@@ -219,9 +219,17 @@ namespace BedeSlots.Controllers
         public async Task<IActionResult> Register(RegisterViewModel model, string returnUrl = null)
         {
             ViewData["ReturnUrl"] = returnUrl;
+
+      
             if (ModelState.IsValid)
             {
-                var user = new User { UserName = model.Email, Email = model.Email };
+                var user = new User
+                { UserName = model.Email,
+                    Email = model.Email,
+                    FirstName = model.FirstName,
+                    LastName = model.LastName               
+                };
+
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
@@ -459,6 +467,20 @@ namespace BedeSlots.Controllers
                 return RedirectToAction(nameof(HomeController.Index), "Home");
             }
         }
+
+        //TODO implement it
+        //private async Task<IEnumerable<SelectListItem>> GetCurrencies()
+        //{
+        //    var currenciesListItems = currencies
+        //        .Select(t => new SelectListItem
+        //        {
+        //            Text = t.UserName,
+        //            Value = t.Id
+        //        })
+        //        .ToList();
+
+        //    return currenciesListItems;
+        //}
 
         #endregion
     }

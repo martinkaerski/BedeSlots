@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+
 namespace BedeSlots.Data.Models
 {
     public class Currency : Entity

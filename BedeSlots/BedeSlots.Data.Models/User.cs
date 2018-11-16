@@ -10,9 +10,15 @@ namespace BedeSlots.Data.Models
         [Required]
         [MinLength(DataModelsConstants.UserNameMinLength)]
         [MaxLength(DataModelsConstants.UserNameMaxLength)]
-        public string Name { get; set; }
+        public string FirstName { get; set; }
 
         [Required]
+        [MinLength(DataModelsConstants.UserNameMinLength)]
+        [MaxLength(DataModelsConstants.UserNameMaxLength)]
+        public string LastName { get; set; }
+
+        [Required]
+        [DataType(DataType.DateTime)]
         public DateTime Birthdate { get; set; }
 
         public int CurrencyId { get; set; }

@@ -17,6 +17,7 @@ namespace BedeSlots.Data.Models
 
         public int TypeId { get; set; }
 
+        [Required]
         public CardType Type { get; set; }
 
         public string UserId { get; set; }

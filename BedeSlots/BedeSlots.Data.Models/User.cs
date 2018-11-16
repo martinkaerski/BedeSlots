@@ -26,6 +26,8 @@ namespace BedeSlots.Data.Models
         [Required]
         public Currency Currency { get; set; }
 
+        public int Balance { get; set; }
+
         public ICollection<BankCard> Cards { get; set; }
 
         public ICollection<Transaction> Transactions { get; set; }

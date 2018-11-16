@@ -80,7 +80,6 @@ namespace BedeSlots
             services.AddTransient<ICurrencyService, CurrencyService>();
             //TODO: delete 
             services.AddTransient<DepositService, DepositService>();
-
         }
 
         private void RegisterAuthentication(IServiceCollection services)

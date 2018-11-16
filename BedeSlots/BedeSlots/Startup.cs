@@ -1,6 +1,7 @@
 ﻿using BedeSlots.Data;
 using BedeSlots.Data.Models;
 using BedeSlots.Services;
+using BedeSlots.Web.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -9,7 +10,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
-using System.Threading.Tasks;
 
 namespace BedeSlots
 {
@@ -38,7 +38,7 @@ namespace BedeSlots
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IServiceProvider serviceProvider)
         {
-            // app.UseDatabaseMigration();
+            app.UseDatabaseMigration();
 
             if (this.Environment.IsDevelopment())
             {
@@ -61,8 +61,6 @@ namespace BedeSlots
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
-
-            CreateRoles(serviceProvider).Wait();
         }
 
         private void RegisterData(IServiceCollection services)
@@ -108,54 +106,11 @@ namespace BedeSlots
         {
             services.AddRouting(options => options.LowercaseUrls = true);
 
-            //TODO: research it
             services.AddMvc(options =>
             {
                 options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
             })
             .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
-        }
-
-
-        private async Task CreateRoles(IServiceProvider serviceProvider)
-        {
-            //adding custom roles
-            var RoleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-            var UserManager = serviceProvider.GetRequiredService<UserManager<User>>();
-            string[] roleNames = { "Admin", "User" };
-            IdentityResult roleResult;
-
-            foreach (var roleName in roleNames)
-            {
-                //creating the roles and seeding them to the database
-                var roleExist = await RoleManager.RoleExistsAsync(roleName);
-                if (!roleExist)
-                {
-                    roleResult = await RoleManager.CreateAsync(new IdentityRole(roleName));
-                }
-            }
-
-            //creating a super user who could maintain the web app
-            var poweruser = new User
-            {
-                UserName = Configuration.GetSection("UserSettings")["UserEmail"],
-                Email = Configuration.GetSection("UserSettings")["UserEmail"],
-                Name = Configuration.GetSection("UserSettings")["UserEmail"],
-                Birthdate = new DateTime(1980, 01, 01),
-                Currency = new Currency() { Name = "USD", Symbol = '$' }
-            };
-
-            string userPassword = Configuration.GetSection("UserSettings")["UserPassword"];
-            var user = await UserManager.FindByEmailAsync(Configuration.GetSection("UserSettings")["UserEmail"]);
-
-            if (user == null)
-            {
-                var createPowerUser = await UserManager.CreateAsync(poweruser, userPassword);
-                if (createPowerUser.Succeeded)
-                {
-                    await UserManager.AddToRoleAsync(poweruser, "Admin");
-                }
-            }
         }
     }
 }

@@ -7,9 +7,9 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Threading.Tasks;
 
-namespace BedeSlots.Web.Infrastructure
+namespace BedeSlots.Web.Extensions
 {
-    public static class SeedData
+    public static class ApplicationBuilderExtensions
     {
         public static IApplicationBuilder UseDatabaseMigration(this IApplicationBuilder app)
         {
@@ -25,8 +25,8 @@ namespace BedeSlots.Web.Infrastructure
                     {
                         var roles = new[]
                         {
-                            "Admin",
-                            "User"
+                            WebConstants.AdministratorRole,
+                            WebConstants.UserRole
                         };
 
                         foreach (var role in roles)
@@ -35,15 +35,12 @@ namespace BedeSlots.Web.Infrastructure
 
                             if (!roleExists)
                             {
-                                await roleManager.CreateAsync(new IdentityRole
-                                {
-                                    Name = role
-                                });
+                                await roleManager.CreateAsync(new IdentityRole(role));
                             }
                         }
 
-                        var adminEmail = "admin@admin.com";
-                        var adminName = "Administrator";
+                        var adminEmail = WebConstants.AdminEmail;
+                        var adminName = WebConstants.AdministratorRole;
                         var adminUser = await userManager.FindByEmailAsync(adminEmail);
 
                         if (adminUser == null)
@@ -54,12 +51,15 @@ namespace BedeSlots.Web.Infrastructure
                                 UserName = adminName,
                                 Name = adminName,
                                 Birthdate = DateTime.UtcNow,
-                                Currency = new Currency() {Name = "USD", Symbol = '$' }
+                                Currency = new Currency() { Name = "USD", Symbol = '$' }
                             };
 
-                            await userManager.CreateAsync(adminUser, "123456");
+                            var createAdmin = await userManager.CreateAsync(adminUser, "123456");
 
-                            await userManager.AddToRoleAsync(adminUser, adminName);
+                            if (createAdmin.Succeeded)
+                            {
+                                await userManager.AddToRoleAsync(adminUser, WebConstants.AdministratorRole);
+                            }
                         }
                     })
                     .Wait();

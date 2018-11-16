@@ -14,5 +14,7 @@ namespace BedeSlots.Data.Models
         public char Symbol { get; set; }
 
         public ICollection<User> Users { get; set; }
+
+        public ICollection<BankCard> Cards { get; set; }
     }
 }

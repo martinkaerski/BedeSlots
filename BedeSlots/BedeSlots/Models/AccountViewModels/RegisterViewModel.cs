@@ -11,6 +11,7 @@ namespace BedeSlots.Models.AccountViewModels
         [Required]
         [EmailAddress]
         [Display(Name = "Email")]
+        [DataType(DataType.EmailAddress)]
         public string Email { get; set; }
 
         [Required]
@@ -39,11 +40,11 @@ namespace BedeSlots.Models.AccountViewModels
         [Required]
         [Display(Name = "Currency")]
         public int CurrencyId { get; set; }
+        
+        [Required]
+        [DataType(DataType.Date)]
+        public DateTime Birthdate { get; set; }
 
         public List<SelectListItem> Currencies { get; set; }
-
-        [Required]
-        [DataType(DataType.DateTime)]
-        public DateTime Birthdate { get; set; }
     }
 }

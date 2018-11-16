@@ -34,13 +34,23 @@ namespace BedeSlots.Data
                .Entity<BankCard>()
                .HasOne(c => c.Type)
                .WithMany(t => t.Cards)
-               .HasForeignKey(u => u.TypeId);
+               .HasForeignKey(u => u.TypeId)
+              .OnDelete(DeleteBehavior.Restrict);
+
 
             modelBuilder
                .Entity<BankCard>()
                .HasOne(c => c.User)
                .WithMany(u => u.Cards)
-               .HasForeignKey(u => u.UserId);
+               .HasForeignKey(u => u.UserId)
+              .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder
+              .Entity<BankCard>()
+              .HasOne(bc => bc.Currency)
+              .WithMany(c => c.Cards)
+              .HasForeignKey(bc => bc.CurrencyId)
+              .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder
               .Entity<Transaction>()

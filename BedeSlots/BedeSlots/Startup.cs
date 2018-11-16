@@ -1,6 +1,8 @@
 ﻿using BedeSlots.Data;
 using BedeSlots.Data.Models;
 using BedeSlots.Services;
+using BedeSlots.Services.Data;
+using BedeSlots.Services.Data.Contracts;
 using BedeSlots.Web.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -75,6 +77,8 @@ namespace BedeSlots
         private void RegisterServices(IServiceCollection services)
         {
             services.AddTransient<IEmailSender, EmailSender>();
+            services.AddTransient<ICardService, CardService>();
+            services.AddTransient<IUserService, UserService>();
         }
 
         private void RegisterAuthentication(IServiceCollection services)

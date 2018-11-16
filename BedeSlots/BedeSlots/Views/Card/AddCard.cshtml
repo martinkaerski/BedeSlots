@@ -1,0 +1,23 @@
+﻿@model BedeSlots.Web.Models.AddCardViewModel
+
+@{
+    ViewData["Title"] = "AddCard";
+}
+
+<h2>AddCard</h2>
+
+<div>
+    <form asp-controller="Card" asp-action="AddCard" method="post">
+        <label>Card number</label>
+        <input asp-for="cardNumber" type="text" name="cardNumber" placeholder="card number" />
+        <label>CVV</label>
+        <input asp-for="Cvv" type="text" name="cvv" placeholder="cvv" />
+        <label>Exipiry</label>
+        <input asp-for="Expiry" type="date" name="expiry" placeholder="expiry" />
+        <label>Type</label>
+        <select asp-for="@Model.CardTypeId" asp-items="@Model.CardTypes" ></select>
+
+        <button type="submit">Add</button>
+    </form>
+
+</div>

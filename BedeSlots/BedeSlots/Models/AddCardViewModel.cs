@@ -7,14 +7,15 @@ using System.Threading.Tasks;
 
 namespace BedeSlots.Web.Models
 {
-    public class DepositViewModel
+    public class AddCardViewModel
     {
-        public List<SelectListItem> BankCards { get; set; }
+        public string cardNumber { get; set; }
+        public int Cvv { get; set; }
+        public DateTime Expiry { get; set; }
+        public int CardTypeId { get; set; }
         public List<SelectListItem> CardTypes { get; set; }
-        public int DepositValue { get; set; }
-        public BankCard BankCard { get; set; }
 
-        public DepositViewModel()
+        public AddCardViewModel()
         {
 
         }

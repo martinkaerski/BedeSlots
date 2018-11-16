@@ -1,0 +1,19 @@
+﻿@model BedeSlots.Web.Models.DepositViewModel
+@{
+    ViewData["Title"] = "Deposit";
+}
+
+<h2>Deposit</h2>
+
+<div class="row">
+    <form asp-controller="Home" asp-action="Deposit" method="post">
+        <select asp-for="@Model.BankCard" asp-items="@Model.BankCards"></select>
+        <span asp-validation-for="BankCard" class="text-danger"></span>
+        <a href="#">Add card</a>
+        <label>Amount</label>
+        <input type="text" asp-for="@Model.DepositValue" placeholder="Amount"/>
+        <button type="submit">Deposit</button>
+    </form>
+
+</div>
+

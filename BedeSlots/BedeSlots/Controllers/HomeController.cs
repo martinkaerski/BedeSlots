@@ -5,11 +5,20 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using BedeSlots.Models;
+using BedeSlots.Web.Models;
+using BedeSlots.Services.Data;
 
 namespace BedeSlots.Controllers
 {
     public class HomeController : Controller
     {
+        private readonly DepositService depositService;
+
+        public HomeController(DepositService depositService)
+        {
+            this.depositService = depositService;
+        }
+
         public IActionResult Index()
         {
             return View();
@@ -26,6 +35,14 @@ namespace BedeSlots.Controllers
         {
             ViewData["Message"] = "Your contact page.";
 
+            return View();
+        }
+        [HttpGet]
+        public IActionResult Deposit()
+        {
+            //var cards = this.depositService.GetUserCards("test");
+
+            var depositVM = new DepositViewModel() { };
             return View();
         }
 

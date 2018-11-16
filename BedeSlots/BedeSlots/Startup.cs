@@ -79,6 +79,7 @@ namespace BedeSlots
             services.AddTransient<IEmailSender, EmailSender>();
             services.AddTransient<ICardService, CardService>();
             services.AddTransient<IUserService, UserService>();
+            services.AddTransient<ICurrencyService, CurrencyService>();
         }
 
         private void RegisterAuthentication(IServiceCollection services)

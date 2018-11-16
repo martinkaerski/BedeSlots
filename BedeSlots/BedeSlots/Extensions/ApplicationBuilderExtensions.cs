@@ -49,7 +49,8 @@ namespace BedeSlots.Web.Extensions
                             {
                                 Email = adminEmail,
                                 UserName = adminEmail,
-                                Name = adminName,
+                                FirstName = adminName,
+                                LastName = adminName,
                                 Birthdate = new DateTime(1980, 01, 01),
                                 Currency = new Currency() { Name = "USD", Symbol = '$' }
                             };

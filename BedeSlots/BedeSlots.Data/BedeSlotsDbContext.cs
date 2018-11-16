@@ -2,6 +2,7 @@
 using BedeSlots.Data.Models.Contracts;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using System;
 using System.Linq;
 
@@ -34,19 +35,38 @@ namespace BedeSlots.Data
                .Entity<BankCard>()
                .HasOne(c => c.Type)
                .WithMany(t => t.Cards)
-               .HasForeignKey(u => u.TypeId);
+               .HasForeignKey(u => u.TypeId)
+              .OnDelete(DeleteBehavior.Restrict);
+
 
             modelBuilder
                .Entity<BankCard>()
                .HasOne(c => c.User)
                .WithMany(u => u.Cards)
-               .HasForeignKey(u => u.UserId);
+               .HasForeignKey(u => u.UserId)
+              .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder
+              .Entity<BankCard>()
+              .HasOne(bc => bc.Currency)
+              .WithMany(c => c.Cards)
+              .HasForeignKey(bc => bc.CurrencyId)
+              .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder
               .Entity<Transaction>()
               .HasOne(t => t.User)
               .WithMany(u => u.Transactions)
               .HasForeignKey(u => u.UserId);
+
+            var converter = new EnumToStringConverter<TransactionType>();
+
+            modelBuilder
+                .Entity<Transaction>()
+                .Property(t => t.Type)
+                .HasConversion(converter);
+
+            SeedData(modelBuilder);
 
             base.OnModelCreating(modelBuilder);
         }
@@ -75,6 +95,17 @@ namespace BedeSlots.Data
                     entity.ModifiedOn = DateTime.Now;
                 }
             }
+        }
+
+        private void SeedData(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<CardType>().HasData(new CardType { Id = 1, Name = "Visa" });
+            modelBuilder.Entity<CardType>().HasData(new CardType { Id = 2, Name = "MasterCard" });
+            modelBuilder.Entity<CardType>().HasData(new CardType { Id = 3, Name = "American Express" });
+
+            modelBuilder.Entity<Currency>().HasData(new Currency { Id = 2, Name = "BGN" });
+            modelBuilder.Entity<Currency>().HasData(new Currency { Id = 3, Name = "EUR" });
+            modelBuilder.Entity<Currency>().HasData(new Currency { Id = 4, Name = "GBP" });
         }
     }
 }

@@ -6,8 +6,8 @@ namespace BedeSlots.Services.Data
 {
     public interface IUserService
     {
-        BedeSlotsDbContext BedeSlotsDbContext { get; }
-
         Task<User> GetUserById(string id);
+
+        Task<Transaction> DepositAsync(Transaction transaction);
     }
 }

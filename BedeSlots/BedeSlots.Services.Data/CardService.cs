@@ -48,5 +48,17 @@ namespace BedeSlots.Services.Data
 
             return type;
         }
+
+        public async Task<BankCard> GetCardByIdAsync(int id)
+        {
+            var card = await this.context.BankCards
+                .Include(c=>c.User)
+                .Include(c=>c.Type)
+                .Include(c=>c.Currency)
+                .FirstOrDefaultAsync(c => c.Id == id);
+
+            return card;
+        }
+
     }
 }

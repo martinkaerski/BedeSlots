@@ -11,8 +11,9 @@ namespace BedeSlots.Web.Models
     {
         public List<SelectListItem> BankCards { get; set; }
         public List<SelectListItem> CardTypes { get; set; }
-        public int DepositValue { get; set; }
-        public BankCard BankCard { get; set; }
+        public int DepositAmount { get; set; }
+        //public BankCard BankCard { get; set; }
+        public int BankCardId { get; set; }
 
         public DepositViewModel()
         {

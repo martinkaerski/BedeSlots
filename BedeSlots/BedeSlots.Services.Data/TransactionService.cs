@@ -1,11 +1,15 @@
 ﻿using BedeSlots.Data;
+using BedeSlots.Data.Models;
+using BedeSlots.Services.Data.Contracts;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace BedeSlots.Services.Data
 {
-    public class TransactionService
+    public class TransactionService : ITransactionService
     {
         private readonly BedeSlotsDbContext context;
 
@@ -14,6 +18,14 @@ namespace BedeSlots.Services.Data
             this.context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
+        public async Task<Transaction> RegisterTransactionsAsync(Transaction transaction)
+        {
+            await this.context.Transactions.AddAsync(transaction);
+            await this.context.SaveChangesAsync();
 
+            return transaction;
+        }
+
+        
     }
 }

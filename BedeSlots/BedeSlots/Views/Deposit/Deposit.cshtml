@@ -7,11 +7,11 @@
 
 <div class="row">
     <form asp-controller="Deposit" asp-action="Deposit" method="post">
-        <select asp-for="@Model.BankCard" asp-items="@Model.BankCards"></select>
-        <span asp-validation-for="BankCard" class="text-danger"></span>
+        <select asp-for="@Model.BankCardId" asp-items="@Model.BankCards"></select>
+        <span asp-validation-for="BankCardId" class="text-danger"></span>
         <a asp-controller="Card" asp-action="AddCard">Add card</a>
         <label>Amount</label>
-        <input type="text" asp-for="@Model.DepositValue" placeholder="Amount"/>
+        <input type="text" asp-for="@Model.DepositAmount" placeholder="Amount"/>
         <button type="submit">Deposit</button>
     </form>
 

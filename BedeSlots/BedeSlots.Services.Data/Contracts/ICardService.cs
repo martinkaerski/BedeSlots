@@ -10,5 +10,6 @@ namespace BedeSlots.Services.Data.Contracts
         Task<ICollection<CardType>> GetCardTypesAsync();
         Task<BankCard> AddCardAsync(BankCard bankCard);
         Task<CardType> GetCardTypeByIdaAsync(int id);
+        Task<BankCard> GetCardByIdAsync(int id);
     }
 }

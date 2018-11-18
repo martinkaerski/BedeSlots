@@ -80,6 +80,8 @@ namespace BedeSlots
             services.AddTransient<ICardService, CardService>();
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<ICurrencyService, CurrencyService>();
+            services.AddTransient<ITransactionService, TransactionService>();
+
         }
 
         private void RegisterAuthentication(IServiceCollection services)

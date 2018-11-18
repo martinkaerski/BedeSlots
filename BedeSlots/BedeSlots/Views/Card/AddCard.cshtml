@@ -8,14 +8,25 @@
 
 <div>
     <form asp-controller="Card" asp-action="AddCard" method="post">
-        <label>Card number</label>
+        <label asp-for="cardNumber" class="control-label"></label>
         <input asp-for="cardNumber" type="text" name="cardNumber" placeholder="card number" />
-        <label>CVV</label>
+        <span asp-validation-for="cardNumber" class="text-danger"></span>
+
+        <label asp-for="Cvv" class="control-label"></label>
         <input asp-for="Cvv" type="text" name="cvv" placeholder="cvv" />
-        <label>Exipiry</label>
+        <span asp-validation-for="Cvv" class="text-danger"></span>
+
+        <label asp-for="Expiry" class="control-label"></label>
         <input asp-for="Expiry" type="date" name="expiry" placeholder="expiry" />
-        <label>Type</label>
-        <select asp-for="@Model.CardTypeId" asp-items="@Model.CardTypes" ></select>
+        <span asp-validation-for="Expiry" class="text-danger"></span>
+
+        <label asp-for="CardTypeId" class="control-label"></label>
+        <select asp-for="@Model.CardTypeId" asp-items="@Model.CardTypes"></select>
+        <span asp-validation-for="CardTypeId" class="text-danger"></span>
+
+        <label asp-for="CurrencyId" class="control-label"></label>
+        <select asp-for="@Model.CurrencyId" asp-items="@Model.Currencies"></select>
+        <span asp-validation-for="CurrencyId" class="text-danger"></span>
 
         <button type="submit">Add</button>
     </form>

@@ -10,8 +10,7 @@ namespace BedeSlots.Data.Models
             MinimumLength = DataModelsConstants.CurrencyNameLength)]
         public string Name { get; set; }
 
-        [Required]
-        public char Symbol { get; set; }
+        public string Symbol { get; set; }
 
         public ICollection<User> Users { get; set; }
 

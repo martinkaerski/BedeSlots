@@ -26,6 +26,23 @@ namespace BedeSlots.Services.Data
             return transaction;
         }
 
-        
+        public async Task<ICollection<Transaction>> GetAllTransactionsAsync()
+        {
+            var transactions = await this.context.Transactions
+                .Include(t => t.User)
+                .ToListAsync();
+
+            return transactions;
+        }
+
+        public async Task<Transaction> GetTransactionAsync(int id)
+        {
+            var transaction = await this.context.Transactions
+                .Include(t => t.User)
+                .ThenInclude(u => u.Cards)
+                .SingleOrDefaultAsync(t => t.Id == id);
+
+            return transaction;
+        }
     }
 }

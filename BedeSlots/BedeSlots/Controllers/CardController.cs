@@ -40,21 +40,22 @@ namespace BedeSlots.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddCard(string cardNumber, int cvv, DateTime expiry, int cardTypeId, int currencyId)
+        public async Task<IActionResult> AddCard(AddCardViewModel model)
         {
             var user = await this.userManager.GetUserAsync(HttpContext.User);
 
             if (!ModelState.IsValid)
             {
-                return Redirect("AddCard");
+                return Redirect("AddCard"); 
             }
+
             var card = new BankCard()
             {
-                Number = cardNumber,
-                CvvNumber = cvv,
-                ExpiryDate = expiry,
-                TypeId = cardTypeId,
-                CurrencyId = currencyId,
+                Number = model.CardNumber,
+                CvvNumber = model.Cvv,
+                ExpiryDate = model.Expiry,
+                TypeId = model.CardTypeId,
+                CurrencyId = model.CurrencyId,
                 UserId = user.Id
             };
 

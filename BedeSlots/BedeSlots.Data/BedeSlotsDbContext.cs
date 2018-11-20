@@ -103,9 +103,11 @@ namespace BedeSlots.Data
             modelBuilder.Entity<CardType>().HasData(new CardType { Id = 2, Name = "MasterCard" });
             modelBuilder.Entity<CardType>().HasData(new CardType { Id = 3, Name = "American Express" });
 
-            modelBuilder.Entity<Currency>().HasData(new Currency { Id = 2, Name = "BGN" });
-            modelBuilder.Entity<Currency>().HasData(new Currency { Id = 3, Name = "EUR" });
-            modelBuilder.Entity<Currency>().HasData(new Currency { Id = 4, Name = "GBP" });
+            //TODO: fix the currency from AppBuilderExtensions
+            //modelBuilder.Entity<Currency>().HasData(new Currency { Id = 1, Name = "USD" });
+            modelBuilder.Entity<Currency>().HasData(new Currency { Id = 2, Name = "BGN", Symbol = "lv" });
+            modelBuilder.Entity<Currency>().HasData(new Currency { Id = 3, Name = "EUR", Symbol = "€" });
+            modelBuilder.Entity<Currency>().HasData(new Currency { Id = 4, Name = "GBP", Symbol = "£" });
         }
     }
 }

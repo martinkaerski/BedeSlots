@@ -62,19 +62,8 @@ namespace BedeSlots.Web.Controllers
                 return Redirect("Deposit");
             }
             var user = await this.userManager.GetUserAsync(HttpContext.User);
-            var bankCard = await this.cardService.GetCardByIdAsync(bankCardId);
 
-            var cardNumberLast4Digits = bankCard.Number.Substring(12, 4);
-            var cardNumberWhithHiddenFirst12Digits = new string('*', 12) + cardNumberLast4Digits;
-
-            var transaction = new Transaction()
-            {
-                Amount = depositAmount,
-                Date = DateTime.Now,
-                Type = TransactionType.Deposit,
-                Description = $"Deposit with card {cardNumberWhithHiddenFirst12Digits}",
-                UserId = user.Id,
-            };
+            var transaction = this.transactionService.CreateTransaction(TransactionType.Deposit, user.Id, bankCardId, depositAmount);
 
             var depositTransaction = await this.userService.DepositAsync(transaction);
 

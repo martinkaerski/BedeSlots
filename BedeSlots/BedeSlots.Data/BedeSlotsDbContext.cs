@@ -59,12 +59,19 @@ namespace BedeSlots.Data
               .WithMany(u => u.Transactions)
               .HasForeignKey(u => u.UserId);
 
-            var converter = new EnumToStringConverter<TransactionType>();
+            var transactionTypeConverter = new EnumToStringConverter<TransactionType>();
 
             modelBuilder
                 .Entity<Transaction>()
                 .Property(t => t.Type)
-                .HasConversion(converter);
+                .HasConversion(transactionTypeConverter);
+
+            var gameTypeConverter = new EnumToStringConverter<GameType>();
+
+            modelBuilder
+                .Entity<Transaction>()
+                .Property(t => t.GameType)
+                .HasConversion(gameTypeConverter);
 
             SeedData(modelBuilder);
 

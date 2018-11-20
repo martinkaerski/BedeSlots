@@ -1,4 +1,5 @@
 ﻿using BedeSlots.Data.Models;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -11,5 +12,7 @@ namespace BedeSlots.Services.Data.Contracts
         Task<ICollection<Transaction>> GetAllTransactionsAsync();
 
         Task<Transaction> GetTransactionAsync(int id);
+
+        Transaction CreateTransaction(TransactionType type, string userId, int cardId,double depositAmount);
     }
 }

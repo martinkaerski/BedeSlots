@@ -32,7 +32,7 @@ namespace BedeSlots.Web.Areas.Admin.Controllers
                     Date = transaction.Date,
                     Type = transaction.Type.ToString(),
                     Amount = transaction.Amount,
-                    Description = transaction.Description,
+                    Description = "card id =>" + transaction.CardId.ToString(),
                     UserEmail = transaction.User.Email
                 };
 
@@ -57,7 +57,7 @@ namespace BedeSlots.Web.Areas.Admin.Controllers
                 Date = transaction.Date,
                 Type = transaction.Type.ToString(),
                 Amount = transaction.Amount,
-                Description = transaction.Description,
+                Description = "card id =>" + transaction.CardId,
                 UserEmail = transaction.User.Email,
                 FirstName = transaction.User.FirstName,
                 LastName = transaction.User.LastName,

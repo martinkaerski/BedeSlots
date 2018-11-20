@@ -111,9 +111,9 @@ namespace BedeSlots.Data.Migrations
                     b.ToTable("Currencies");
 
                     b.HasData(
-                        new { Id = 2, IsDeleted = false, Name = "BGN" },
-                        new { Id = 3, IsDeleted = false, Name = "EUR" },
-                        new { Id = 4, IsDeleted = false, Name = "GBP" }
+                        new { Id = 2, IsDeleted = false, Name = "BGN", Symbol = "lv" },
+                        new { Id = 3, IsDeleted = false, Name = "EUR", Symbol = "€" },
+                        new { Id = 4, IsDeleted = false, Name = "GBP", Symbol = "£" }
                     );
                 });
 
@@ -125,9 +125,11 @@ namespace BedeSlots.Data.Migrations
 
                     b.Property<double>("Amount");
 
+                    b.Property<int>("CardId");
+
                     b.Property<DateTime>("Date");
 
-                    b.Property<string>("Description")
+                    b.Property<string>("GameType")
                         .IsRequired();
 
                     b.Property<string>("Type")

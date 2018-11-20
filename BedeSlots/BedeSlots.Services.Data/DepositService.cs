@@ -14,12 +14,5 @@ namespace BedeSlots.Services.Data
         {
             this.context = context ?? throw new ArgumentNullException(nameof(context));
         }
-
-        public IEnumerable<BankCard> GetUserCards(string userId)
-        {
-            var cards = this.context.BankCards.Where(c => c.UserId == userId);
-
-            return cards;
-        }
     }
 }

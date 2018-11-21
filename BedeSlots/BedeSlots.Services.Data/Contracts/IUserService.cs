@@ -7,5 +7,6 @@ namespace BedeSlots.Services.Data.Contracts
     public interface IUserService
     {
         Task<User> GetUserById(string id);
+        Task<double> GetUserBalanceById(string userId);
     }
 }

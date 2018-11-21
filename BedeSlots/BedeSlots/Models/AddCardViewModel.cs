@@ -26,12 +26,7 @@ namespace BedeSlots.Web.Models
         [Display(Name = "Card type")]
         public int CardTypeId { get; set; }
 
-        [Required]
-        [Display(Name = "Currency")]
-        public int CurrencyId { get; set; }
-
         public List<SelectListItem> CardTypes { get; set; }
-        public List<SelectListItem> Currencies { get; set; }
 
         public AddCardViewModel()
         {

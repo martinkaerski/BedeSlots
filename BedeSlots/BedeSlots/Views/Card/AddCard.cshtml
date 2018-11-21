@@ -24,10 +24,6 @@
         <select asp-for="CardTypeId" asp-items="@Model.CardTypes"></select>
         <span asp-validation-for="CardTypeId" class="text-danger"></span>
 
-        <label asp-for="CurrencyId" class="control-label"></label>
-        <select asp-for="CurrencyId" asp-items="@Model.Currencies"></select>
-        <span asp-validation-for="CurrencyId" class="text-danger"></span>
-
         <button type="submit">Add</button>
     </form>
 </div>

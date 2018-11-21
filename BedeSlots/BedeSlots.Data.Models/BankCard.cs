@@ -26,9 +26,5 @@ namespace BedeSlots.Data.Models
         [Required]
         public User User { get; set; }
 
-        public int CurrencyId { get; set; }
-
-        [Required]
-        public Currency Currency { get; set; }
     }
 }

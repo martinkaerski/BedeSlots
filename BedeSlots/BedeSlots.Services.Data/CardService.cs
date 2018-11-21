@@ -54,7 +54,6 @@ namespace BedeSlots.Services.Data
             var card = await this.context.BankCards
                 .Include(c=>c.User)
                 .Include(c=>c.Type)
-                .Include(c=>c.Currency)
                 .FirstOrDefaultAsync(c => c.Id == id);
 
             return card;

@@ -27,7 +27,7 @@ namespace BedeSlots.Data.Migrations
 
                     b.Property<DateTime?>("CreatedOn");
 
-                    b.Property<int>("CurrencyId");
+                    b.Property<int?>("CurrencyId");
 
                     b.Property<int>("CvvNumber");
 
@@ -324,10 +324,9 @@ namespace BedeSlots.Data.Migrations
 
             modelBuilder.Entity("BedeSlots.Data.Models.BankCard", b =>
                 {
-                    b.HasOne("BedeSlots.Data.Models.Currency", "Currency")
+                    b.HasOne("BedeSlots.Data.Models.Currency")
                         .WithMany("Cards")
-                        .HasForeignKey("CurrencyId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .HasForeignKey("CurrencyId");
 
                     b.HasOne("BedeSlots.Data.Models.CardType", "Type")
                         .WithMany("Cards")

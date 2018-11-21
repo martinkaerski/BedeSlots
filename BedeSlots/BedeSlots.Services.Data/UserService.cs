@@ -21,6 +21,13 @@ namespace BedeSlots.Services.Data
             this.transactionService = transactionService;
         }
 
+        public async Task<double> GetUserBalanceById(string userId)
+        {
+            var user = await this.context.Users.FirstOrDefaultAsync(u => u.Id == userId);
+
+            return user.Balance;
+        }
+
         public async Task<User> GetUserById(string id)
         {
             var user = await this.context.Users.FirstOrDefaultAsync(x => x.Id == id);

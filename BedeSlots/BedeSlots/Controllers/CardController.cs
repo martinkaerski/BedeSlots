@@ -26,16 +26,14 @@ namespace BedeSlots.Web.Controllers
             this.userService = userService;
             this.cardService = cardService;
         }
-        
+
         [HttpGet]
         public async Task<IActionResult> AddCard()
         {
             var cardTypes = await this.cardService.GetCardTypesAsync();
             var cardTypesSelectList = cardTypes.Select(x => new SelectListItem { Value = x.Id.ToString(), Text = x.Name }).ToList();
-            var currencies = await this.currencyService.GetAllCurrenciesAsync();
-            var currenciesSelectList = currencies.Select(c => new SelectListItem { Value = c.Id.ToString(), Text = c.Name }).ToList();
 
-            var addCardVM = new AddCardViewModel() { CardTypes = cardTypesSelectList, Currencies = currenciesSelectList };
+            var addCardVM = new AddCardViewModel() { CardTypes = cardTypesSelectList };
             return View(addCardVM);
         }
 
@@ -46,7 +44,7 @@ namespace BedeSlots.Web.Controllers
 
             if (!ModelState.IsValid)
             {
-                return Redirect("AddCard"); 
+                return Redirect("AddCard");
             }
 
             var card = new BankCard()
@@ -55,7 +53,6 @@ namespace BedeSlots.Web.Controllers
                 CvvNumber = model.Cvv,
                 ExpiryDate = model.Expiry,
                 TypeId = model.CardTypeId,
-                CurrencyId = model.CurrencyId,
                 UserId = user.Id
             };
 
@@ -71,7 +68,6 @@ namespace BedeSlots.Web.Controllers
             {
                 CardNumber = card.Number,
                 CardType = card.Type,
-                Currency = card.Currency,
                 Cvv = card.CvvNumber.ToString(),
                 Expiry = card.ExpiryDate.ToShortDateString(),
                 Owner = card.User

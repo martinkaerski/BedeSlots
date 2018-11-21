@@ -5,7 +5,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using System;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace BedeSlots.Data
 {
@@ -38,8 +37,7 @@ namespace BedeSlots.Data
                .WithMany(t => t.Cards)
                .HasForeignKey(u => u.TypeId)
               .OnDelete(DeleteBehavior.Restrict);
-
-
+            
             modelBuilder
                .Entity<BankCard>()
                .HasOne(c => c.User)
@@ -106,10 +104,10 @@ namespace BedeSlots.Data
             modelBuilder.Entity<CardType>().HasData(new CardType { Id = 3, Name = "American Express" });
 
             //TODO: fix the currency from AppBuilderExtensions
-            //modelBuilder.Entity<Currency>().HasData(new Currency { Id = 1, Name = "USD" });
-            modelBuilder.Entity<Currency>().HasData(new Currency { Id = 2, Name = "BGN", Symbol = "lv" });
-            modelBuilder.Entity<Currency>().HasData(new Currency { Id = 3, Name = "EUR", Symbol = "€" });
-            modelBuilder.Entity<Currency>().HasData(new Currency { Id = 4, Name = "GBP", Symbol = "£" });
+            modelBuilder.Entity<Currency>().HasData(new Currency { Id = 1, Name = CurrencyName.GBP });
+            modelBuilder.Entity<Currency>().HasData(new Currency { Id = 2, Name = CurrencyName.BGN });
+            modelBuilder.Entity<Currency>().HasData(new Currency { Id = 3, Name = CurrencyName.EUR });
         }
     }
 }
+

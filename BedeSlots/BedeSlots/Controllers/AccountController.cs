@@ -218,7 +218,7 @@ namespace BedeSlots.Controllers
             var model = new RegisterViewModel()
             {
                 Currencies = currencies
-                                .Select(c => new SelectListItem { Text = c.Name, Value = c.Id.ToString() })
+                                .Select(c => new SelectListItem { Text = c.Name.ToString(), Value = c.Id.ToString() })
                                 .ToList()
             };
 
@@ -491,7 +491,7 @@ namespace BedeSlots.Controllers
             var currenciesListItems = currencies
                 .Select(c => new SelectListItem
                 {
-                    Text = c.Name,
+                    Text = c.Name.ToString(),
                     Value = c.Id.ToString()                    
                 })
                 .ToList();

@@ -57,6 +57,7 @@ namespace BedeSlots.Web.Controllers
             }
         }
 
+        [HttpPost]
         public async Task<IActionResult> Deposit(int bankCardId, int depositAmount)
         {
             if (!ModelState.IsValid)

@@ -122,6 +122,8 @@ namespace BedeSlots
         {
             services.AddRouting(options => options.LowercaseUrls = true);
 
+            services.AddMemoryCache();
+
             services.AddMvc(options =>
             {
                 options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());

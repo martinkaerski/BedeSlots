@@ -45,7 +45,7 @@ namespace BedeSlots.Services.Data
             return transaction;
         }
 
-        public Transaction CreateTransaction(TransactionType type, string userId, int cardId, double depositAmount)
+        public Transaction CreateTransaction(TransactionType type, string userId, int cardId, decimal depositAmount)
         {
             var transaction = new Transaction()
             {

@@ -53,7 +53,7 @@ namespace BedeSlots.Web.Extensions
                                 FirstName = adminName,
                                 LastName = adminName,
                                 Birthdate = new DateTime(1980, 01, 01),
-                                Currency = new Currency() { Name = CurrencyName.USD, Symbol = "$" }
+                                Currency = Currency.USD
                             };
 
                             var createAdmin = await userManager.CreateAsync(adminUser, "123456");

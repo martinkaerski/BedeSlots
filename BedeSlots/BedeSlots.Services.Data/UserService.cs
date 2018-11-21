@@ -2,10 +2,6 @@
 using BedeSlots.Data.Models;
 using BedeSlots.Services.Data.Contracts;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace BedeSlots.Services.Data
@@ -21,7 +17,7 @@ namespace BedeSlots.Services.Data
             this.transactionService = transactionService;
         }
 
-        public async Task<double> GetUserBalanceById(string userId)
+        public async Task<decimal> GetUserBalanceById(string userId)
         {
             var user = await this.context.Users.FirstOrDefaultAsync(u => u.Id == userId);
 

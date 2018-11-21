@@ -12,23 +12,34 @@ namespace BedeSlots.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly IExchangeRateApiCallService exchangeRateApiCallService;
         private readonly UserManager<User> userManager;
+        private readonly IExchangeRateApiCallService exchangeRateApiCallService;
+        private readonly ICurrencyConverterService currencyConverterService;
 
-        public HomeController(IExchangeRateApiCallService exchangeRateApiCallService, UserManager<User> userManager)
+        public HomeController(IExchangeRateApiCallService exchangeRateApiCallService, UserManager<User> userManager, ICurrencyConverterService currencyConverterService)
         {
             this.exchangeRateApiCallService = exchangeRateApiCallService;
             this.userManager = userManager;
+            this.currencyConverterService = currencyConverterService;
         }
 
         public async Task<IActionResult> Index()
         {
-            //var result = this.exchangeRateApiCallService.GetAllRatesAsync();
-
             var user = await this.userManager.GetUserAsync(HttpContext.User);
+
             if (user != null)
             {
-                ViewData["Balance"] = new UserBalanceViewModel() { Balance = user.Balance };
+                decimal userBalance;
+                if (user.Currency != Currency.USD)
+                {
+                    userBalance = await this.currencyConverterService.ConvertFromUsdToOther(user.Balance, user.Currency);
+                }
+                else
+                {
+                    userBalance = user.Balance;
+                }
+
+                ViewData["Balance"] = new UserBalanceViewModel() { Balance = userBalance };
             }
 
             return View();

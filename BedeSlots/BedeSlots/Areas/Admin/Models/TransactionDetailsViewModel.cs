@@ -16,7 +16,7 @@ namespace BedeSlots.Web.Areas.Admin.Models
 
         public string Type { get; set; }
 
-        public double Amount { get; set; }
+        public decimal Amount { get; set; }
 
         public string Description { get; set; }
 

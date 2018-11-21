@@ -5,6 +5,8 @@ namespace BedeSlots.Services.Data.Contracts
 {
     public interface ICurrencyConverterService
     {
-        Task<double> ConvertToUsd(double amount, CurrencyName currencyName);
+        Task<decimal> ConvertToUsd(decimal amount, Currency currencyName);
+
+        Task<decimal> ConvertFromUsdToOther(decimal amount, Currency currencyName);
     }
 }

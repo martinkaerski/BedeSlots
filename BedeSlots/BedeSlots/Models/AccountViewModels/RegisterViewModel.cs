@@ -39,7 +39,7 @@ namespace BedeSlots.Models.AccountViewModels
 
         [Required]
         [Display(Name = "Currency")]
-        public int CurrencyId { get; set; }
+        public Currency Currency { get; set; }
         
         [Required]
         [DataType(DataType.Date)]

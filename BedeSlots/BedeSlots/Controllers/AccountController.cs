@@ -213,13 +213,11 @@ namespace BedeSlots.Controllers
         public async Task<IActionResult> Register(string returnUrl = null)
         {
             ViewData["ReturnUrl"] = returnUrl;
-            var currencies = await this.currencyService.GetAllCurrenciesAsync();
 
+            var currensciesListItems = GetCurrencies().ToList();
             var model = new RegisterViewModel()
             {
-                Currencies = currencies
-                                .Select(c => new SelectListItem { Text = c.Name.ToString(), Value = c.Id.ToString() })
-                                .ToList()
+                Currencies = currensciesListItems
             };
 
             return View(model);
@@ -231,7 +229,7 @@ namespace BedeSlots.Controllers
         public async Task<IActionResult> Register(RegisterViewModel model, string returnUrl = null)
         {
             ViewData["ReturnUrl"] = returnUrl;
-            
+
             if (ModelState.IsValid)
             {
                 var user = new User
@@ -240,7 +238,7 @@ namespace BedeSlots.Controllers
                     Email = model.Email,
                     FirstName = model.FirstName,
                     LastName = model.LastName,
-                    CurrencyId = model.CurrencyId,
+                    Currency = model.Currency,
                     Birthdate = model.Birthdate
                 };
 
@@ -485,14 +483,14 @@ namespace BedeSlots.Controllers
             }
         }
 
-        private async Task<IEnumerable<SelectListItem>> GetCurrencies()
+        private  IEnumerable<SelectListItem> GetCurrencies()
         {
-            var currencies = await this.currencyService.GetAllCurrenciesAsync();
+            var currencies = this.currencyService.GetAllCurrenciesNames();
             var currenciesListItems = currencies
                 .Select(c => new SelectListItem
                 {
-                    Text = c.Name.ToString(),
-                    Value = c.Id.ToString()                    
+                    Text = c.ToString(),
+                    Value = c.ToString()
                 })
                 .ToList();
 

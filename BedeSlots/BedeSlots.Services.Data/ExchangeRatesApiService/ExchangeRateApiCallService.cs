@@ -18,22 +18,23 @@ namespace BedeSlots.Services.Data
         }
 
         //TODO: Deserialise async?
-        public async Task<IDictionary<CurrencyName, double>> GetAllRatesAsync()
+        public async Task<IDictionary<Currency, decimal>> GetAllRatesAsync()
         {
             var stringResultRates = await this.exchangeRateApiCaller.GetCurrenciesRatesAsync();
             var deserializedRates = JsonConvert.DeserializeObject<CurrencyDto>(stringResultRates);
 
-            var ratesKVP = new Dictionary<CurrencyName, double>
+            var ratesKVP = new Dictionary<Currency, decimal>
             {
-                { CurrencyName.BGN, double.Parse(deserializedRates.Rates.BGN)},
-                { CurrencyName.EUR, double.Parse(deserializedRates.Rates.EUR)},
-                { CurrencyName.GBP, double.Parse(deserializedRates.Rates.GBP)},
+                { Currency.BGN, decimal.Parse(deserializedRates.Rates.BGN)},
+                { Currency.EUR, decimal.Parse(deserializedRates.Rates.EUR)},
+                { Currency.GBP, decimal.Parse(deserializedRates.Rates.GBP)},
+                { Currency.USD, 1m }
             };
 
             return ratesKVP;
         }
 
-        public async Task<double> GetRateAsync(CurrencyName currencyName)
+        public async Task<decimal> GetRateAsync(Currency currencyName)
         {
             var rates = await GetAllRatesAsync();
             return rates[currencyName];

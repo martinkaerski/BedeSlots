@@ -21,12 +21,10 @@ namespace BedeSlots.Data.Models
         [DataType(DataType.DateTime)]
         public DateTime Birthdate { get; set; }
 
-        public int CurrencyId { get; set; }
-
         [Required]
         public Currency Currency { get; set; }
 
-        public double Balance { get; set; }
+        public decimal Balance { get; set; }
 
         public ICollection<BankCard> Cards { get; set; }
 

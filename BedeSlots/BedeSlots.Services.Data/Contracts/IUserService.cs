@@ -1,12 +1,11 @@
-﻿using System.Threading.Tasks;
-using BedeSlots.Data;
-using BedeSlots.Data.Models;
+﻿using BedeSlots.Data.Models;
+using System.Threading.Tasks;
 
 namespace BedeSlots.Services.Data.Contracts
 {
     public interface IUserService
     {
         Task<User> GetUserById(string id);
-        Task<double> GetUserBalanceById(string userId);
+        Task<decimal> GetUserBalanceById(string userId);
     }
 }

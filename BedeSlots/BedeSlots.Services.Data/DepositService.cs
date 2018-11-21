@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
-using BedeSlots.Data;
+﻿using BedeSlots.Data;
 using BedeSlots.Data.Models;
 using BedeSlots.Services.Data.Contracts;
 using Microsoft.EntityFrameworkCore;
+using System.Threading.Tasks;
 
 namespace BedeSlots.Services.Data
 {
@@ -23,15 +20,11 @@ namespace BedeSlots.Services.Data
         public async Task<Transaction> DepositAsync(Transaction transaction)
         {
             var user = await this.context.Users.FirstOrDefaultAsync(u => u.Id == transaction.UserId);
-            double amount = transaction.Amount;
+            decimal amount = transaction.Amount;
 
-            //TODO: use one of them
-            var usdId = (int)CurrencyName.USD;
-            var userCurrencyName = (CurrencyName)user.CurrencyId;
-            
-            if (user.CurrencyId != usdId)
+            if (user.Currency != Currency.USD)
             {
-               amount = await this.currencyConverterService.ConvertToUsd(transaction.Amount, userCurrencyName);
+                amount = await this.currencyConverterService.ConvertToUsd(transaction.Amount, user.Currency);
             }
 
             user.Balance += amount;

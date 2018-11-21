@@ -18,19 +18,12 @@ namespace BedeSlots.Data
 
         public DbSet<CardType> CardTypes { get; set; }
 
-        public DbSet<Currency> Currencies { get; set; }
-
         public DbSet<Transaction> Transactions { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             //modelBuilder.ApplyConfiguration(new UserConfiguration());
-            modelBuilder
-               .Entity<User>()
-               .HasOne(u => u.Currency)
-               .WithMany(c => c.Users)
-               .HasForeignKey(u => u.CurrencyId);
-
+            
             modelBuilder
                .Entity<BankCard>()
                .HasOne(c => c.Type)
@@ -102,11 +95,6 @@ namespace BedeSlots.Data
             modelBuilder.Entity<CardType>().HasData(new CardType { Id = 1, Name = "Visa" });
             modelBuilder.Entity<CardType>().HasData(new CardType { Id = 2, Name = "MasterCard" });
             modelBuilder.Entity<CardType>().HasData(new CardType { Id = 3, Name = "American Express" });
-
-            //TODO: fix the currency from AppBuilderExtensions
-            modelBuilder.Entity<Currency>().HasData(new Currency { Id = 1, Name = CurrencyName.GBP });
-            modelBuilder.Entity<Currency>().HasData(new Currency { Id = 2, Name = CurrencyName.BGN });
-            modelBuilder.Entity<Currency>().HasData(new Currency { Id = 3, Name = CurrencyName.EUR });
         }
     }
 }

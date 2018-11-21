@@ -1,12 +1,11 @@
 ﻿using BedeSlots.Data;
 using BedeSlots.Data.Models;
 using BedeSlots.Services.Data.Contracts;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
 
 namespace BedeSlots.Services.Data
 {
@@ -52,12 +51,11 @@ namespace BedeSlots.Services.Data
         public async Task<BankCard> GetCardByIdAsync(int id)
         {
             var card = await this.context.BankCards
-                .Include(c=>c.User)
-                .Include(c=>c.Type)
+                .Include(c => c.User)
+                .Include(c => c.Type)
                 .FirstOrDefaultAsync(c => c.Id == id);
 
             return card;
         }
-
     }
 }

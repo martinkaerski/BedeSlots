@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace BedeSlots.Data.Models
+﻿namespace BedeSlots.Data.Models
 {
-   public enum GameType
+    public enum GameType
     {
         FourToThree = 1,
         FiveToFive = 2,

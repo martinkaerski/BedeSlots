@@ -6,7 +6,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\BedeSlots.Data\BedeSlots.Data.csproj" />
-    <ProjectReference Include="..\BedeSlots.Services.External\BedeSlots.Services.External.csproj" />
   </ItemGroup>
 
   <ItemGroup>

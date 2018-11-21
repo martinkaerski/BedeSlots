@@ -3,6 +3,8 @@ using BedeSlots.Data.Models;
 using BedeSlots.Services;
 using BedeSlots.Services.Data;
 using BedeSlots.Services.Data.Contracts;
+using BedeSlots.Services.External;
+using BedeSlots.Services.External.Contracts;
 using BedeSlots.Web.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -87,8 +89,8 @@ namespace BedeSlots
             services.AddTransient<ITransactionService, TransactionService>();
             services.AddTransient<IDepositService, DepositService>();
             services.AddTransient<ICurrencyConverterService, CurrencyConverterService>();
-            services.AddTransient<IExchangeRateApiCaller, ExchangeRateApiCaller>();
-
+            services.AddTransient<IExchangeRateApiCallService, ExchangeRateApiCallService>();
+            services.AddTransient<IExchangeRatesApiCaller, ExchangeRatesApiCaller>();
         }
 
         private void RegisterAuthentication(IServiceCollection services)

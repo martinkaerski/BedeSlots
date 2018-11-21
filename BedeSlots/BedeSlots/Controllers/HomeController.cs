@@ -12,18 +12,18 @@ namespace BedeSlots.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly IExchangeRateApiCaller exchangeRateApiCaller;
+        private readonly IExchangeRateApiCallService exchangeRateApiCallService;
         private readonly UserManager<User> userManager;
 
-        public HomeController(IExchangeRateApiCaller exchangeRateApiCaller, UserManager<User> userManager)
+        public HomeController(IExchangeRateApiCallService exchangeRateApiCallService, UserManager<User> userManager)
         {
-            this.exchangeRateApiCaller = exchangeRateApiCaller;
+            this.exchangeRateApiCallService = exchangeRateApiCallService;
             this.userManager = userManager;
         }
 
         public async Task<IActionResult> Index()
         {
-            var result = await this.exchangeRateApiCaller.GetCurrenciesRates();
+            //var result = this.exchangeRateApiCallService.GetAllRatesAsync();
 
             var user = await this.userManager.GetUserAsync(HttpContext.User);
             if (user != null)
@@ -32,7 +32,6 @@ namespace BedeSlots.Controllers
             }
 
             return View();
-
         }
 
         public IActionResult About()

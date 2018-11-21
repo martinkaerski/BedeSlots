@@ -73,13 +73,11 @@ namespace BedeSlots.Web.Controllers
             var registeredTransaction = await this.transactionService.RegisterTransactionsAsync(depositTransaction);
             // TODO considering status message or details page..
             return View("DepositInfo");
-
         }
 
         public IActionResult DepositInfo()
         {
             return View();
         }
-
     }
 }

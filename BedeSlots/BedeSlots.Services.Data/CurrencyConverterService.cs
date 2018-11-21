@@ -9,18 +9,17 @@ namespace BedeSlots.Services.Data
     public class CurrencyConverterService : ICurrencyConverterService
     {
         private readonly BedeSlotsDbContext context;
-        private readonly ICurrencyService currencyService;
+        private readonly IExchangeRateApiCallService exchangeRateApiCallService;
 
-        public CurrencyConverterService(BedeSlotsDbContext context, ICurrencyService currencyService)
+        public CurrencyConverterService(BedeSlotsDbContext context, IExchangeRateApiCallService exchangeRateApiCallService)
         {
             this.context = context ?? throw new ArgumentNullException(nameof(context));
-            this.currencyService = currencyService;
+            this.exchangeRateApiCallService = exchangeRateApiCallService;
         }
 
         public async Task<double> ConvertToUsd(double amount, CurrencyName currencyName)
         {
-            var currency = await this.currencyService.GetCurrencyAsync(currencyName);
-            var rateToBaseCurrency = currency.RateToBaseCurrency;
+            var rateToBaseCurrency = await this.exchangeRateApiCallService.GetRateAsync(currencyName);
             
             return amount * (1 / rateToBaseCurrency);
         }

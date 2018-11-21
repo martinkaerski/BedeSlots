@@ -22,5 +22,11 @@ namespace BedeSlots.Services.Data
             var currencies = await this.context.Currencies.ToListAsync();
             return currencies;
         }
+
+        public async Task<Currency> GetCurrencyAsync(CurrencyName name)
+        {
+            var currency = await this.context.Currencies.SingleOrDefaultAsync(c => c.Name == name);
+            return currency;
+        }
     }
 }

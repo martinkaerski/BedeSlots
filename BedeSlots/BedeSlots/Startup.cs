@@ -86,8 +86,9 @@ namespace BedeSlots
             services.AddTransient<ICurrencyService, CurrencyService>();
             services.AddTransient<ITransactionService, TransactionService>();
             services.AddTransient<IDepositService, DepositService>();
-
+            services.AddTransient<ICurrencyConverterService, CurrencyConverterService>();
             services.AddTransient<IExchangeRateApiCaller, ExchangeRateApiCaller>();
+
         }
 
         private void RegisterAuthentication(IServiceCollection services)

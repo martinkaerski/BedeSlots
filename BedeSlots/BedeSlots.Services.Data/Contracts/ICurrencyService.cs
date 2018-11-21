@@ -7,5 +7,7 @@ namespace BedeSlots.Services.Data.Contracts
     public interface ICurrencyService
     {
         Task<ICollection<Currency>> GetAllCurrenciesAsync();
+
+        Task<Currency> GetCurrencyAsync(CurrencyName name);
     }
 }

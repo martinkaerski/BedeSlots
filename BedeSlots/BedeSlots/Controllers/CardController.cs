@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using BedeSlots.Data.Models;
-using BedeSlots.Services.Data;
+﻿using BedeSlots.Data.Models;
 using BedeSlots.Services.Data.Contracts;
 using BedeSlots.Web.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace BedeSlots.Web.Controllers
 {
@@ -26,14 +23,14 @@ namespace BedeSlots.Web.Controllers
             this.userService = userService;
             this.cardService = cardService;
         }
-        
+
         [HttpGet]
         public async Task<IActionResult> AddCard()
         {
             var cardTypes = await this.cardService.GetCardTypesAsync();
             var cardTypesSelectList = cardTypes.Select(x => new SelectListItem { Value = x.Id.ToString(), Text = x.Name }).ToList();
             var currencies = await this.currencyService.GetAllCurrenciesAsync();
-            var currenciesSelectList = currencies.Select(c => new SelectListItem { Value = c.Id.ToString(), Text = c.Name }).ToList();
+            var currenciesSelectList = currencies.Select(c => new SelectListItem { Value = c.Id.ToString(), Text = c.Name.ToString() }).ToList();
 
             var addCardVM = new AddCardViewModel() { CardTypes = cardTypesSelectList, Currencies = currenciesSelectList };
             return View(addCardVM);
@@ -46,7 +43,7 @@ namespace BedeSlots.Web.Controllers
 
             if (!ModelState.IsValid)
             {
-                return Redirect("AddCard"); 
+                return Redirect("AddCard");
             }
 
             var card = new BankCard()

@@ -100,9 +100,10 @@ namespace BedeSlots.Data.Migrations
 
                     b.Property<DateTime?>("ModifiedOn");
 
-                    b.Property<string>("Name")
-                        .IsRequired()
+                    b.Property<int>("Name")
                         .HasMaxLength(3);
+
+                    b.Property<double>("RateToBaseCurrency");
 
                     b.Property<string>("Symbol");
 
@@ -111,9 +112,9 @@ namespace BedeSlots.Data.Migrations
                     b.ToTable("Currencies");
 
                     b.HasData(
-                        new { Id = 2, IsDeleted = false, Name = "BGN", Symbol = "lv" },
-                        new { Id = 3, IsDeleted = false, Name = "EUR", Symbol = "€" },
-                        new { Id = 4, IsDeleted = false, Name = "GBP", Symbol = "£" }
+                        new { Id = 1, IsDeleted = false, Name = 4, RateToBaseCurrency = 0.0 },
+                        new { Id = 2, IsDeleted = false, Name = 2, RateToBaseCurrency = 0.0 },
+                        new { Id = 3, IsDeleted = false, Name = 3, RateToBaseCurrency = 0.0 }
                     );
                 });
 

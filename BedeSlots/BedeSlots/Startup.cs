@@ -85,6 +85,7 @@ namespace BedeSlots
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<ICurrencyService, CurrencyService>();
             services.AddTransient<ITransactionService, TransactionService>();
+            services.AddTransient<IDepositService, DepositService>();
 
         }
 

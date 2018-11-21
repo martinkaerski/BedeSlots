@@ -28,12 +28,5 @@ namespace BedeSlots.Services.Data
             return user;
         }
 
-        public async Task<Transaction> DepositAsync(Transaction transaction)
-        {
-            var user = await this.context.Users.FirstOrDefaultAsync(u => u.Id == transaction.UserId);
-            user.Balance += transaction.Amount;
-
-            return transaction;
-        }
     }
 }

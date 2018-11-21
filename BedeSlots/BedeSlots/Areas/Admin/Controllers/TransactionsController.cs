@@ -13,10 +13,12 @@ namespace BedeSlots.Web.Areas.Admin.Controllers
     public class TransactionsController : Controller
     {
         private readonly ITransactionService transactionService;
+        private readonly ICardService cardService;
 
-        public TransactionsController(ITransactionService transactionService)
+        public TransactionsController(ITransactionService transactionService, ICardService cardService)
         {
             this.transactionService = transactionService;
+            this.cardService = cardService;
         }
 
         public async Task<IActionResult> Index()
@@ -24,15 +26,19 @@ namespace BedeSlots.Web.Areas.Admin.Controllers
             var transactions = await transactionService.GetAllTransactionsAsync();
             var list = new List<TransactionHistoryViewModel>();
 
+
             foreach (var transaction in transactions)
             {
+                var card = await this.cardService.GetCardByIdAsync(transaction.CardId);
+                var cardNumberLastFourDigits = card.Number.Substring(12,4);
+
                 var transactionViewModel = new TransactionHistoryViewModel()
                 {
                     Id = transaction.Id,
                     Date = transaction.Date,
                     Type = transaction.Type.ToString(),
                     Amount = transaction.Amount,
-                    Description = "card id =>" + transaction.CardId.ToString(),
+                    Description = "Deposit with card " + new string('*',12) + cardNumberLastFourDigits,
                     UserEmail = transaction.User.Email
                 };
 

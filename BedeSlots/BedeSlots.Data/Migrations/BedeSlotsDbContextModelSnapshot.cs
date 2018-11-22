@@ -40,46 +40,16 @@ namespace BedeSlots.Data.Migrations
                     b.Property<string>("Number")
                         .IsRequired();
 
-                    b.Property<int>("TypeId");
+                    b.Property<int>("Type");
 
                     b.Property<string>("UserId")
                         .IsRequired();
 
                     b.HasKey("Id");
 
-                    b.HasIndex("TypeId");
-
                     b.HasIndex("UserId");
 
                     b.ToTable("BankCards");
-                });
-
-            modelBuilder.Entity("BedeSlots.Data.Models.CardType", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTime?>("CreatedOn");
-
-                    b.Property<DateTime?>("DeletedOn");
-
-                    b.Property<bool>("IsDeleted");
-
-                    b.Property<DateTime?>("ModifiedOn");
-
-                    b.Property<string>("Name")
-                        .IsRequired();
-
-                    b.HasKey("Id");
-
-                    b.ToTable("CardTypes");
-
-                    b.HasData(
-                        new { Id = 1, IsDeleted = false, Name = "Visa" },
-                        new { Id = 2, IsDeleted = false, Name = "MasterCard" },
-                        new { Id = 3, IsDeleted = false, Name = "American Express" }
-                    );
                 });
 
             modelBuilder.Entity("BedeSlots.Data.Models.Transaction", b =>
@@ -287,11 +257,6 @@ namespace BedeSlots.Data.Migrations
 
             modelBuilder.Entity("BedeSlots.Data.Models.BankCard", b =>
                 {
-                    b.HasOne("BedeSlots.Data.Models.CardType", "Type")
-                        .WithMany("Cards")
-                        .HasForeignKey("TypeId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
                     b.HasOne("BedeSlots.Data.Models.User", "User")
                         .WithMany("Cards")
                         .HasForeignKey("UserId")

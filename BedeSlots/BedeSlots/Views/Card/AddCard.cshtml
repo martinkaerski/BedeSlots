@@ -20,9 +20,9 @@
         <input asp-for="Expiry" type="date" name="expiry" placeholder="expiry" />
         <span asp-validation-for="Expiry" class="text-danger"></span>
 
-        <label asp-for="CardTypeId" class="control-label"></label>
-        <select asp-for="CardTypeId" asp-items="@Model.CardTypes"></select>
-        <span asp-validation-for="CardTypeId" class="text-danger"></span>
+        <label asp-for="CardType" class="control-label"></label>
+        <select asp-for="CardType" asp-items="@Model.CardTypes"></select>
+        <span asp-validation-for="CardType" class="text-danger"></span>
 
         <button type="submit">Add</button>
     </form>

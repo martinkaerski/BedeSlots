@@ -16,21 +16,12 @@ namespace BedeSlots.Data
 
         public DbSet<BankCard> BankCards { get; set; }
 
-        public DbSet<CardType> CardTypes { get; set; }
-
         public DbSet<Transaction> Transactions { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             //modelBuilder.ApplyConfiguration(new UserConfiguration());
-            
-            modelBuilder
-               .Entity<BankCard>()
-               .HasOne(c => c.Type)
-               .WithMany(t => t.Cards)
-               .HasForeignKey(u => u.TypeId)
-              .OnDelete(DeleteBehavior.Restrict);
-            
+                        
             modelBuilder
                .Entity<BankCard>()
                .HasOne(c => c.User)
@@ -57,8 +48,6 @@ namespace BedeSlots.Data
                 .Entity<Transaction>()
                 .Property(t => t.GameType)
                 .HasConversion(gameTypeConverter);
-
-            SeedData(modelBuilder);
 
             base.OnModelCreating(modelBuilder);
         }
@@ -88,13 +77,6 @@ namespace BedeSlots.Data
                     entity.ModifiedOn = DateTime.Now;
                 }
             }
-        }
-
-        private void SeedData(ModelBuilder modelBuilder)
-        {
-            modelBuilder.Entity<CardType>().HasData(new CardType { Id = 1, Name = "Visa" });
-            modelBuilder.Entity<CardType>().HasData(new CardType { Id = 2, Name = "MasterCard" });
-            modelBuilder.Entity<CardType>().HasData(new CardType { Id = 3, Name = "American Express" });
         }
     }
 }

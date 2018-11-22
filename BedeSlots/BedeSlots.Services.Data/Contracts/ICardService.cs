@@ -7,9 +7,7 @@ namespace BedeSlots.Services.Data.Contracts
     public interface ICardService
     {
         Task<ICollection<BankCard>> GetUserCardsAsync(string userId);
-        Task<ICollection<CardType>> GetCardTypesAsync();
         Task<BankCard> AddCardAsync(BankCard bankCard);
-        Task<CardType> GetCardTypeByIdaAsync(int id);
         Task<BankCard> GetCardByIdAsync(int id);
     }
 }

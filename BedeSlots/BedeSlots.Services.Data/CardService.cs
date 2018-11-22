@@ -20,18 +20,18 @@ namespace BedeSlots.Services.Data
 
         public async Task<ICollection<BankCard>> GetUserCardsAsync(string userId)
         {
-            var cards = await context.BankCards.Include(c => c.Type)
+            var cards = await context.BankCards
                 .Where(c => c.UserId == userId)
                 .ToListAsync();
 
             return cards;
         }
 
-        public async Task<ICollection<CardType>> GetCardTypesAsync()
-        {
-            var types = await this.context.CardTypes.Where(x => x.IsDeleted == false).ToListAsync();
-            return types;
-        }
+        //public async Task<ICollection<CardType>> GetCardTypesAsync()
+        //{
+        //    var types = await this.context.CardTypes.Where(x => x.IsDeleted == false).ToListAsync();
+        //    return types;
+        //}
 
         public async Task<BankCard> AddCardAsync(BankCard bankCard)
         {
@@ -41,18 +41,17 @@ namespace BedeSlots.Services.Data
             return bankCard;
         }
 
-        public async Task<CardType> GetCardTypeByIdaAsync(int id)
-        {
-            var type = await this.context.CardTypes.FirstOrDefaultAsync(t => t.Id == id);
+        //public async Task<CardType> GetCardTypeByIdaAsync(int id)
+        //{
+        //    var type = await this.context.CardTypes.FirstOrDefaultAsync(t => t.Id == id);
 
-            return type;
-        }
+        //    return type;
+        //}
 
         public async Task<BankCard> GetCardByIdAsync(int id)
         {
             var card = await this.context.BankCards
                 .Include(c => c.User)
-                .Include(c => c.Type)
                 .FirstOrDefaultAsync(c => c.Id == id);
 
             return card;

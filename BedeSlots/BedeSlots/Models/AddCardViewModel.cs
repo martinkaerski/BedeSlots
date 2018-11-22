@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using BedeSlots.Data.Models;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -7,6 +8,10 @@ namespace BedeSlots.Web.Models
 {
     public class AddCardViewModel
     {
+        public AddCardViewModel()
+        {
+        }
+
         [Required]
         [RegularExpression("^[0-9]{16}$", ErrorMessage = "The card number should be 16 digits.")]
         [Display(Name = "Card number")]
@@ -24,13 +29,8 @@ namespace BedeSlots.Web.Models
 
         [Required]
         [Display(Name = "Card type")]
-        public int CardTypeId { get; set; }
+        public CardType CardType { get; set; }
 
         public List<SelectListItem> CardTypes { get; set; }
-
-        public AddCardViewModel()
-        {
-
-        }
     }
 }

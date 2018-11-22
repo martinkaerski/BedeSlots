@@ -16,8 +16,6 @@ namespace BedeSlots.Data.Models
         [Required]
         public DateTime ExpiryDate { get; set; }
 
-        public int TypeId { get; set; }
-
         [Required]
         public CardType Type { get; set; }
 

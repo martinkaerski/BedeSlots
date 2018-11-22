@@ -45,8 +45,8 @@ namespace BedeSlots.Web.Controllers
                 var cards = await this.cardService.GetUserCardsAsync(user.Id);
                 var cardsSelectList = cards.Select(x => new SelectListItem { Value = x.Id.ToString(), Text = x.Number }).ToList();
 
-                var cardTypes = await this.cardService.GetCardTypesAsync();
-                var cardTypesSelectList = cardTypes.Select(x => new SelectListItem { Value = x.Id.ToString(), Text = x.Name }).ToList();
+                var cardTypes = Enum.GetValues(typeof(CardType)).Cast<CardType>();
+                var cardTypesSelectList = cardTypes.Select(c => new SelectListItem { Value = c.ToString(), Text = c.ToString() }).ToList();
 
                 var depositVM = new DepositViewModel() { BankCards = cardsSelectList, CardTypes = cardTypesSelectList };
                 return View(depositVM);

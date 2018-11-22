@@ -4,6 +4,7 @@ using BedeSlots.Web.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -27,8 +28,8 @@ namespace BedeSlots.Web.Controllers
         [HttpGet]
         public async Task<IActionResult> AddCard()
         {
-            var cardTypes = await this.cardService.GetCardTypesAsync();
-            var cardTypesSelectList = cardTypes.Select(x => new SelectListItem { Value = x.Id.ToString(), Text = x.Name }).ToList();
+            var cardTypes = Enum.GetValues(typeof(CardType)).Cast<CardType>();
+            var cardTypesSelectList = cardTypes.Select(c => new SelectListItem { Value = c.ToString(), Text = c.ToString() }).ToList();
 
             var addCardVM = new AddCardViewModel() { CardTypes = cardTypesSelectList };
             return View(addCardVM);
@@ -49,7 +50,7 @@ namespace BedeSlots.Web.Controllers
                 Number = model.CardNumber,
                 CvvNumber = model.Cvv,
                 ExpiryDate = model.Expiry,
-                TypeId = model.CardTypeId,
+                Type = model.CardType,
                 UserId = user.Id
             };
 

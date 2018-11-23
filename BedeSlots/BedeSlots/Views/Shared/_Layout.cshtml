@@ -43,7 +43,7 @@
                     }
                     @if (User.Identity.IsAuthenticated && balance != null)
                     {
-                        <li><a>Balance: @balance.Balance  $</a></li>
+                        <li><a>Balance: @balance.Balance.ToString("0.00")  $</a></li>
                     }
 
                 </ul>

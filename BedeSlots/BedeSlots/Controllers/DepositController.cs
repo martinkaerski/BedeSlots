@@ -58,20 +58,22 @@ namespace BedeSlots.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Deposit(int bankCardId, int depositAmount)
+        public async Task<IActionResult> Deposit(DepositViewModel depositViewModel)
         {
             if (!ModelState.IsValid)
             {
                 return Redirect("Deposit");
             }
+            
             var user = await this.userManager.GetUserAsync(HttpContext.User);
 
-            var transaction = this.transactionService.CreateTransaction(TransactionType.Deposit, user.Id, bankCardId, depositAmount);
+            var transaction = this.transactionService.CreateTransaction(TransactionType.Deposit, user.Id,
+                depositViewModel.BankCardId, depositViewModel.DepositAmount);
 
             var depositTransaction = await this.depositService.DepositAsync(transaction);
 
-            var registeredTransaction = await this.transactionService.RegisterTransactionsAsync(depositTransaction);
-            // TODO considering status message or details page..
+            await this.transactionService.RegisterTransactionsAsync(depositTransaction);
+
             return View("DepositInfo");
         }
 

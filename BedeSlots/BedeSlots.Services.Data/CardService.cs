@@ -56,5 +56,17 @@ namespace BedeSlots.Services.Data
 
             return card;
         }
+
+        public bool CardExists(int bankCardId)
+        {
+            if (this.context.BankCards.Any(c => c.Id == bankCardId))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
     }
 }

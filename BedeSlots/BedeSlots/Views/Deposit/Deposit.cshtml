@@ -10,10 +10,14 @@
         <select asp-for="@Model.BankCardId" asp-items="@Model.BankCards"></select>
         <span asp-validation-for="BankCardId" class="text-danger"></span>
         <a asp-controller="Card" asp-action="AddCard">Add card</a>
-        <label>Amount</label>
-        <input type="text" asp-for="@Model.DepositAmount" placeholder="Amount"/>
+
+        <input type="text" asp-for="@Model.DepositAmount" placeholder="Amount" />
+        <span asp-validation-for="DepositAmount" class="text-danger"></span>
         <button type="submit">Deposit</button>
     </form>
-
 </div>
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}
 

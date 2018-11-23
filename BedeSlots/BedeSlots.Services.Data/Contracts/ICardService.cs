@@ -9,5 +9,6 @@ namespace BedeSlots.Services.Data.Contracts
         Task<ICollection<BankCard>> GetUserCardsAsync(string userId);
         Task<BankCard> AddCardAsync(BankCard bankCard);
         Task<BankCard> GetCardByIdAsync(int id);
+        bool CardExists(int bankCardId);
     }
 }

@@ -13,8 +13,8 @@ namespace BedeSlots.Services.External
             {
                 try
                 {
-                    client.BaseAddress = new Uri("https://api.exchangeratesapi.io");
-                    var response = await client.GetAsync($"/latest?base=USD&symbols=EUR,GBP,BGN");
+                    client.BaseAddress = new Uri(ServicesConstants.ApiBaseAddress);
+                    var response = await client.GetAsync(ServicesConstants.ApiParameters);
                     response.EnsureSuccessStatusCode();
 
                     var stringResult = await response.Content.ReadAsStringAsync();

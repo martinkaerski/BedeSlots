@@ -13,11 +13,11 @@
         <span asp-validation-for="CardNumber" class="text-danger"></span>
 
         <label asp-for="Cvv" class="control-label"></label>
-        <input asp-for="Cvv" type="text" name="cvv" placeholder="cvv" />
+        <input asp-for="Cvv" type="text" name="cvv" placeholder="cvv" required />
         <span asp-validation-for="Cvv" class="text-danger"></span>
 
         <label asp-for="Expiry" class="control-label"></label>
-        <input asp-for="Expiry" type="date" name="expiry" placeholder="expiry" />
+        <input asp-for="Expiry" type="date" name="expiry" placeholder="expiry" required />
         <span asp-validation-for="Expiry" class="text-danger"></span>
 
         <label asp-for="CardType" class="control-label"></label>

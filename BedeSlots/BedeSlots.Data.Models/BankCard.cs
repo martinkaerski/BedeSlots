@@ -23,6 +23,5 @@ namespace BedeSlots.Data.Models
 
         [Required]
         public User User { get; set; }
-
     }
 }

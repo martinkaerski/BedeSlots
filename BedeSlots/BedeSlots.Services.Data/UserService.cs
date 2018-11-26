@@ -30,6 +30,5 @@ namespace BedeSlots.Services.Data
 
             return user;
         }
-
     }
 }

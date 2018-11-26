@@ -29,7 +29,7 @@ namespace BedeSlots.Web.Areas.Admin.Controllers
 
             foreach (var transaction in transactions)
             {
-                var card = await this.cardService.GetCardByIdAsync(transaction.CardId);
+                var card = await this.cardService.GetCardByIdAsync((int)transaction.CardId);
                 var cardNumberLastFourDigits = card.Number.Substring(12,4);
 
                 var transactionViewModel = new TransactionHistoryViewModel()

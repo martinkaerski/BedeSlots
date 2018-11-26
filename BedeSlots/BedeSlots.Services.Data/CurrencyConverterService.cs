@@ -13,14 +13,14 @@ namespace BedeSlots.Services.Data
             this.exchangeRateApiCallService = exchangeRateApiCallService;
         }
 
-        public async Task<decimal> ConvertToUsd(decimal amount, Currency currencyName)
+        public async Task<decimal> ConvertToBaseCurrency(decimal amount, Currency currencyName)
         {
             var rateToBaseCurrency = await this.exchangeRateApiCallService.GetRateAsync(currencyName);
 
             return amount * (1 / rateToBaseCurrency);
         }
 
-        public async Task<decimal> ConvertFromUsdToOther(decimal amount, Currency currencyName)
+        public async Task<decimal> ConvertFromBaseToOther(decimal amount, Currency currencyName)
         {
             var rateToBaseCurrency = await this.exchangeRateApiCallService.GetRateAsync(currencyName);
 

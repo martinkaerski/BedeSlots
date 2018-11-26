@@ -4,7 +4,6 @@ using BedeSlots.Services.Data.Contracts;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace BedeSlots.Services.Data
@@ -51,7 +50,7 @@ namespace BedeSlots.Services.Data
             {
                 Amount = depositAmount,
                 Date = DateTime.Now,
-                Type = TransactionType.Deposit,
+                Type = type,
                 CardId = cardId,
                 UserId = userId,
             };

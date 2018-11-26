@@ -24,7 +24,7 @@ namespace BedeSlots.Services.Data
 
             if (user.Currency != Currency.USD)
             {
-                amount = await this.currencyConverterService.ConvertToUsd(transaction.Amount, user.Currency);
+                amount = await this.currencyConverterService.ConvertToBaseCurrency(transaction.Amount, user.Currency);
             }
 
             user.Balance += amount;

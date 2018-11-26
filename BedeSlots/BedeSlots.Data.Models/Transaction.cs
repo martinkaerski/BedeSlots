@@ -20,7 +20,7 @@ namespace BedeSlots.Data.Models
         public decimal Amount { get; set; }
 
         //TODO: should it be like this - one entity for deposit and win/stake
-        public int CardId { get; set; }
+        public int? CardId { get; set; }
 
         public GameType GameType { get; set; }
 

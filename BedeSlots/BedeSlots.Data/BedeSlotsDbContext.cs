@@ -5,6 +5,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using System;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace BedeSlots.Data
 {
@@ -52,11 +54,16 @@ namespace BedeSlots.Data
             base.OnModelCreating(modelBuilder);
         }
 
-        //TODO: Override SaveChangesAsync
         public override int SaveChanges()
         {
             this.ApplyAuditInfoRules();
             return base.SaveChanges();
+        }
+
+        public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default(CancellationToken))
+        {
+            this.ApplyAuditInfoRules();
+            return await base.SaveChangesAsync(cancellationToken);
         }
 
         private void ApplyAuditInfoRules()

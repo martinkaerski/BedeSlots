@@ -71,6 +71,7 @@ namespace BedeSlots.Web.Controllers
                 Owner = card.User
             };
 
+            
             return View(cardInfo);
         }
     }

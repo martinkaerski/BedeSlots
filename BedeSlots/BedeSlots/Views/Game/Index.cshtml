@@ -1,0 +1,36 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+}
+
+<link href="~/css/game.css" rel="stylesheet" />
+
+<h1>Slot Machine</h1>
+<div class="content">
+    <table>
+        <tr>
+            <td><img id="first-first" src="~/images/fruits/0.png" name="left"></td>
+            <td><img src="~/images/fruits/1.png" name="center"></td>
+            <td><img src="~/images/fruits/2.png" name="right"></td>
+        </tr>
+
+        <tr>
+            <td><img src="~/images/fruits/0.png" name="sleft"></td>
+            <td><img src="~/images/fruits/0.png" name="scenter"></td>
+            <td><img src="~/images/fruits/0.png" name="sright"></td>
+        </tr>
+
+        <tr>
+            <td><img src="~/images/fruits/0.png" name="tleft"></td>
+            <td><img src="~/images/fruits/0.png" name="tcenter"></td>
+            <td><img src="~/images/fruits/0.png" name="tright"></td>
+        </tr>
+    </table>
+        
+    <form action="#" class="btn btn-default">
+        <input type="button" value="Spin" onclick=" slot();">
+    </form>
+    <div class="title">Result: <span id="all"></span></div>
+</div>
+
+<script src="~/js/game.js"></script>

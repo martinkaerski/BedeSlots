@@ -10,7 +10,7 @@ for (let i = 0; i < 4; i++) {
 
 var counter = 0;
 
-function slot() {
+function spin() {
     var Random = setInterval(function () {
         
         counter++;
@@ -37,16 +37,36 @@ function slot() {
             let final_center = list[center];
             let final_right = list[right];
             
-            if ((final_left == final_center) && (final_left == final_right)) {
-                document.getElementById("all").innerHTML = "You won!";
-
-            } else {
-                document.getElementById("all").innerHTML = "You lost. Try Again!";
-            }
-
             counter = 0;
             clearInterval(Random);
             // After the result will be displayed the random number generating process should be closed.
         }
     }, 140);  
 }  
+
+﻿$(function () {
+    const $spinForm = $('#spin-form');
+
+    $spinForm.on('submit', function (event) {
+        event.preventDefault();
+
+        $.get($commentForm.attr('action'), function (serverData) {
+            $('#comment-section').prepend(serverData);
+        });
+    });
+});
+
+
+$(document).ready(function () {
+    $("#spin-btn").click(function () {
+        $.post("demo_test_post.asp",
+            {
+                name: "Donald Duck",
+                city: "Duckburg"
+            },
+            function (data, status) {
+                alert("Data: " + data + "\nStatus: " + status);
+            });
+    });
+});
+

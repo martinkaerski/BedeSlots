@@ -1,4 +1,6 @@
-﻿
+﻿@model GameSlotViewModel
+@inject IJsonHelper Json;
+
 @{
     ViewData["Title"] = "Index";
 }
@@ -7,30 +9,63 @@
 
 <h1>Slot Machine</h1>
 <div class="content">
-    <table>
-        <tr>
-            <td><img id="first-first" src="~/images/fruits/0.png" name="left"></td>
-            <td><img src="~/images/fruits/1.png" name="center"></td>
-            <td><img src="~/images/fruits/2.png" name="right"></td>
-        </tr>
+    <div id="partial">
+        <partial name="_GameSlotPartial" model="@Model" />
+    </div>
 
-        <tr>
-            <td><img src="~/images/fruits/0.png" name="sleft"></td>
-            <td><img src="~/images/fruits/0.png" name="scenter"></td>
-            <td><img src="~/images/fruits/0.png" name="sright"></td>
-        </tr>
+    @*<form id="spin-form" method="post" asp-controller="Game" asp-action="Spin">*@
+    <form id="spin-form">
 
-        <tr>
-            <td><img src="~/images/fruits/0.png" name="tleft"></td>
-            <td><img src="~/images/fruits/0.png" name="tcenter"></td>
-            <td><img src="~/images/fruits/0.png" name="tright"></td>
-        </tr>
-    </table>
-        
-    <form action="#" class="btn btn-default">
-        <input type="button" value="Spin" onclick=" slot();">
+        <div class="form-group col-m-4">
+            <label asp-for="Money" class="control-label"></label>
+            <input asp-for="Money" class="form-control" id="data" />
+            <span asp-validation-for="Money" class="text-danger"></span>
+        </div>
+
+        <input type="submit" id="spin-button" value="Spin">
     </form>
-    <div class="title">Result: <span id="all"></span></div>
 </div>
 
-<script src="~/js/game.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+@*<script src="~/js/game.js"></script>*@
+<script>
+    $("#spin-form").submit(function (event) {
+        event.preventDefault();
+        const $spinForm = $("spin-form");
+        const dataToSend = $spinForm.serialize();
+        const data = $("#data").serialize();
+
+        //TODO: dataToSend is empty???
+        console.log(dataToSend);
+
+        $.ajax({
+            url: "/Game/Spin",
+            type: "Get",
+            data: data,
+            success: function (partialViewResult) {
+                $("#partial").empty();
+                $("#partial").html(partialViewResult);
+            },
+            error: function (arg, data, value) {
+                console.log(arg + data + value);
+            }
+        })
+    });
+
+    //TODO: cant run with post method, if asp-action and controller - partialView in new page
+
+    //$(function () {
+    //    const $commentForm = $('#spin-form');
+
+    //    $commentForm.on('submit', function (event) {
+    //        event.preventDefault();
+
+    //        const dataToSend = $commentForm.serialize();
+
+    //        $.post($commentForm.attr('action'), dataToSend, function (partialViewResult) {
+    //            $("#partial").empty();
+    //            $("#partial").html(partialViewResult);
+    //        });
+    //    });
+    //});
+</script>

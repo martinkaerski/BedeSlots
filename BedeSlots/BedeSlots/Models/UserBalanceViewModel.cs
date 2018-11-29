@@ -2,11 +2,10 @@
 {
     public class UserBalanceViewModel
     {
-        public decimal Balance { get; set; }
-
         public UserBalanceViewModel()
         {
-
         }
+
+        public decimal Balance { get; set; }
     }
 }

@@ -10,6 +10,6 @@ namespace BedeSlots.Services.Data.Contracts
 
         Task<Transaction> GetTransactionByIdAsync(int id);
 
-        Task<Transaction> AddTransaction(TransactionType type, string userId, int? cardId, decimal amount, GameType? gameType);
+        Task<Transaction> AddTransactionAsync(TransactionType type, string userId, int? cardId, decimal amount, GameType? gameType);
     }
 }

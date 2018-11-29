@@ -51,10 +51,13 @@
                 </ul>
                 @await Html.PartialAsync("_LoginPartial")
 
-                @if (SignInManager.IsSignedIn(User))
-                {
-                    @await Component.InvokeAsync("UserBalance");
-                }
+                <div id="component-balance">
+                    @if (SignInManager.IsSignedIn(User))
+                    {
+                        @await Component.InvokeAsync("UserBalance");
+                    }
+                </div>
+
             </div>
         </div>
     </nav>

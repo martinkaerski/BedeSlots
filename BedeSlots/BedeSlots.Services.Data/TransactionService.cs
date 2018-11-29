@@ -36,7 +36,7 @@ namespace BedeSlots.Services.Data
             return transaction;
         }
 
-        public async Task<Transaction> AddTransaction(TransactionType type, string userId, int? cardId, decimal amount, GameType? gameType)
+        public async Task<Transaction> AddTransactionAsync(TransactionType type, string userId, int? cardId, decimal amount, GameType? gameType)
         {
             var transaction = new Transaction()
             {

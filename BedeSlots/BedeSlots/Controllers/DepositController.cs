@@ -61,7 +61,7 @@ namespace BedeSlots.Web.Controllers
 
             var user = await this.userManager.GetUserAsync(HttpContext.User);
 
-            var transaction = await this.transactionService.AddTransaction(TransactionType.Deposit, user.Id,
+            var transaction = await this.transactionService.AddTransactionAsync(TransactionType.Deposit, user.Id,
                 depositViewModel.BankCardId, depositViewModel.Amount,
                 null);
 

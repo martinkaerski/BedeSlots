@@ -40,37 +40,39 @@ namespace BedeSlots.Web.Controllers
                 Rows = rows,
                 Cols = cols,
                 Matrix = stringMatrix,
-                AvailableMoney = user.Balance,
+                Balance = user.Balance,
                 Message = "Good luck!"
             };
 
             return View(model);
         }
 
-        public async Task<IActionResult> Spin(decimal money)
+        public async Task<IActionResult> Spin(decimal stake)
         {
             var user = await userManager.GetUserAsync(HttpContext.User);
 
-            if (user.Balance >= money)
+            if (user.Balance >= stake)
             {
-                await this.depositService.WithdrawMoneyAsync(money, user.Id);
-                var stakeTransaction = this.transactionService.AddTransaction(TransactionType.Stake, user.Id, null, money, GameType._4x3);
+                await this.depositService.WithdrawMoneyAsync(stake, user.Id);
+                var stakeTransaction = await this.transactionService.AddTransactionAsync(TransactionType.Stake, user.Id, null, stake, GameType._4x3);
 
-                var result = game.Spin(5, 5, money);
+                var result = game.Spin(rows, cols, stake);
 
                 var model = new GameSlotViewModel()
                 {
                     Rows = rows,
                     Cols = cols,
                     Matrix = result.Matrix,
-                    Money = result.Money,
-                    AvailableMoney = user.Balance
+                    Stake = result.Money,
+                    Balance = user.Balance
                 };
 
                 if (result.Money > 0)
                 {
-                    var winTransaction = this.transactionService.AddTransaction(TransactionType.Win, user.Id, null, result.Money, GameType._4x3);
+                    var winTransaction = await this.transactionService.AddTransactionAsync(TransactionType.Win, user.Id, null, result.Money, GameType._4x3);
+
                     await depositService.DepositAsync(result.Money, user.Id);
+                    model.Balance += result.Money;
                     model.Message = $"You won {result.Money}";
                 }
                 else
@@ -86,12 +88,17 @@ namespace BedeSlots.Web.Controllers
                 {
                     Rows = rows,
                     Cols = cols,
-                    AvailableMoney = user.Balance,
+                    Balance = user.Balance,
                     Message = "Not enough money"
                 };
 
                 return this.PartialView("_GameSlotPartial", model);
             }
+        }
+
+        public IActionResult BalanceViewComponent()
+        {
+            return ViewComponent("UserBalance");
         }
 
         [AcceptVerbs("Get", "Post")]

@@ -17,9 +17,9 @@
     <form id="spin-form">
 
         <div class="form-group col-m-4">
-            <label asp-for="Money" class="control-label"></label>
-            <input asp-for="Money" class="form-control" id="data" />
-            <span asp-validation-for="Money" class="text-danger"></span>
+            <label asp-for="@Model.Stake" class="control-label"></label>
+            <input asp-for="@Model.Stake" class="form-control" id="data" />
+            <span asp-validation-for="@Model.Stake" class="text-danger"></span>
         </div>
 
         <input type="submit" id="spin-button" value="Spin">
@@ -37,6 +37,7 @@
 
         //TODO: dataToSend is empty???
         console.log(dataToSend);
+        let container = $("#component-balance");
 
         $.ajax({
             url: "/Game/Spin",
@@ -45,6 +46,7 @@
             success: function (partialViewResult) {
                 $("#partial").empty();
                 $("#partial").html(partialViewResult);
+                $.get("/Game/BalanceViewComponent", function (data) { container.html(data); });
             },
             error: function (arg, data, value) {
                 console.log(arg + data + value);

@@ -19,6 +19,7 @@ namespace BedeSlots.Web.Models
         [Display(Name = "Amount")]
         public decimal DepositAmount { get; set; }
 
+        [Display(Name = "Select card")]
         public List<SelectListItem> BankCards { get; set; }
         public List<SelectListItem> CardTypes { get; set; }
 

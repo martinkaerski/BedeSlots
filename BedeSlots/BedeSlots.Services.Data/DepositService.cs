@@ -28,6 +28,9 @@ namespace BedeSlots.Services.Data
             }
 
             user.Balance += amount;
+
+            this.context.Update(user);
+            await this.context.SaveChangesAsync();
             return transaction;
         }
     }

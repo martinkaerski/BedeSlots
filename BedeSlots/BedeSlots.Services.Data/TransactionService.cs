@@ -20,6 +20,10 @@ namespace BedeSlots.Services.Data
         public async Task<Transaction> RegisterTransactionsAsync(Transaction transaction)
         {
             await this.context.Transactions.AddAsync(transaction);
+
+            var user = await this.context.Users.FirstOrDefaultAsync(u => u.Id == transaction.UserId);
+            user.Transactions.Add(transaction);
+
             await this.context.SaveChangesAsync();
 
             return transaction;
@@ -34,7 +38,7 @@ namespace BedeSlots.Services.Data
             return transactions;
         }
 
-        public async Task<Transaction> GetTransactionAsync(int id)
+        public async Task<Transaction> GetTransactionByIdAsync(int id)
         {
             var transaction = await this.context.Transactions
                 .Include(t => t.User)

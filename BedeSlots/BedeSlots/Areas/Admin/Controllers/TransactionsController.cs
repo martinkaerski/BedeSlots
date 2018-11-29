@@ -23,11 +23,10 @@ namespace BedeSlots.Web.Areas.Admin.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var transactions = await transactionService.GetAllTransactionsAsync();
+            var transactions = await this.transactionService.GetAllTransactionsAsync();
             var list = new List<TransactionHistoryViewModel>();
 
-
-            foreach (var transaction in transactions)
+            foreach (var transaction in transactions.Reverse())
             {
                 if (transaction.CardId != null)
                 {
@@ -55,7 +54,7 @@ namespace BedeSlots.Web.Areas.Admin.Controllers
         // GET: Admin/Transactions/Details/5
         public async Task<IActionResult> Details(int id)
         {
-            var transaction = await transactionService.GetTransactionAsync(id);
+            var transaction = await transactionService.GetTransactionByIdAsync(id);
 
             if (transaction == null)
             {

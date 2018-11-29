@@ -10,7 +10,7 @@ namespace BedeSlots.Services.Data.Contracts
 
         Task<ICollection<Transaction>> GetAllTransactionsAsync();
 
-        Task<Transaction> GetTransactionAsync(int id);
+        Task<Transaction> GetTransactionByIdAsync(int id);
 
         Transaction CreateTransaction(TransactionType type, string userId, int cardId, decimal depositAmount);
     }

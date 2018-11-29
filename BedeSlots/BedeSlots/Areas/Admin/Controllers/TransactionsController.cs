@@ -23,14 +23,13 @@ namespace BedeSlots.Web.Areas.Admin.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var transactions = await transactionService.GetAllTransactionsAsync();
+            var transactions = await this.transactionService.GetAllTransactionsAsync();
             var list = new List<TransactionHistoryViewModel>();
 
-
-            foreach (var transaction in transactions)
+            foreach (var transaction in transactions.Reverse())
             {
                 var card = await this.cardService.GetCardByIdAsync(transaction.CardId);
-                var cardNumberLastFourDigits = card.Number.Substring(12,4);
+                var cardNumberLastFourDigits = card.Number.Substring(12, 4);
 
                 var transactionViewModel = new TransactionHistoryViewModel()
                 {
@@ -38,7 +37,7 @@ namespace BedeSlots.Web.Areas.Admin.Controllers
                     Date = transaction.Date,
                     Type = transaction.Type.ToString(),
                     Amount = transaction.Amount,
-                    Description = "Deposit with card " + new string('*',12) + cardNumberLastFourDigits,
+                    Description = "Deposit with card " + new string('*', 12) + cardNumberLastFourDigits,
                     UserEmail = transaction.User.Email
                 };
 
@@ -51,7 +50,7 @@ namespace BedeSlots.Web.Areas.Admin.Controllers
         // GET: Admin/Transactions/Details/5
         public async Task<IActionResult> Details(int id)
         {
-            var transaction = await transactionService.GetTransactionAsync(id);
+            var transaction = await transactionService.GetTransactionByIdAsync(id);
 
             if (transaction == null)
             {

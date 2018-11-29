@@ -42,7 +42,17 @@
                 @Html.DisplayFor(modelItem => item.Amount)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Description)
+               @{string descr;}
+                @if (item.Type == TransactionType.Deposit)
+                {
+                    descr = "Deposit with card **** **** **** " + item.Description;
+                }
+                else
+                {
+                    descr = $"{item.Type} on game {item.Description}";
+                }
+
+                @descr
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.UserEmail)

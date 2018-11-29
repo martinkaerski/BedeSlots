@@ -17,18 +17,6 @@ namespace BedeSlots.Services.Data
             this.context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
-        public async Task<Transaction> RegisterTransactionsAsync(Transaction transaction)
-        {
-            await this.context.Transactions.AddAsync(transaction);
-
-            var user = await this.context.Users.FirstOrDefaultAsync(u => u.Id == transaction.UserId);
-            user.Transactions.Add(transaction);
-
-            await this.context.SaveChangesAsync();
-
-            return transaction;
-        }
-
         public async Task<ICollection<Transaction>> GetAllTransactionsAsync()
         {
             var transactions = await this.context.Transactions
@@ -48,7 +36,7 @@ namespace BedeSlots.Services.Data
             return transaction;
         }
 
-        public Transaction CreateTransaction(TransactionType type, string userId, int? cardId, decimal amount)
+        public async Task<Transaction> AddTransaction(TransactionType type, string userId, int? cardId, decimal amount, GameType? gameType)
         {
             var transaction = new Transaction()
             {
@@ -57,7 +45,11 @@ namespace BedeSlots.Services.Data
                 Type = type,
                 CardId = cardId,
                 UserId = userId,
+                GameType = gameType
             };
+
+            await this.context.Transactions.AddAsync(transaction);
+            await this.context.SaveChangesAsync();
 
             return transaction;
         }

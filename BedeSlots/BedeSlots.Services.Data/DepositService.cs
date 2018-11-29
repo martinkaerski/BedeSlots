@@ -2,10 +2,12 @@
 using BedeSlots.Data.Models;
 using BedeSlots.Services.Data.Contracts;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Threading.Tasks;
 
 namespace BedeSlots.Services.Data
 {
+    //TODO: change the name of the service
     public class DepositService : IDepositService
     {
         private readonly BedeSlotsDbContext context;
@@ -17,21 +19,44 @@ namespace BedeSlots.Services.Data
             this.currencyConverterService = currencyConverterService;
         }
 
-        public async Task<Transaction> DepositAsync(Transaction transaction)
+        public async Task<User> DepositAsync(decimal amount, string userId)
         {
-            var user = await this.context.Users.FirstOrDefaultAsync(u => u.Id == transaction.UserId);
-            decimal amount = transaction.Amount;
+            var user = await this.context.Users.FirstOrDefaultAsync(u => u.Id == userId);
 
             if (user.Currency != Currency.USD)
             {
-                amount = await this.currencyConverterService.ConvertToBaseCurrency(transaction.Amount, user.Currency);
+                amount = await this.currencyConverterService.ConvertToBaseCurrency(amount, user.Currency);
             }
 
             user.Balance += amount;
 
             this.context.Update(user);
             await this.context.SaveChangesAsync();
-            return transaction;
+            return user;
+        }
+
+        public async Task<User> WithdrawMoneyAsync(decimal amount, string userId)
+        {
+            var user = await this.context.Users.FirstOrDefaultAsync(u => u.Id == userId);
+
+            if (user.Currency != Currency.USD)
+            {
+                amount = await this.currencyConverterService.ConvertToBaseCurrency(amount, user.Currency);
+            }
+
+            if (user.Balance >= amount)
+            {
+                user.Balance -= amount;
+            }
+            else
+            {
+                throw new InvalidOperationException("Not enough money!");
+                //TODO: what to do?
+            }
+
+            this.context.Update(user);
+            await this.context.SaveChangesAsync();
+            return user;
         }
     }
 }

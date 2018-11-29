@@ -64,8 +64,7 @@ namespace BedeSlots.Data.Migrations
 
                     b.Property<DateTime>("Date");
 
-                    b.Property<string>("GameType")
-                        .IsRequired();
+                    b.Property<string>("GameType");
 
                     b.Property<string>("Type")
                         .IsRequired();

@@ -1,4 +1,5 @@
-﻿using BedeSlots.Services.Data.Contracts;
+﻿using BedeSlots.Data.Models;
+using BedeSlots.Services.Data.Contracts;
 using BedeSlots.Web.Areas.Admin.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -28,30 +29,40 @@ namespace BedeSlots.Web.Areas.Admin.Controllers
 
             foreach (var transaction in transactions.Reverse())
             {
-                if (transaction.CardId != null)
+                string descriptionData = string.Empty;
+
+                if (transaction.Type == TransactionType.Deposit)
                 {
-                    var card = await this.cardService.GetCardByIdAsync((int)transaction.CardId);
-                    var cardNumberLastFourDigits = card.Number.Substring(12, 4);
+                    if (transaction.CardId != null)
+                    {
+                        var card = await this.cardService.GetCardByIdAsync((int)transaction.CardId);
+                        var cardNumberLastFourDigits = card.Number.Substring(12, 4);
+                        descriptionData = cardNumberLastFourDigits;
+                    }
+                }
+                else
+                {
+                    descriptionData = transaction.GameType.ToString().Substring(1);
                 }
 
                 var transactionViewModel = new TransactionHistoryViewModel()
                 {
                     Id = transaction.Id,
                     Date = transaction.Date,
-                    Type = transaction.Type.ToString(),
+                    Type = transaction.Type,
+                    GameType = transaction.GameType,
                     Amount = transaction.Amount,
-                    Description = "Descr",
-                    //Description = "Deposit with card " + new string('*', 12) + cardNumberLastFourDigits,
+                    Description = descriptionData,
                     UserEmail = transaction.User.Email
                 };
 
                 list.Add(transactionViewModel);
             }
 
+            //TODO: return list or model with prop transactionHistoryVM?
             return View(list);
         }
 
-        // GET: Admin/Transactions/Details/5
         public async Task<IActionResult> Details(int id)
         {
             var transaction = await transactionService.GetTransactionByIdAsync(id);

@@ -48,15 +48,12 @@
                             <li><a asp-area="Admin" asp-controller="UserAdministration" asp-action="Index">Users</a></li>
                         }
                     }
-
                 </ul>
                 @await Html.PartialAsync("_LoginPartial")
 
                 @if (SignInManager.IsSignedIn(User))
                 {
-
                     @await Component.InvokeAsync("UserBalance");
-
                 }
             </div>
         </div>

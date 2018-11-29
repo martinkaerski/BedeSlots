@@ -44,11 +44,11 @@ namespace BedeSlots.Services.Data
             return transaction;
         }
 
-        public Transaction CreateTransaction(TransactionType type, string userId, int cardId, decimal depositAmount)
+        public Transaction CreateTransaction(TransactionType type, string userId, int? cardId, decimal amount)
         {
             var transaction = new Transaction()
             {
-                Amount = depositAmount,
+                Amount = amount,
                 Date = DateTime.Now,
                 Type = type,
                 CardId = cardId,

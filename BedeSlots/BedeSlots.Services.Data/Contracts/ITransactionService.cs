@@ -12,6 +12,6 @@ namespace BedeSlots.Services.Data.Contracts
 
         Task<Transaction> GetTransactionAsync(int id);
 
-        Transaction CreateTransaction(TransactionType type, string userId, int cardId, decimal depositAmount);
+        Transaction CreateTransaction(TransactionType type, string userId, int? cardId, decimal amount);
     }
 }

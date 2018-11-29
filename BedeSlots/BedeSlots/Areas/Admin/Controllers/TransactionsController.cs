@@ -29,8 +29,11 @@ namespace BedeSlots.Web.Areas.Admin.Controllers
 
             foreach (var transaction in transactions)
             {
-                var card = await this.cardService.GetCardByIdAsync((int)transaction.CardId);
-                var cardNumberLastFourDigits = card.Number.Substring(12,4);
+                if (transaction.CardId != null)
+                {
+                    var card = await this.cardService.GetCardByIdAsync((int)transaction.CardId);
+                    var cardNumberLastFourDigits = card.Number.Substring(12, 4);
+                }
 
                 var transactionViewModel = new TransactionHistoryViewModel()
                 {
@@ -38,7 +41,8 @@ namespace BedeSlots.Web.Areas.Admin.Controllers
                     Date = transaction.Date,
                     Type = transaction.Type.ToString(),
                     Amount = transaction.Amount,
-                    Description = "Deposit with card " + new string('*',12) + cardNumberLastFourDigits,
+                    Description = "Descr",
+                    //Description = "Deposit with card " + new string('*', 12) + cardNumberLastFourDigits,
                     UserEmail = transaction.User.Email
                 };
 

@@ -60,7 +60,7 @@ namespace BedeSlots.Data.Migrations
 
                     b.Property<decimal>("Amount");
 
-                    b.Property<int>("CardId");
+                    b.Property<int?>("CardId");
 
                     b.Property<DateTime>("Date");
 

@@ -1,6 +1,8 @@
 ﻿using BedeSlots.Data.Models;
 using BedeSlots.Services.Data.Contracts;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace BedeSlots.Services.Data
 {
@@ -12,15 +14,7 @@ namespace BedeSlots.Services.Data
 
         public ICollection<Currency> GetAllCurrenciesNames()
         {
-            var currencies = new List<Currency>
-            {
-                Currency.USD,
-                Currency.BGN,
-                Currency.EUR,
-                Currency.GBP
-            };
-
-            return currencies;
+           return Enum.GetValues(typeof(Currency)).Cast<Currency>().ToList();
         }
     }
 }

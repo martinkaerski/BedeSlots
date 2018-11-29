@@ -1,5 +1,7 @@
 ﻿using BedeSlots.Data;
 using BedeSlots.Data.Models;
+using BedeSlots.Games;
+using BedeSlots.Games.Contracts;
 using BedeSlots.Services;
 using BedeSlots.Services.Data;
 using BedeSlots.Services.Data.Contracts;
@@ -90,7 +92,9 @@ namespace BedeSlots
             services.AddTransient<IDepositService, DepositService>();
             services.AddTransient<ICurrencyConverterService, CurrencyConverterService>();
             services.AddTransient<IExchangeRateApiCallService, ExchangeRateApiCallService>();
+            //TODO: should it be here?
             services.AddTransient<IExchangeRatesApiCaller, ExchangeRatesApiCaller>();
+            services.AddTransient<IGame, Game>();
         }
 
         private void RegisterAuthentication(IServiceCollection services)

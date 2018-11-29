@@ -6,6 +6,7 @@ using Microsoft.Extensions.Caching.Memory;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace BedeSlots.Services.Data
@@ -34,16 +35,18 @@ namespace BedeSlots.Services.Data
             var stringResultRates = await this.exchangeRateApiCaller.GetCurrenciesRatesAsync();
             var deserializedRates = JsonConvert.DeserializeObject<CurrencyDto>(stringResultRates);
 
+            var currencies = Enum.GetValues(typeof(Currency)).Cast<Currency>().ToList();
+
             rates = new Dictionary<Currency, decimal>
             {
                 { Currency.BGN, decimal.Parse(deserializedRates.Rates.BGN)},
                 { Currency.EUR, decimal.Parse(deserializedRates.Rates.EUR)},
                 { Currency.GBP, decimal.Parse(deserializedRates.Rates.GBP)},
-                { Currency.USD, 1m }
+                { Currency.USD, decimal.Parse(deserializedRates.Rates.USD )}
             };
 
             var cacheEntryOptions = new MemoryCacheEntryOptions()
-           .SetSlidingExpiration(TimeSpan.FromSeconds(60*60*24));
+           .SetSlidingExpiration(TimeSpan.FromSeconds(60 * 60 * 24));
 
             cache.Set(key, rates, cacheEntryOptions);
 

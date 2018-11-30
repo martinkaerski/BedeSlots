@@ -1,6 +1,6 @@
 ﻿using BedeSlots.Data.Models;
-using BedeSlots.Data.Models.Dto;
 using BedeSlots.Services.Data.Contracts;
+using BedeSlots.Services.Data.ExchangeRatesApiService.Dto;
 using BedeSlots.Services.External.Contracts;
 using Microsoft.Extensions.Caching.Memory;
 using Newtonsoft.Json;

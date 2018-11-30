@@ -1,5 +1,4 @@
-﻿using BedeSlots.Data.Models;
-using BedeSlots.Services.Data.Contracts;
+﻿using BedeSlots.Services.Data.Contracts;
 using BedeSlots.Web.Areas.Admin.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -9,8 +8,8 @@ using System.Threading.Tasks;
 
 namespace BedeSlots.Web.Areas.Admin.Controllers
 {
-    [Area("Admin")]
-    [Authorize(Roles = "Administrator")]
+    [Area(WebConstants.AdminArea)]
+    [Authorize(Roles = WebConstants.AdminRole + "," + WebConstants.MasterAdminRole)]
     public class TransactionsController : Controller
     {
         private readonly ITransactionService transactionService;

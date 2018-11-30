@@ -1,4 +1,4 @@
-﻿namespace BedeSlots.Data.Models.Dto
+﻿namespace BedeSlots.Services.Data.ExchangeRatesApiService.Dto
 {
     public class RatesDto
     {

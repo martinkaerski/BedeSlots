@@ -29,6 +29,7 @@
     <ProjectReference Include="..\BedeSlots.Common\BedeSlots.Common.csproj" />
     <ProjectReference Include="..\BedeSlots.Data.Models\BedeSlots.Data.Models.csproj" />
     <ProjectReference Include="..\BedeSlots.Data\BedeSlots.Data.csproj" />
+    <ProjectReference Include="..\BedeSlots.DTO\BedeSlots.DTO.csproj" />
     <ProjectReference Include="..\BedeSlots.Games\BedeSlots.Games.csproj" />
     <ProjectReference Include="..\BedeSlots.Services.Data\BedeSlots.Services.Data.csproj" />
   </ItemGroup>

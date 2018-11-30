@@ -1,6 +1,8 @@
 ﻿using BedeSlots.Data;
 using BedeSlots.Data.Models;
+using BedeSlots.DTO;
 using BedeSlots.Services.Data.Contracts;
+using BedeSlots.Services.Data.Models.Users;
 using Microsoft.EntityFrameworkCore;
 using System.Collections;
 using System.Collections.Generic;
@@ -34,9 +36,20 @@ namespace BedeSlots.Services.Data
             return user;
         }
 
-        public async Task<IList<User>> GetAllUsersAsync()
+        public async Task<ICollection<UserDto>> GetAllUsersAsync()
         {
-            var users = await this.context.Users.Include(u=>u.Transactions).ToListAsync();
+            var users = await this.context
+                .Users.Include(u=>u.Transactions)
+                .Select(u => new UserDto
+                {
+                    Id = u.Id,
+                    FirstName = u.UserName,
+                    LastName = u.LastName,
+                    Birthdate = u.Birthdate,
+                    Balance = u.Balance,
+                    Currency = u.Currency
+                })
+                .ToListAsync();
 
             return users;
         }

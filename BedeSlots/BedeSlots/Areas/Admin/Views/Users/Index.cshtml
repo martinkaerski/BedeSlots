@@ -1,0 +1,93 @@
+﻿@model UserListingViewModel
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>User administration</h2>
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Username
+                @*@Html.DisplayNameFor(model => model.Username)*@
+            </th>
+            <th>
+                Email
+                @*@Html.DisplayNameFor(model => model.Email)*@
+            </th>
+            <th>
+                Firstname
+                @*@Html.DisplayNameFor(model => model.FirstName)*@
+            </th>
+            <th>
+                Lastname
+                @*@Html.DisplayNameFor(model => model.LastName)*@
+            </th>
+            <th>
+                Balance
+                @*@Html.DisplayNameFor(model => model.Balance)*@
+            </th>
+            <th>
+                Currency
+                @*@Html.DisplayNameFor(model => model.Currency)*@
+            </th>
+            <th>
+                Role
+                @*@Html.DisplayNameFor(model => model.Role)*@
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model.Users)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => user.Username)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => user.Email)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => user.FirstName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => user.LastName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => user.Balance)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => user.Currency)
+                </td>
+                <td>
+                    <form asp-action="AddToRole" method="post">
+                        <div class="row">
+                            <div class="col-md-9">
+                                <input type="hidden" name="UserId" value="@user.Id" />
+                                <select name="Role" asp-items="Model.Roles" class="form-control"></select>
+                            </div>
+                            <div class="col-md-3">
+                                <input class="btn btn-sm btn-primary" type="submit" value="Add To Role" />
+                            </div>
+                        </div>
+                    </form>
+                </td>
+                @*<td>
+                    <a asp-area="Admin" asp-action="EditRole" asp-controller="UserAdministration">Edit role</a> |
+                    <a asp-area="Admin" asp-action="Transactions" asp-controller="UserAdministration">Transactions</a>
+                </td>*@
+            </tr>
+        }
+    </tbody>
+</table>
+@section Scripts{
+
+    <script>
+      
+    </script>
+}

@@ -45,10 +45,10 @@
                     }
                     @if (User.Identity.IsAuthenticated)
                     {
-                        @if (User.IsInRole("Administrator"))
+                        @if (User.IsInRole(WebConstants.MasterAdminRole) || User.IsInRole(WebConstants.AdminRole))
                         {
                             <li><a asp-area="Admin" asp-controller="Transactions" asp-action="Index">Transactions</a></li>
-                            <li><a asp-area="Admin" asp-controller="UserAdministration" asp-action="Index">Users</a></li>
+                            <li><a asp-area="Admin" asp-controller="Users" asp-action="Index">Users</a></li>
                         }
                     }
                 </ul>

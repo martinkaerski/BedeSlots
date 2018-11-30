@@ -54,7 +54,9 @@ namespace BedeSlots.Web.Controllers
             if (user.Balance >= stake)
             {
                 await this.depositService.WithdrawMoneyAsync(stake, user.Id);
-                var stakeTransaction = await this.transactionService.AddTransactionAsync(TransactionType.Stake, user.Id, null, stake, GameType._4x3);
+                string gameType = GameType._4x3.ToString().Substring(1);
+                
+                var stakeTransaction = await this.transactionService.AddTransactionAsync(TransactionType.Stake, user.Id, gameType ,stake);
 
                 var result = game.Spin(rows, cols, stake);
 
@@ -69,9 +71,9 @@ namespace BedeSlots.Web.Controllers
 
                 if (result.Money > 0)
                 {
-                    var winTransaction = await this.transactionService.AddTransactionAsync(TransactionType.Win, user.Id, null, result.Money, GameType._4x3);
+                    var winTransaction = await this.transactionService.AddTransactionAsync(TransactionType.Win, user.Id, gameType ,result.Money);
 
-                    await depositService.DepositAsync(result.Money, user.Id);
+                    await depositService.DepositMoneyAsync(result.Money, user.Id);
                     model.Balance += result.Money;
                     model.Message = $"You won {result.Money}";
                 }

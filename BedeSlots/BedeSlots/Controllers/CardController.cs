@@ -1,4 +1,5 @@
-﻿using BedeSlots.Data.Models;
+﻿using BedeSlots.Common;
+using BedeSlots.Data.Models;
 using BedeSlots.Services.Data.Contracts;
 using BedeSlots.Web.Models;
 using Microsoft.AspNetCore.Identity;
@@ -29,7 +30,8 @@ namespace BedeSlots.Web.Controllers
         public async Task<IActionResult> AddCard()
         {
             var cardTypes = Enum.GetValues(typeof(CardType)).Cast<CardType>();
-            var cardTypesSelectList = cardTypes.Select(c => new SelectListItem { Value = c.ToString(), Text = c.ToString() }).ToList();
+
+            var cardTypesSelectList = cardTypes.Select(c => new SelectListItem { Value = ((int)c).ToString(), Text = c.ToString()}).ToList();
 
             var addCardVM = new AddCardViewModel() { CardTypes = cardTypesSelectList };
             return View(addCardVM);
@@ -71,7 +73,7 @@ namespace BedeSlots.Web.Controllers
                 Owner = card.User
             };
 
-            
+
             return View(cardInfo);
         }
     }

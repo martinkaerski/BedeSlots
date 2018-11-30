@@ -12,14 +12,16 @@ namespace BedeSlots.Services.Data
     {
         private readonly BedeSlotsDbContext context;
         private readonly ICurrencyConverterService currencyConverterService;
+        private readonly ITransactionService transactionService;
 
-        public DepositService(BedeSlotsDbContext context, ICurrencyConverterService currencyConverterService)
+        public DepositService(BedeSlotsDbContext context, ICurrencyConverterService currencyConverterService, ITransactionService transactionService)
         {
             this.context = context;
             this.currencyConverterService = currencyConverterService;
+            this.transactionService = transactionService;
         }
 
-        public async Task<User> DepositAsync(decimal amount, string userId)
+        public async Task<User> DepositMoneyAsync(decimal amount, string userId)
         {
             var user = await this.context.Users.FirstOrDefaultAsync(u => u.Id == userId);
 

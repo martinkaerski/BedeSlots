@@ -27,7 +27,8 @@ namespace BedeSlots.Data.Migrations
 
                     b.Property<DateTime?>("CreatedOn");
 
-                    b.Property<int>("CvvNumber");
+                    b.Property<string>("CvvNumber")
+                        .IsRequired();
 
                     b.Property<DateTime?>("DeletedOn");
 
@@ -60,11 +61,10 @@ namespace BedeSlots.Data.Migrations
 
                     b.Property<decimal>("Amount");
 
-                    b.Property<int?>("CardId");
-
                     b.Property<DateTime>("Date");
 
-                    b.Property<string>("GameType");
+                    b.Property<string>("Description")
+                        .IsRequired();
 
                     b.Property<string>("Type")
                         .IsRequired();

@@ -1,4 +1,5 @@
-﻿@model IEnumerable<TransactionHistoryViewModel>
+﻿
+@model IEnumerable<TransactionHistoryViewModel>
 
 @{
     ViewData["Title"] = "Index";
@@ -7,61 +8,87 @@
 
 <h2>Transaction History</h2>
 
-<table class="table">
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.datatables.css">
+
+
+<table id="table-transaction" class="table table-striped table-bordered dt-responsive nowrap display">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Date)
+                Date
+                @*@Html.DisplayNameFor(model => model.Date)*@
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Type)
+                Type
+                @*@Html.DisplayNameFor(model => model.Type)*@
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Amount)
+                Amount
+                @*@Html.DisplayNameFor(model => model.Amount)*@
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Description)
+                Description
+                @*@Html.DisplayNameFor(model => model.Description)*@
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.UserEmail)
+                User
+                @*@Html.DisplayNameFor(model => model.UserEmail)*@
             </th>
-            <th></th>
+            <th>
+                Details
+                @*@Html.DisplayNameFor(model => model.UserEmail)*@
+            </th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model)
-{
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Date)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Type)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Amount)
-            </td>
-            <td>
-               @{string descr;}
-                @if (item.Type == TransactionType.Deposit)
-                {
-                    descr = "Deposit with card **** **** **** " + item.Description;
-                }
-                else
-                {
-                    descr = $"{item.Type} on game {item.Description}";
-                }
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Date)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Type)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Amount)
+                </td>
+                <td>
+                    @{string descr;}
+                    @if (item.Type == TransactionType.Deposit)
+                    {
+                        descr = "Deposit with card **** **** **** " + item.Description;
+                    }
+                    else
+                    {
+                        descr = $"{item.Type} on game {item.Description}";
+                    }
 
-                @descr
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.UserEmail)
-            </td>
+                    @descr
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UserEmail)
+                </td>
 
-            <td>
-            <a asp-area="Admin" asp-controller="Transactions" asp-action="Details" asp-route-id="@item.Id" class="btn btn-default">Details</a>
-            </td>
-        </tr>
-}
+                <td>
+                    <a asp-area="Admin" asp-controller="Transactions" asp-action="Details" asp-route-id="@item.Id" class="btn btn-default">Details</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
+
+@section Scripts{
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+   
+    <script>
+        $(function () {
+            $('#table-transaction').dataTable({
+
+            });
+        });
+    </script>
+}
+
+

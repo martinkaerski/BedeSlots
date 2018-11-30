@@ -29,30 +29,13 @@ namespace BedeSlots.Web.Areas.Admin.Controllers
 
             foreach (var transaction in transactions.Reverse())
             {
-                string descriptionData = string.Empty;
-
-                if (transaction.Type == TransactionType.Deposit)
-                {
-                    if (transaction.CardId != null)
-                    {
-                        var card = await this.cardService.GetCardByIdAsync((int)transaction.CardId);
-                        var cardNumberLastFourDigits = card.Number.Substring(12, 4);
-                        descriptionData = cardNumberLastFourDigits;
-                    }
-                }
-                else
-                {
-                    descriptionData = transaction.GameType.ToString().Substring(1);
-                }
-
                 var transactionViewModel = new TransactionHistoryViewModel()
                 {
                     Id = transaction.Id,
                     Date = transaction.Date,
                     Type = transaction.Type,
-                    GameType = transaction.GameType,
                     Amount = transaction.Amount,
-                    Description = descriptionData,
+                    Description = transaction.Description,
                     UserEmail = transaction.User.Email
                 };
 
@@ -77,7 +60,7 @@ namespace BedeSlots.Web.Areas.Admin.Controllers
                 Date = transaction.Date,
                 Type = transaction.Type.ToString(),
                 Amount = transaction.Amount,
-                Description = "card id =>" + transaction.CardId,
+                Description = transaction.Description,
                 UserEmail = transaction.User.Email,
                 FirstName = transaction.User.FirstName,
                 LastName = transaction.User.LastName,

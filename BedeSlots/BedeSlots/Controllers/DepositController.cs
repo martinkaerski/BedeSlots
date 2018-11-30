@@ -60,12 +60,13 @@ namespace BedeSlots.Web.Controllers
             }
 
             var user = await this.userManager.GetUserAsync(HttpContext.User);
+            var card = await this.cardService.GetCardByIdAsync(depositViewModel.BankCardId);
 
+            var cardNumberLastFourDigits = card.Number.Substring(12, 4);
             var transaction = await this.transactionService.AddTransactionAsync(TransactionType.Deposit, user.Id,
-                depositViewModel.BankCardId, depositViewModel.Amount,
-                null);
+                cardNumberLastFourDigits, depositViewModel.Amount);
 
-            var depositTransaction = await this.depositService.DepositAsync(depositViewModel.Amount, user.Id);
+            var depositTransaction = await this.depositService.DepositMoneyAsync(depositViewModel.Amount, user.Id);
 
             return View("DepositInfo");
         }

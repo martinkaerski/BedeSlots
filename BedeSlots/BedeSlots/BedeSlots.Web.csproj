@@ -17,6 +17,7 @@
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.1.5" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="2.1.4" PrivateAssets="All" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.5" PrivateAssets="All" />
+    <PackageReference Include="System.Linq.Dynamic.Core" Version="1.0.9" />
   </ItemGroup>
 
   <ItemGroup>
@@ -26,8 +27,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\BedeSlots.Common\BedeSlots.Common.csproj" />
     <ProjectReference Include="..\BedeSlots.Data.Models\BedeSlots.Data.Models.csproj" />
     <ProjectReference Include="..\BedeSlots.Data\BedeSlots.Data.csproj" />
+    <ProjectReference Include="..\BedeSlots.DTO\BedeSlots.DTO.csproj" />
     <ProjectReference Include="..\BedeSlots.Games\BedeSlots.Games.csproj" />
     <ProjectReference Include="..\BedeSlots.Services.Data\BedeSlots.Services.Data.csproj" />
   </ItemGroup>

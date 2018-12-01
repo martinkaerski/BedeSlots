@@ -3,7 +3,7 @@ using BedeSlots.Data.Models;
 using BedeSlots.Services.Data.Contracts;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace BedeSlots.Services.Data
@@ -17,23 +17,19 @@ namespace BedeSlots.Services.Data
             this.context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
-        public async Task<Transaction> RegisterTransactionsAsync(Transaction transaction)
+        public IQueryable<Transaction> GetAllTransactions()
         {
-            await this.context.Transactions.AddAsync(transaction);
-
-            var user = await this.context.Users.FirstOrDefaultAsync(u => u.Id == transaction.UserId);
-            user.Transactions.Add(transaction);
-
-            await this.context.SaveChangesAsync();
-
-            return transaction;
-        }
-
-        public async Task<ICollection<Transaction>> GetAllTransactionsAsync()
-        {
-            var transactions = await this.context.Transactions
+            var transactions = this.context.Transactions
                 .Include(t => t.User)
-                .ToListAsync();
+                //.Select(t => new TransactionDto
+                //{
+                //    Date = t.Date,
+                //    Amount = t.Amount,
+                //    Description = t.Description, 
+                //    Type = t.Type,
+                //    User = t.User.Email
+                //})
+                .AsQueryable();
 
             return transactions;
         }
@@ -48,16 +44,19 @@ namespace BedeSlots.Services.Data
             return transaction;
         }
 
-        public Transaction CreateTransaction(TransactionType type, string userId, int cardId, decimal depositAmount)
+        public async Task<Transaction> AddTransactionAsync(TransactionType type, string userId, string description, decimal amount)
         {
             var transaction = new Transaction()
             {
-                Amount = depositAmount,
+                Amount = amount,
                 Date = DateTime.Now,
                 Type = type,
-                CardId = cardId,
                 UserId = userId,
+                Description = description
             };
+
+            await this.context.Transactions.AddAsync(transaction);
+            await this.context.SaveChangesAsync();
 
             return transaction;
         }

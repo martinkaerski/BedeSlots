@@ -44,13 +44,6 @@ namespace BedeSlots.Data
                 .Property(t => t.Type)
                 .HasConversion(transactionTypeConverter);
 
-            var gameTypeConverter = new EnumToStringConverter<GameType>();
-
-            modelBuilder
-                .Entity<Transaction>()
-                .Property(t => t.GameType)
-                .HasConversion(gameTypeConverter);
-
             base.OnModelCreating(modelBuilder);
         }
 

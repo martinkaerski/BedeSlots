@@ -1,6 +1,8 @@
 ﻿using BedeSlots.Data;
 using BedeSlots.Data.Models;
+using BedeSlots.DTO;
 using BedeSlots.Services.Data.Contracts;
+using BedeSlots.Services.Data.Models.Users;
 using Microsoft.EntityFrameworkCore;
 using System.Collections;
 using System.Collections.Generic;
@@ -34,18 +36,33 @@ namespace BedeSlots.Services.Data
             return user;
         }
 
-        public async Task<IList<User>> GetAllUsersAsync()
+        public  IQueryable<UserDto> GetAllUsers()
         {
-            var users = await this.context.Users.Include(u=>u.Transactions).ToListAsync();
+            var users =  this.context
+                .Users.Include(u=>u.Transactions)
+                .Select(u => new UserDto
+                {
+                    Id = u.Id,
+                    Username = u.UserName,
+                    Firstname = u.FirstName,
+                    Lastname = u.LastName,
+                    Email = u.Email,
+                    Birthdate = u.Birthdate,
+                    Balance = u.Balance,
+                    Currency = u.Currency
+                })
+                .AsQueryable();
 
             return users;
         }
 
-        public async Task<string> GetUserRole(User user)
+        public async Task<string> GetUserRole(string userId)
         {
-            var role = await this.context.UserRoles.FirstOrDefaultAsync(u => u.UserId == user.Id);
+            var role = await this.context.UserRoles.FirstOrDefaultAsync(u => u.UserId == userId);
+            var roleId = role.RoleId;
+            var roleName = this.context.Roles.SingleOrDefault(r => r.Id == roleId).Name;
 
-            return role.ToString();
+            return roleName;
         }
 
         public async Task<IEnumerable<Transaction>> GetUserTransactionsAsync(string id)

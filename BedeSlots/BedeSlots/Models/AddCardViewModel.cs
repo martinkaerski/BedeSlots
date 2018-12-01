@@ -1,4 +1,5 @@
-﻿using BedeSlots.Data.Models;
+﻿using BedeSlots.Common.CustomAttributes;
+using BedeSlots.Data.Models;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
@@ -20,10 +21,10 @@ namespace BedeSlots.Web.Models
         [Required]
         [RegularExpression("^[0-9]{3}$", ErrorMessage = "The CVV number should be 3 digits.")]
         [Display(Name = "CVV")]
-        public int Cvv { get; set; }
+        public string Cvv { get; set; }
 
         [Required]
-        [ExpiryDate]
+        [ExpiryDate(ErrorMessage = "Invalid expiry date!")]
         [Display(Name = "Expiry")]
         public DateTime Expiry { get; set; }
 

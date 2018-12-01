@@ -17,6 +17,9 @@
               asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
         <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
     </environment>
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css">
+
 </head>
 <body>
     <nav class="navbar navbar-inverse navbar-fixed-top">
@@ -42,22 +45,22 @@
                     }
                     @if (User.Identity.IsAuthenticated)
                     {
-                        @if (User.IsInRole("Administrator"))
+                        @if (User.IsInRole(WebConstants.MasterAdminRole) || User.IsInRole(WebConstants.AdminRole))
                         {
                             <li><a asp-area="Admin" asp-controller="Transactions" asp-action="Index">Transactions</a></li>
-                            <li><a asp-area="Admin" asp-controller="UserAdministration" asp-action="Index">Users</a></li>
+                            <li><a asp-area="Admin" asp-controller="Users" asp-action="Index">Users</a></li>
                         }
                     }
-
                 </ul>
                 @await Html.PartialAsync("_LoginPartial")
 
-                @if (SignInManager.IsSignedIn(User))
-                {
+                <div id="component-balance">
+                    @if (SignInManager.IsSignedIn(User))
+                    {
+                        @await Component.InvokeAsync("UserBalance");
+                    }
+                </div>
 
-                    @await Component.InvokeAsync("UserBalance");
-
-                }
             </div>
         </div>
     </nav>

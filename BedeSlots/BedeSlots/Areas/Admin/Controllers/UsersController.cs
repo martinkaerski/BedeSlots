@@ -1,10 +1,13 @@
 ﻿using BedeSlots.Data.Models;
 using BedeSlots.Services.Data.Contracts;
 using BedeSlots.Web.Areas.Admin.Models;
+using BedeSlots.Web.Areas.Admin.Models.Users;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using System;
-using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -12,45 +15,58 @@ namespace BedeSlots.Web.Areas.Admin.Controllers
 {
     [Area(WebConstants.AdminArea)]
     [Authorize(Roles = WebConstants.AdminRole + "," + WebConstants.MasterAdminRole)]
-    public class TransactionsController : Controller
+    public class UsersController : Controller
     {
+        private readonly IUserService userService;
         private readonly ITransactionService transactionService;
-        private readonly ICardService cardService;
+        private readonly UserManager<User> userManager;
+        private readonly RoleManager<IdentityRole> roleManager;
 
-        public TransactionsController(ITransactionService transactionService, ICardService cardService)
+        public UsersController(
+            IUserService userService,
+            UserManager<User> userManager,
+            ITransactionService transactionService,
+            RoleManager<IdentityRole> roleManager)
         {
+            this.userService = userService;
             this.transactionService = transactionService;
-            this.cardService = cardService;
+            this.userManager = userManager;
+            this.roleManager = roleManager;
         }
 
         public IActionResult Index()
-        {
+        {                       
             return View();
         }
 
-        public async Task<IActionResult> Details(int id)
+        [HttpPost]
+        public async Task<IActionResult> AddToRole(AddUserToRoleViewModel model)
         {
-            var transaction = await transactionService.GetTransactionByIdAsync(id);
+            var roleExists = await this.roleManager.RoleExistsAsync(model.Role);
+            var user = await this.userManager.FindByIdAsync(model.UserId);
+            var userExists = user != null;
 
-            if (transaction == null)
+            if (!roleExists || !userExists)
             {
-                return NotFound();
+                this.ModelState.AddModelError(string.Empty, "Invalid identity details.");
             }
 
-            var model = new TransactionDetailsViewModel()
+            if (!ModelState.IsValid)
             {
-                Date = transaction.Date,
-                Type = transaction.Type.ToString(),
-                Amount = transaction.Amount,
-                Description = transaction.Description,
-                UserEmail = transaction.User.Email,
-                FirstName = transaction.User.FirstName,
-                LastName = transaction.User.LastName,
-                Birthdate = transaction.User.Birthdate,
-                Cards = transaction.User.Cards.Select(c => c.Number).ToList()
-            };
+                return this.RedirectToAction(nameof(Index));
+            }
 
-            return View(model);
+            await this.userManager.AddToRoleAsync(user, model.Role);
+
+            return this.RedirectToAction(nameof(Index));
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetRole(string data)
+        {
+            var roleName = await userService.GetUserRole(data);
+
+            return Content(roleName);
         }
 
         [HttpPost]
@@ -75,48 +91,49 @@ namespace BedeSlots.Web.Areas.Admin.Controllers
                 int skip = start != null ? int.Parse(start) : 0;
                 int recordsTotal = 0;
 
-                var transactions = this.transactionService.GetAllTransactions();
+                var users = this.userService.GetAllUsers();
 
                 //Sorting
                 if (!(string.IsNullOrEmpty(sortColumn) && string.IsNullOrEmpty(sortColumnDirection)))
                 {
                     if (sortColumnDirection == "asc")
                     {
-                        transactions = transactions
-                            .OrderBy(t => t.GetType().GetProperty(sortColumn).GetValue(t));
+                        users = users
+                            .OrderBy(u => u.GetType().GetProperty(sortColumn).GetValue(u));
                     }
                     else
                     {
-                        transactions = transactions
-                            .OrderByDescending(t => t.GetType().GetProperty(sortColumn).GetValue(t));
+                        users = users
+                            .OrderByDescending(u => u.GetType().GetProperty(sortColumn).GetValue(u));
                     }
                 }
                 
                 //Search
                 if (!string.IsNullOrEmpty(searchValue))
                 {
-                    transactions = transactions
-                        .Where(t => t.User.Email.Contains(searchValue)  
-                        || t.Description.Contains(searchValue) 
-                        ||  t.Type.ToString().Contains(searchValue));
+                    users = users
+                        .Where(u => u.Firstname.Contains(searchValue)
+                        || u.Lastname.Contains(searchValue)
+                        || u.Username.Contains(searchValue)
+                        || u.Email.Contains(searchValue));
                 }
 
                 //Total number of rows count 
-                recordsTotal = transactions.Count();
+                recordsTotal = users.Count();
 
                 //Paging 
-                var data = transactions
+                var data = users
                     .Skip(skip)
                     .Take(pageSize)
-                    .Select(t => new
+                    .Select(u => new
                     {
-                        Date = t.Date.ToString("G", CultureInfo.InvariantCulture),
-                        Type = t.Type.ToString(),
-                        Amount = t.Amount.ToString(),                        
-                        Description = t.Type == TransactionType.Deposit 
-                        ? $"Deposit with card **** **** **** {t.Description}" 
-                        : $"{t.Type.ToString()} on game {t.Description}",
-                        User = t.User.Email
+                     Username = u.Username,
+                     Firstname = u.Firstname,
+                     Lastname = u.Lastname,
+                     Email = u.Email,
+                     Balance = u.Balance,
+                     Currency = u.Currency.ToString(),
+                     Role = "User"
                     })
                     .ToList();
 
@@ -128,6 +145,5 @@ namespace BedeSlots.Web.Areas.Admin.Controllers
                 throw;
             }
         }
-
     }
 }

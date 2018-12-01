@@ -10,6 +10,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\BedeSlots.Data\BedeSlots.Data.csproj" />
+    <ProjectReference Include="..\BedeSlots.DTO\BedeSlots.DTO.csproj" />
     <ProjectReference Include="..\BedeSlots.Services.External\BedeSlots.Services.External.csproj" />
   </ItemGroup>
 

@@ -1,6 +1,5 @@
 ﻿using BedeSlots.Data;
 using BedeSlots.Data.Models;
-using BedeSlots.Services.Data.Contracts;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -26,7 +25,8 @@ namespace BedeSlots.Web.Extensions
                     {
                         var roles = new[]
                         {
-                            WebConstants.AdministratorRole,
+                            WebConstants.MasterAdminRole,
+                            WebConstants.AdminRole,
                             WebConstants.UserRole
                         };
 
@@ -41,7 +41,7 @@ namespace BedeSlots.Web.Extensions
                         }
 
                         var adminEmail = WebConstants.AdminEmail;
-                        var adminName = WebConstants.AdministratorRole;
+                        var adminName = WebConstants.AdminName;
                         var adminUser = await userManager.FindByEmailAsync(adminEmail);
 
                         if (adminUser == null)
@@ -60,7 +60,7 @@ namespace BedeSlots.Web.Extensions
 
                             if (createAdmin.Succeeded)
                             {
-                                await userManager.AddToRoleAsync(adminUser, WebConstants.AdministratorRole);
+                                await userManager.AddToRoleAsync(adminUser, WebConstants.MasterAdminRole);
                             }
                         }
                     })

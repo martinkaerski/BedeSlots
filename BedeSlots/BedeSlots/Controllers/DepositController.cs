@@ -1,20 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using BedeSlots.Data.Models;
-using BedeSlots.Services.Data;
+﻿using BedeSlots.Data.Models;
 using BedeSlots.Services.Data.Contracts;
 using BedeSlots.Web.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace BedeSlots.Web.Controllers
 {
+    [Authorize]
     public class DepositController : Controller
     {
-
         private readonly UserManager<User> userManager;
         private readonly ITransactionService transactionService;
         private readonly IUserService userService;
@@ -40,21 +39,16 @@ namespace BedeSlots.Web.Controllers
         {
             var user = await this.userManager.GetUserAsync(HttpContext.User);
             // TODO temp check before private funtionality implementation is done
-            if (user != null)
-            {
-                var cards = await this.cardService.GetUserCardsAsync(user.Id);
-                var cardsSelectList = cards.Select(x => new SelectListItem { Value = x.Id.ToString(), Text = x.Number }).ToList();
 
-                var cardTypes = Enum.GetValues(typeof(CardType)).Cast<CardType>();
-                var cardTypesSelectList = cardTypes.Select(c => new SelectListItem { Value = c.ToString(), Text = c.ToString() }).ToList();
+            var cards = await this.cardService.GetUserCardsAsync(user.Id);
+            var cardsSelectList = cards.Select(x => new SelectListItem { Value = x.Id.ToString(), Text = x.Number }).ToList();
 
-                var depositVM = new DepositViewModel() { /*BankCards = cardsSelectList,*/ CardTypes = cardTypesSelectList };
-                return View(depositVM);
-            }
-            else
-            {
-                return Redirect("/account/login");
-            }
+            var cardTypes = Enum.GetValues(typeof(CardType)).Cast<CardType>();
+            var cardTypesSelectList = cardTypes.Select(c => new SelectListItem { Value = c.ToString(), Text = c.ToString() }).ToList();
+
+            var depositVM = new DepositViewModel() { BankCards = cardsSelectList, CardTypes = cardTypesSelectList };
+
+            return View(depositVM);
         }
 
         [HttpPost]
@@ -66,13 +60,13 @@ namespace BedeSlots.Web.Controllers
             }
 
             var user = await this.userManager.GetUserAsync(HttpContext.User);
+            var card = await this.cardService.GetCardByIdAsync(depositViewModel.BankCardId);
 
-            var transaction = this.transactionService.CreateTransaction(TransactionType.Deposit, user.Id,
-                depositViewModel.BankCardId, depositViewModel.DepositAmount);
+            var cardNumberLastFourDigits = card.Number.Substring(12, 4);
+            var transaction = await this.transactionService.AddTransactionAsync(TransactionType.Deposit, user.Id,
+                cardNumberLastFourDigits, depositViewModel.Amount);
 
-            var depositTransaction = await this.depositService.DepositAsync(transaction);
-
-            await this.transactionService.RegisterTransactionsAsync(depositTransaction);
+            var depositTransaction = await this.depositService.DepositMoneyAsync(depositViewModel.Amount, user.Id);
 
             return View("DepositInfo");
         }

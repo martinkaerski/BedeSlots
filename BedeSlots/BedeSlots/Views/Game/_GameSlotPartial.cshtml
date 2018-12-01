@@ -12,6 +12,13 @@
         }
     </table>
 
-    <div class="text text-success">Earning: @Model.Money</div>
-
+    <div class="text text-success">Balance: @Model.Balance</div>
+    <div class="text text-success">Earning: @Model.Stake</div>
+    <span asp-validation-for="@Model.Stake" class="text-danger"></span>
+    <div class="text text-success"> @Model.Message</div>
 </section>
+
+@section Scripts
+    {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+}

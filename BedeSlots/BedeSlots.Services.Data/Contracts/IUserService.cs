@@ -1,5 +1,7 @@
 ﻿using BedeSlots.Data.Models;
+using BedeSlots.DTO;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace BedeSlots.Services.Data.Contracts
@@ -7,9 +9,13 @@ namespace BedeSlots.Services.Data.Contracts
     public interface IUserService
     {
         Task<User> GetUserById(string id);
+
         Task<decimal> GetUserBalanceById(string userId);
-        Task<IList<User>> GetAllUsersAsync();
-        Task<string> GetUserRole(User user);
+
+        IQueryable<UserDto> GetAllUsers();
+
+        Task<string> GetUserRole(string userId);
+
         Task<IEnumerable<Transaction>> GetUserTransactionsAsync(string id);
     }
 }

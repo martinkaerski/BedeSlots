@@ -5,6 +5,8 @@ namespace BedeSlots.Services.Data.Contracts
 {
     public interface IDepositService
     {
-        Task<Transaction> DepositAsync(Transaction transaction);
+        Task<User> DepositMoneyAsync(decimal amount, string userId);
+
+        Task<User> WithdrawMoneyAsync(decimal amount, string userId);
     }
 }

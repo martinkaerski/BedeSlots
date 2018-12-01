@@ -1,17 +1,15 @@
 ﻿using BedeSlots.Data.Models;
-using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace BedeSlots.Services.Data.Contracts
 {
     public interface ITransactionService
     {
-        Task<Transaction> RegisterTransactionsAsync(Transaction transaction);
-
-        Task<ICollection<Transaction>> GetAllTransactionsAsync();
+        IQueryable<Transaction> GetAllTransactions();
 
         Task<Transaction> GetTransactionByIdAsync(int id);
 
-        Transaction CreateTransaction(TransactionType type, string userId, int cardId, decimal depositAmount);
+        Task<Transaction> AddTransactionAsync(TransactionType type, string userId, string description, decimal amount);
     }
 }

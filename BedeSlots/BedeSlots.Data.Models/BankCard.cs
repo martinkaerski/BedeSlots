@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BedeSlots.Common.CustomAttributes;
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace BedeSlots.Data.Models
@@ -9,11 +10,12 @@ namespace BedeSlots.Data.Models
         [RegularExpression("^[0-9]{16}$", ErrorMessage = "The card number should be 16 digits.")]
         public string Number { get; set; }
 
-        //TODO: change it to string
         [Required]
-        public int CvvNumber { get; set; }
+        [RegularExpression("^[0-9]{3}$", ErrorMessage = "The CVV number should be 3 digits.")]
+        public string CvvNumber { get; set; }
 
         [Required]
+        [ExpiryDate]
         public DateTime ExpiryDate { get; set; }
 
         [Required]

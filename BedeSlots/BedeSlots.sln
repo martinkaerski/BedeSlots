@@ -13,7 +13,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BedeSlots.Services.Data", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BedeSlots.Services.External", "BedeSlots.Services.External\BedeSlots.Services.External.csproj", "{7E61B5A3-3A1E-46DF-9FC5-58A1AA20B138}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BedeSlots.Games", "BedeSlots.Games\BedeSlots.Games.csproj", "{71978C6B-0AB2-44F4-953E-E6802B1772F4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BedeSlots.Games", "BedeSlots.Games\BedeSlots.Games.csproj", "{71978C6B-0AB2-44F4-953E-E6802B1772F4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BedeSlots.Common", "BedeSlots.Common\BedeSlots.Common.csproj", "{4E69E4A4-F69E-465A-B4DC-CDFF2FAEE339}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BedeSlots.DTO", "BedeSlots.DTO\BedeSlots.DTO.csproj", "{DE83E7B0-F486-42A4-B157-26E44E8241CB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +49,14 @@ Global
 		{71978C6B-0AB2-44F4-953E-E6802B1772F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{71978C6B-0AB2-44F4-953E-E6802B1772F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{71978C6B-0AB2-44F4-953E-E6802B1772F4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4E69E4A4-F69E-465A-B4DC-CDFF2FAEE339}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4E69E4A4-F69E-465A-B4DC-CDFF2FAEE339}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4E69E4A4-F69E-465A-B4DC-CDFF2FAEE339}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4E69E4A4-F69E-465A-B4DC-CDFF2FAEE339}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DE83E7B0-F486-42A4-B157-26E44E8241CB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DE83E7B0-F486-42A4-B157-26E44E8241CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DE83E7B0-F486-42A4-B157-26E44E8241CB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DE83E7B0-F486-42A4-B157-26E44E8241CB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

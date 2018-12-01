@@ -1,6 +1,7 @@
 ﻿using BedeSlots.Data.Models;
 using BedeSlots.DTO;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace BedeSlots.Services.Data.Contracts
@@ -11,7 +12,7 @@ namespace BedeSlots.Services.Data.Contracts
 
         Task<decimal> GetUserBalanceById(string userId);
 
-        Task<ICollection<UserDto>> GetAllUsersAsync();
+        IQueryable<UserDto> GetAllUsers();
 
         Task<string> GetUserRole(string userId);
 

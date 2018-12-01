@@ -9,5 +9,6 @@
         public const string AdminArea = "Admin";
 
         public const string AdminEmail = "admin@admin.com";
+        public const string AdminName = "Administrator";
     }
 }

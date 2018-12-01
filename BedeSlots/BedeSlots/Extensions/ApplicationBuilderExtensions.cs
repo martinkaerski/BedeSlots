@@ -41,7 +41,7 @@ namespace BedeSlots.Web.Extensions
                         }
 
                         var adminEmail = WebConstants.AdminEmail;
-                        var adminName = WebConstants.MasterAdminRole;
+                        var adminName = WebConstants.AdminName;
                         var adminUser = await userManager.FindByEmailAsync(adminEmail);
 
                         if (adminUser == null)

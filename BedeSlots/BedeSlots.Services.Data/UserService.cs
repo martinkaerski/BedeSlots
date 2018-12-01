@@ -36,20 +36,22 @@ namespace BedeSlots.Services.Data
             return user;
         }
 
-        public async Task<ICollection<UserDto>> GetAllUsersAsync()
+        public  IQueryable<UserDto> GetAllUsers()
         {
-            var users = await this.context
+            var users =  this.context
                 .Users.Include(u=>u.Transactions)
                 .Select(u => new UserDto
                 {
                     Id = u.Id,
-                    FirstName = u.UserName,
-                    LastName = u.LastName,
+                    Username = u.UserName,
+                    Firstname = u.FirstName,
+                    Lastname = u.LastName,
+                    Email = u.Email,
                     Birthdate = u.Birthdate,
                     Balance = u.Balance,
                     Currency = u.Currency
                 })
-                .ToListAsync();
+                .AsQueryable();
 
             return users;
         }

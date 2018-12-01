@@ -4,6 +4,7 @@ using BedeSlots.Web.Areas.Admin.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -90,36 +91,37 @@ namespace BedeSlots.Web.Areas.Admin.Controllers
                             .OrderByDescending(t => t.GetType().GetProperty(sortColumn).GetValue(t));
                     }
                 }
-
+                
                 //Search
                 if (!string.IsNullOrEmpty(searchValue))
                 {
                     transactions = transactions
                         .Where(t => t.User.Email.Contains(searchValue)  
-                        || t.Description.Contains(searchValue));
+                        || t.Description.Contains(searchValue) 
+                        ||  t.Type.ToString().Contains(searchValue));
                 }
 
                 //Total number of rows count 
                 recordsTotal = transactions.Count();
+
                 //Paging 
                 var data = transactions
                     .Skip(skip)
                     .Take(pageSize)
                     .Select(t => new
                     {
-                        Date = t.Date.ToLongDateString(),
+                        Date = t.Date.ToString("G", CultureInfo.InvariantCulture),
                         Type = t.Type.ToString(),
-                        Amount = t.Amount.ToString(),
-                        
+                        Amount = t.Amount.ToString(),                        
                         Description = t.Type == TransactionType.Deposit 
                         ? $"Deposit with card **** **** **** {t.Description}" 
                         : $"{t.Type.ToString()} on game {t.Description}",
                         User = t.User.Email
                     })
                     .ToList();
+
                 //Returning Json Data
                 return Json(new { draw = draw, recordsFiltered = recordsTotal, recordsTotal = recordsTotal, data = data });
-
             }
             catch (Exception)
             {

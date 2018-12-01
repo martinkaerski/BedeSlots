@@ -48,7 +48,7 @@ namespace BedeSlots.Web.Controllers
                 var cardTypes = Enum.GetValues(typeof(CardType)).Cast<CardType>();
                 var cardTypesSelectList = cardTypes.Select(c => new SelectListItem { Value = c.ToString(), Text = c.ToString() }).ToList();
 
-                var depositVM = new DepositViewModel() { BankCards = cardsSelectList, CardTypes = cardTypesSelectList };
+                var depositVM = new DepositViewModel() { /*BankCards = cardsSelectList,*/ CardTypes = cardTypesSelectList };
                 return View(depositVM);
             }
             else
@@ -64,7 +64,7 @@ namespace BedeSlots.Web.Controllers
             {
                 return Redirect("Deposit");
             }
-            
+
             var user = await this.userManager.GetUserAsync(HttpContext.User);
 
             var transaction = this.transactionService.CreateTransaction(TransactionType.Deposit, user.Id,

@@ -1,4 +1,5 @@
 ﻿using BedeSlots.Data.Models;
+using BedeSlots.DTO;
 using BedeSlots.Services.Data.Contracts;
 using BedeSlots.Web.Areas.Admin.Models;
 using BedeSlots.Web.Areas.Admin.Models.Users;
@@ -6,13 +7,14 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace BedeSlots.Web.Areas.Admin.Controllers
 {
+    //TODO: refactoring
+
     [Area(WebConstants.AdminArea)]
     [Authorize(Roles = WebConstants.AdminRole + "," + WebConstants.MasterAdminRole)]
     public class UsersController : Controller
@@ -35,38 +37,50 @@ namespace BedeSlots.Web.Areas.Admin.Controllers
         }
 
         public IActionResult Index()
-        {                       
+        {
             return View();
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddToRole(AddUserToRoleViewModel model)
+        public async Task<IActionResult> Index(EditRoleViewModel model)
         {
-            var roleExists = await this.roleManager.RoleExistsAsync(model.Role);
+            var role = model.RoleId;
             var user = await this.userManager.FindByIdAsync(model.UserId);
-            var userExists = user != null;
+            var userRoles = await this.userManager.GetRolesAsync(user);
 
-            if (!roleExists || !userExists)
+            if (userRoles.Contains(WebConstants.MasterAdminRole))
             {
-                this.ModelState.AddModelError(string.Empty, "Invalid identity details.");
+                return View();
             }
 
-            if (!ModelState.IsValid)
-            {
-                return this.RedirectToAction(nameof(Index));
-            }
-
-            await this.userManager.AddToRoleAsync(user, model.Role);
-
-            return this.RedirectToAction(nameof(Index));
+            await this.userService.EditUserRoleAsync(model.UserId, model.RoleId);
+            return View();
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetRole(string data)
+        public async Task<IActionResult> EditRole(string userid)
         {
-            var roleName = await userService.GetUserRole(data);
+            var user = await this.userManager.FindByIdAsync(userid);
+            var userRoles = await this.userManager.GetRolesAsync(user);
 
-            return Content(roleName);
+            if (userRoles.Contains(WebConstants.MasterAdminRole))
+            {
+                return RedirectToAction("Index");
+            }
+
+            var roleId = await userService.GetUserRoleIdAsync(userid);
+
+            var roles = await userService.GetAllRolesAsync();
+            var rolesSelectList = roles.Select(r => new SelectListItem { Value = r.Id, Text = r.Name }).ToList();
+            var model = new EditRoleViewModel()
+            {
+                UserId = userid,
+                RoleId = roleId,
+                UserName =  user.FirstName + " " + user.LastName,
+                Roles = rolesSelectList
+            };
+
+            return PartialView("_EditRolePartial", model);
         }
 
         [HttpPost]
@@ -107,7 +121,7 @@ namespace BedeSlots.Web.Areas.Admin.Controllers
                             .OrderByDescending(u => u.GetType().GetProperty(sortColumn).GetValue(u));
                     }
                 }
-                
+
                 //Search
                 if (!string.IsNullOrEmpty(searchValue))
                 {
@@ -125,15 +139,16 @@ namespace BedeSlots.Web.Areas.Admin.Controllers
                 var data = users
                     .Skip(skip)
                     .Take(pageSize)
-                    .Select(u => new
+                    .Select( u =>  new
                     {
-                     Username = u.Username,
-                     Firstname = u.Firstname,
-                     Lastname = u.Lastname,
-                     Email = u.Email,
-                     Balance = u.Balance,
-                     Currency = u.Currency.ToString(),
-                     Role = "User"
+                        Userid = u.Id,
+                        Username = u.Username,
+                        Firstname = u.Firstname,
+                        Lastname = u.Lastname,
+                        Email = u.Email,
+                        Balance = u.Balance,
+                        Currency = u.Currency.ToString(),
+                        Role = "User"
                     })
                     .ToList();
 

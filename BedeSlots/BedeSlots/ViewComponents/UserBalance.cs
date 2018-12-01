@@ -26,7 +26,7 @@ namespace BedeSlots.Web.ViewComponents
         {
             var id = HttpContext.User.Claims.FirstOrDefault();
 
-            var balance = await this.userService.GetUserBalanceById(id.Value);
+            var balance = await this.userService.GetUserBalanceByIdAsync(id.Value);
             var userBalanceVM = new UserBalanceViewModel() { Balance = Math.Round(balance, 2) };
 
             return View("Default",userBalanceVM);

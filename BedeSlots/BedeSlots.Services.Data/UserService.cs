@@ -2,44 +2,48 @@
 using BedeSlots.Data.Models;
 using BedeSlots.DTO;
 using BedeSlots.Services.Data.Contracts;
-using BedeSlots.Services.Data.Models.Users;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace BedeSlots.Services.Data
 {
+    //TODO: refactoring
     public class UserService : IUserService
     {
         private readonly BedeSlotsDbContext context;
         private readonly ITransactionService transactionService;
+        private readonly RoleManager<IdentityRole> roleManager;
+        private readonly UserManager<User> userManager;
 
-        public UserService(BedeSlotsDbContext bedeSlotsDbContext, ITransactionService transactionService)
+        public UserService(BedeSlotsDbContext bedeSlotsDbContext, ITransactionService transactionService, RoleManager<IdentityRole> roleManager, UserManager<User> userManager)
         {
             this.context = bedeSlotsDbContext;
             this.transactionService = transactionService;
+            this.roleManager = roleManager;
+            this.userManager = userManager;
         }
 
-        public async Task<decimal> GetUserBalanceById(string userId)
+        public async Task<decimal> GetUserBalanceByIdAsync(string userId)
         {
             var user = await this.context.Users.FirstOrDefaultAsync(u => u.Id == userId);
 
             return user.Balance;
         }
 
-        public async Task<User> GetUserById(string id)
+        public User GetUserById(string id)
         {
-            var user = await this.context.Users.FirstOrDefaultAsync(x => x.Id == id);
+            var user = this.context.Users.FirstOrDefault(x => x.Id == id);
 
             return user;
         }
 
-        public  IQueryable<UserDto> GetAllUsers()
+        public IQueryable<UserDto> GetAllUsers()
         {
-            var users =  this.context
-                .Users.Include(u=>u.Transactions)
+            var users = this.context
+                .Users.Include(u => u.Transactions)
                 .Select(u => new UserDto
                 {
                     Id = u.Id,
@@ -56,9 +60,27 @@ namespace BedeSlots.Services.Data
             return users;
         }
 
-        public async Task<string> GetUserRole(string userId)
+        public async Task<string> GetUserRoleIdAsync(string userId)
         {
             var role = await this.context.UserRoles.FirstOrDefaultAsync(u => u.UserId == userId);
+            var roleId = role.RoleId;
+            var roleName = this.context.Roles.SingleOrDefault(r => r.Id == roleId).Name;
+
+            return roleId;
+        }
+
+        public async Task<IdentityUserRole<string>> GetUserRoleAsync(string userId)
+        {
+            var role = await this.context.UserRoles.FirstOrDefaultAsync(u => u.UserId == userId);
+            var roleId = role.RoleId;
+            var roleName = this.context.Roles.SingleOrDefault(r => r.Id == roleId).Name;
+
+            return role;
+        }
+
+        public string GetUserRoleName(string userId)
+        {
+            var role = this.context.UserRoles.FirstOrDefault(u => u.UserId == userId);
             var roleId = role.RoleId;
             var roleName = this.context.Roles.SingleOrDefault(r => r.Id == roleId).Name;
 
@@ -70,6 +92,30 @@ namespace BedeSlots.Services.Data
             var transactions = await this.context.Transactions.Where(t => t.UserId == id).ToListAsync();
 
             return transactions;
+        }
+
+        public async Task<ICollection<IdentityRole>> GetAllRolesAsync()
+        {
+            var roles = await this.context.Roles.Where(r => r.Name != "MasterAdmin").ToListAsync();
+            return roles;
+        }
+
+        public async Task<IdentityRole> EditUserRoleAsync(string userId, string newRoleId)
+        {
+            var userRole = this.context.UserRoles.FirstOrDefault(ur => ur.UserId == userId);
+            this.context.UserRoles.Remove(userRole);
+
+            var newRole = await this.context.Roles.FirstOrDefaultAsync(r => r.Id == newRoleId);
+            var user = GetUserById(userId);
+
+            if (newRole == null || user == null)
+            {
+                //TODO: do smth
+            }
+
+            await this.userManager.AddToRoleAsync(user, newRole.Name);
+
+            return newRole;
         }
 
     }

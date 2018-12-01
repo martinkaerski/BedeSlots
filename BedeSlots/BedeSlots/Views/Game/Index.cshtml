@@ -15,7 +15,6 @@
 
     @*<form id="spin-form" method="post" asp-controller="Game" asp-action="Spin">*@
     <form id="spin-form">
-
         <div class="form-group col-m-4">
             <label asp-for="@Model.Stake" class="control-label"></label>
             <input asp-for="@Model.Stake" class="form-control" id="data" />
@@ -26,48 +25,34 @@
     </form>
 </div>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-@*<script src="~/js/game.js"></script>*@
-<script>
-    $("#spin-form").submit(function (event) {
-        event.preventDefault();
-        const $spinForm = $("spin-form");
-        const dataToSend = $spinForm.serialize();
-        const data = $("#data").serialize();
 
-        //TODO: dataToSend is empty???
-        console.log(dataToSend);
-        let container = $("#component-balance");
+@section Scripts{
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
-        $.ajax({
-            url: "/Game/Spin",
-            type: "Get",
-            data: data,
-            success: function (partialViewResult) {
-                $("#partial").empty();
-                $("#partial").html(partialViewResult);
-                $.get("/Game/BalanceViewComponent", function (data) { container.html(data); });
-            },
-            error: function (arg, data, value) {
-                console.log(arg + data + value);
-            }
-        })
-    });
+    <script>
+        $("#spin-form").submit(function (event) {
+            event.preventDefault();
+            const $spinForm = $("spin-form");
+            const dataToSend = $spinForm.serialize();
+            const data = $("#data").serialize();
 
-    //TODO: cant run with post method, if asp-action and controller - partialView in new page
+            //TODO: dataToSend is empty???
+            console.log(dataToSend);
+            let container = $("#component-balance");
 
-    //$(function () {
-    //    const $commentForm = $('#spin-form');
-
-    //    $commentForm.on('submit', function (event) {
-    //        event.preventDefault();
-
-    //        const dataToSend = $commentForm.serialize();
-
-    //        $.post($commentForm.attr('action'), dataToSend, function (partialViewResult) {
-    //            $("#partial").empty();
-    //            $("#partial").html(partialViewResult);
-    //        });
-    //    });
-    //});
-</script>
+            $.ajax({
+                url: "/Game/Spin",
+                type: "Get",
+                data: data,
+                success: function (partialViewResult) {
+                    $("#partial").empty();
+                    $("#partial").html(partialViewResult);
+                    $.get("/Game/BalanceViewComponent", function (data) { container.html(data); });
+                },
+                error: function (arg, data, value) {
+                    console.log(arg + data + value);
+                }
+            })
+        });
+    </script>
+}

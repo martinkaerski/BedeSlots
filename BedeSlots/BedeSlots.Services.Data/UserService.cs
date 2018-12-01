@@ -54,11 +54,13 @@ namespace BedeSlots.Services.Data
             return users;
         }
 
-        public async Task<string> GetUserRole(User user)
+        public async Task<string> GetUserRole(string userId)
         {
-            var role = await this.context.UserRoles.FirstOrDefaultAsync(u => u.UserId == user.Id);
+            var role = await this.context.UserRoles.FirstOrDefaultAsync(u => u.UserId == userId);
+            var roleId = role.RoleId;
+            var roleName = this.context.Roles.SingleOrDefault(r => r.Id == roleId).Name;
 
-            return role.ToString();
+            return roleName;
         }
 
         public async Task<IEnumerable<Transaction>> GetUserTransactionsAsync(string id)

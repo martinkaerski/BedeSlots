@@ -3,7 +3,7 @@ using BedeSlots.Data.Models;
 using BedeSlots.Services.Data.Contracts;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace BedeSlots.Services.Data
@@ -17,11 +17,19 @@ namespace BedeSlots.Services.Data
             this.context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
-        public async Task<ICollection<Transaction>> GetAllTransactionsAsync()
+        public IQueryable<Transaction> GetAllTransactions()
         {
-            var transactions = await this.context.Transactions
+            var transactions = this.context.Transactions
                 .Include(t => t.User)
-                .ToListAsync();
+                //.Select(t => new TransactionDto
+                //{
+                //    Date = t.Date,
+                //    Amount = t.Amount,
+                //    Description = t.Description, 
+                //    Type = t.Type,
+                //    User = t.User.Email
+                //})
+                .AsQueryable();
 
             return transactions;
         }

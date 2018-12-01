@@ -1,6 +1,7 @@
 ﻿using BedeSlots.Data.Models;
 using BedeSlots.Services.Data.Contracts;
 using BedeSlots.Web.Areas.Admin.Models;
+using BedeSlots.Web.Areas.Admin.Models.Users;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -35,8 +36,26 @@ namespace BedeSlots.Web.Areas.Admin.Controllers
         public async Task<IActionResult> Index()
         {
             var users = await this.userService.GetAllUsersAsync();
+
+            var usersViewModelsTask = users
+                .Select(async u => new UserViewModel
+                {
+                    Id = u.Id,
+                    Username = u.Username,
+                    FirstName = u.FirstName,
+                    LastName = u.LastName,
+                    Birthdate = u.Birthdate,
+                    Balance = u.Balance,
+                    Currency = u.Currency,
+                    Email = u.Email,
+                    Role = await userService.GetUserRole(u.Id)
+                });
+
+            var usersViewModels = await Task.WhenAll(usersViewModelsTask);
+
             var roles = await this.roleManager
                 .Roles
+                .Where(r => r.Name != WebConstants.MasterAdminRole)
                 .Select(r => new SelectListItem
                 {
                     Text = r.Name,
@@ -45,8 +64,8 @@ namespace BedeSlots.Web.Areas.Admin.Controllers
                 .ToListAsync();
 
             var userViewModel = new UserListingViewModel
-            {
-                Users = users,
+            {                
+                Users = usersViewModels,
                 Roles = roles
             };
                        
@@ -73,6 +92,14 @@ namespace BedeSlots.Web.Areas.Admin.Controllers
             await this.userManager.AddToRoleAsync(user, model.Role);
 
             return this.RedirectToAction(nameof(Index));
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetRole(string data)
+        {
+            var roleName = await userService.GetUserRole(data);
+
+            return Content(roleName);
         }
     }
 }

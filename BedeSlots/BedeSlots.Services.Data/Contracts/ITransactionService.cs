@@ -1,12 +1,12 @@
 ﻿using BedeSlots.Data.Models;
-using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace BedeSlots.Services.Data.Contracts
 {
     public interface ITransactionService
     {
-        Task<ICollection<Transaction>> GetAllTransactionsAsync();
+        IQueryable<Transaction> GetAllTransactions();
 
         Task<Transaction> GetTransactionByIdAsync(int id);
 

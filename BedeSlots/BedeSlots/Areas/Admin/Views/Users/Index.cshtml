@@ -68,8 +68,9 @@
                     <form asp-action="AddToRole" method="post">
                         <div class="row">
                             <div class="col-md-9">
-                                <input type="hidden" name="UserId" value="@user.Id" />
-                                <select name="Role" asp-items="Model.Roles" class="form-control"></select>
+                                <input id="user-id" hidden name="UserId" value="@user.Id" />
+
+                                <select id="select-role" name="Role" asp-items="Model.Roles" class="form-control">@user.Role</select>
                             </div>
                             <div class="col-md-3">
                                 <input class="btn btn-sm btn-primary" type="submit" value="Add To Role" />
@@ -85,9 +86,28 @@
         }
     </tbody>
 </table>
-@section Scripts{
 
+@section Scripts{
     <script>
-      
+        $(function () {
+            const data = $("#user-id").val();
+            console.log(data);
+            console.log(typeof(data));
+
+
+            $.ajax({
+                url: "/Admin/Users/GetRole",
+                type: "Get",
+                contentType: "application/json; charset=utf-8",
+                data: { data: data },
+                dataType: 'json',
+                success: function (role) {
+                    $("#select-role").val(role);                 
+                },
+                error: function (arg, data, value) {
+                    console.log(arg + data + value);
+                }
+            })
+        });
     </script>
-}
+    }

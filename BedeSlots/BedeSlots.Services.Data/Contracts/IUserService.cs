@@ -13,7 +13,7 @@ namespace BedeSlots.Services.Data.Contracts
 
         Task<ICollection<UserDto>> GetAllUsersAsync();
 
-        Task<string> GetUserRole(User user);
+        Task<string> GetUserRole(string userId);
 
         Task<IEnumerable<Transaction>> GetUserTransactionsAsync(string id);
     }

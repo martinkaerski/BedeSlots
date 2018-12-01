@@ -25,7 +25,7 @@ namespace BedeSlots.Web.Controllers
             this.userService = userService;
             this.cardService = cardService;
         }
-
+        // TODO method is not async at all..
         [HttpGet]
         public async Task<IActionResult> AddCard()
         {
@@ -38,6 +38,7 @@ namespace BedeSlots.Web.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddCard(AddCardViewModel model)
         {
             var user = await this.userManager.GetUserAsync(HttpContext.User);
@@ -57,7 +58,8 @@ namespace BedeSlots.Web.Controllers
             };
 
             await this.cardService.AddCardAsync(card);
-            return Redirect($"CardInfo/{card.Id}");
+
+            return View("Deposit");
         }
 
         public async Task<IActionResult> CardInfo(int id)

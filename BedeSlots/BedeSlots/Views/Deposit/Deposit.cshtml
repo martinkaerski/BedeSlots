@@ -8,10 +8,17 @@
     <div class="col-md-4 col-md-offset-4">
         <form asp-controller="Deposit" asp-action="Deposit" method="post">
             <div class="well form-group">
-                <label asp-for="BankCards" class="control-label"></label>
-                <select asp-for="@Model.BankCardId" asp-items="@Model.BankCards" class="form-control"></select>
-                <span asp-validation-for="BankCardId" class="text-danger"></span>
-                <a class="btn btn-default" asp-controller="Card" asp-action="AddCard">Add card</a>
+                <div id="select-card-dropdown">
+                    @await Component.InvokeAsync("SelectCard")
+                </div>
+
+                @*<label asp-for="BankCards" class="control-label"></label>
+                    <select asp-for="@Model.BankCardId" asp-items="@Model.BankCards" class="form-control"></select>
+                    <span asp-validation-for="BankCardId" class="text-danger"></span>
+                    <a class="btn btn-default" asp-controller="Card" asp-action="AddCard">Add card</a>*@
+
+                @*<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">Open modal for something</button>*@
+
             </div>
             <div class="well form-group">
                 <label asp-for="Amount" class="control-label"></label>
@@ -23,11 +30,38 @@
             </div>
         </form>
     </div>
+    @*modal*@
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <h2 class="modal-title text-center" id="exampleModalLabel">Add card</h2>
+                </div>
+                <div class="modal-body">
+                    @await Component.InvokeAsync("AddCard");
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary form-control" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    @*modalend*@
 </div>
+
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"
+        integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+        crossorigin="anonymous"></script>
 
 
 @section Scripts {
     @await Html.PartialAsync("_ValidationScriptsPartial")
+    <script src="~/js/addCard.js"></script>
 }
 
 

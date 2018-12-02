@@ -31,7 +31,6 @@ namespace BedeSlots.Web.Controllers
             this.userService = userService;
         }
 
-        [Authorize]
         public async Task<IActionResult> Index()
         {
             var user = await userManager.GetUserAsync(HttpContext.User);
@@ -44,7 +43,8 @@ namespace BedeSlots.Web.Controllers
                 Cols = cols,
                 Matrix = stringMatrix,
                 Balance = await this.userService.GetUserBalanceByIdAsync(user.Id),
-                Message = "Good luck!"
+                Message = "Good luck!",
+                Currency = user.Currency
             };
 
             return View(model);
@@ -70,7 +70,8 @@ namespace BedeSlots.Web.Controllers
                     Cols = cols,
                     Matrix = result.Matrix,
                     Stake = result.Money,
-                    Balance = convertedUserBalance - stake
+                    Balance = convertedUserBalance - stake,
+                    Currency = user.Currency
                 };
 
                 if (result.Money > 0)
@@ -95,7 +96,8 @@ namespace BedeSlots.Web.Controllers
                     Rows = rows,
                     Cols = cols,
                     Balance = user.Balance,
-                    Message = "Not enough money"
+                    Message = "Not enough money",
+                    Currency = user.Currency
                 };
 
                 return this.PartialView("_GameSlotPartial", model);
@@ -120,14 +122,16 @@ namespace BedeSlots.Web.Controllers
             var user = await userManager.GetUserAsync(HttpContext.User);
             var matrix = game.GenerateMatrix(rows, cols, null);
             var stringMatrix = game.GetCharMatrix(matrix);
+            var convertedUserBalance = await this.userService.GetUserBalanceByIdAsync(user.Id);
 
             var model = new GameSlotViewModel()
             {
                 Rows = rows,
                 Cols = cols,
                 Matrix = stringMatrix,
-                Balance = user.Balance,
-                Message = "Good luck!"
+                Balance = convertedUserBalance,
+                Message = "Good luck!",
+                Currency = user.Currency
             };
 
             return View(model);

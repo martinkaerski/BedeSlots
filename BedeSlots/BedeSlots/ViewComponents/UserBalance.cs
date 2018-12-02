@@ -25,10 +25,14 @@ namespace BedeSlots.Web.ViewComponents
         public async Task<IViewComponentResult> InvokeAsync()
         {
             //var id = HttpContext.User.Claims.FirstOrDefault();
-            var id = this.userManager.GetUserId(HttpContext.User);
+            var user = await this.userManager.GetUserAsync(HttpContext.User);
 
-            var balance = await this.userService.GetUserBalanceByIdAsync(id);
-            var userBalanceVM = new UserBalanceViewModel() { Balance = Math.Round(balance, 2) };
+            var balance = await this.userService.GetUserBalanceByIdAsync(user.Id);
+            var userBalanceVM = new UserBalanceViewModel()
+            {
+                Balance = Math.Round(balance, 2),
+                Currency = user.Currency
+            };
 
             return View("Default", userBalanceVM);
         }

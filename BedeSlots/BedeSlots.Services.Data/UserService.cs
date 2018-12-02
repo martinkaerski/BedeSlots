@@ -2,6 +2,7 @@
 using BedeSlots.Data.Models;
 using BedeSlots.DTO;
 using BedeSlots.Services.Data.Contracts;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
@@ -118,5 +119,6 @@ namespace BedeSlots.Services.Data
             return newRole;
         }
 
+       
     }
 }

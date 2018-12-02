@@ -26,5 +26,6 @@ namespace BedeSlots.Services.Data.Contracts
         Task<IdentityUserRole<string>> GetUserRoleAsync(string userId);
 
         string GetUserRoleName(string userId);
+
     }
 }

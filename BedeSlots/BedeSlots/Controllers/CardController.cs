@@ -27,11 +27,11 @@ namespace BedeSlots.Web.Controllers
         }
         // TODO method is not async at all..
         [HttpGet]
-        public async Task<IActionResult> AddCard()
+        public IActionResult AddCard()
         {
             var cardTypes = Enum.GetValues(typeof(CardType)).Cast<CardType>();
 
-            var cardTypesSelectList = cardTypes.Select(c => new SelectListItem { Value = ((int)c).ToString(), Text = c.ToString()}).ToList();
+            var cardTypesSelectList = cardTypes.Select(c => new SelectListItem { Value = ((int)c).ToString(), Text = c.ToString() }).ToList();
 
             var addCardVM = new AddCardViewModel() { CardTypes = cardTypesSelectList };
             return View(addCardVM);
@@ -59,7 +59,7 @@ namespace BedeSlots.Web.Controllers
 
             await this.cardService.AddCardAsync(card);
 
-            return View("Deposit");
+            return ViewComponent("SelectCard");
         }
 
         public async Task<IActionResult> CardInfo(int id)
@@ -77,6 +77,25 @@ namespace BedeSlots.Web.Controllers
 
 
             return View(cardInfo);
+        }
+
+        [AcceptVerbs("Get", "Post")]
+        public async Task<JsonResult> DoesCardExistInDatabase(string cardNumber)
+        {
+            var userId = this.userManager.GetUserId(HttpContext.User);
+
+            var cards = await this.cardService.GetUserCardsAsync(userId);
+
+            var doesExists = cards.Any(c => c.Number == cardNumber);
+
+            if (!doesExists)
+            {
+                return Json(true);
+            }
+            else
+            {
+                return Json($"Card {cardNumber} allready added!");
+            }
         }
     }
 }

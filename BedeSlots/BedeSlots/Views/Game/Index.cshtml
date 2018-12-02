@@ -7,52 +7,59 @@
 
 <link href="~/css/game.css" rel="stylesheet" />
 
-<h1>Slot Machine</h1>
-<div class="content">
-    <div id="partial">
-        <partial name="_GameSlotPartial" model="@Model" />
+<div class="row">
+    <div class="col-md-4">
+        <a asp-controller="Game" asp-action="SmallSlotMachine" class="btn">
+            <img src="~/images/img-history-fruit-big.jpg" alt="Resposive Image" />
+        </a>
     </div>
-
-    @*<form id="spin-form" method="post" asp-controller="Game" asp-action="Spin">*@
-    <form id="spin-form">
-        <div class="form-group col-m-4">
-            <label asp-for="@Model.Stake" class="control-label"></label>
-            <input asp-for="@Model.Stake" class="form-control" id="data" />
-            <span asp-validation-for="@Model.Stake" class="text-danger"></span>
-        </div>
-
-        <input type="submit" id="spin-button" value="Spin">
-    </form>
 </div>
 
+@*<div class="content">
+        <div id="partial">
+            <partial name="_GameSlotPartial" model="@Model" />
+        </div>
 
-@section Scripts{
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        @*<form id="spin-form" method="post" asp-controller="Game" asp-action="Spin">
+        <form id="spin-form">
+            <div class="form-group col-m-4">
+                <label asp-for="@Model.Stake" class="control-label"></label>
+                <input asp-for="@Model.Stake" class="form-control" id="data" />
+                <span asp-validation-for="@Model.Stake" class="text-danger"></span>
+            </div>
 
-    <script>
-        $("#spin-form").submit(function (event) {
-            event.preventDefault();
-            const $spinForm = $("spin-form");
-            const dataToSend = $spinForm.serialize();
-            const data = $("#data").serialize();
+            <input type="submit" id="spin-button" value="Spin">
+        </form>
+    </div>*@
 
-            //TODO: dataToSend is empty???
-            console.log(dataToSend);
-            let container = $("#component-balance");
 
-            $.ajax({
-                url: "/Game/Spin",
-                type: "Get",
-                data: data,
-                success: function (partialViewResult) {
-                    $("#partial").empty();
-                    $("#partial").html(partialViewResult);
-                    $.get("/Game/BalanceViewComponent", function (data) { container.html(data); });
-                },
-                error: function (arg, data, value) {
-                    console.log(arg + data + value);
-                }
-            })
-        });
-    </script>
-}
+@*@section Scripts{
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>*@
+
+@*<script>
+            $("#spin-form").submit(function (event) {
+                event.preventDefault();
+                const $spinForm = $("spin-form");
+                const dataToSend = $spinForm.serialize();
+                const data = $("#data").serialize();
+
+                //TODO: dataToSend is empty???
+                console.log(dataToSend);
+                let container = $("#component-balance");
+
+                $.ajax({
+                    url: "/Game/Spin",
+                    type: "Get",
+                    data: data,
+                    success: function (partialViewResult) {
+                        $("#partial").empty();
+                        $("#partial").html(partialViewResult);
+                        $.get("/Game/BalanceViewComponent", function (data) { container.html(data); });
+                    },
+                    error: function (arg, data, value) {
+                        console.log(arg + data + value);
+                    }
+                })
+            });
+        </script>
+    }*@

@@ -37,6 +37,11 @@
 .hiddenRow {
     padding: 0 !important;
 }
+
 .well {
     background-color: lightblue;
+}
+.inline {
+    display: inline-block;
+    margin: 2%;
 }

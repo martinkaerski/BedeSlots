@@ -5,6 +5,7 @@ using BedeSlots.Web.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Threading.Tasks;
 
 namespace BedeSlots.Web.Controllers
@@ -55,8 +56,8 @@ namespace BedeSlots.Web.Controllers
             {
                 await this.depositService.WithdrawMoneyAsync(stake, user.Id);
                 string gameType = GameType._4x3.ToString().Substring(1);
-                
-                var stakeTransaction = await this.transactionService.AddTransactionAsync(TransactionType.Stake, user.Id, gameType ,stake);
+
+                var stakeTransaction = await this.transactionService.AddTransactionAsync(TransactionType.Stake, user.Id, gameType, stake);
 
                 var result = game.Spin(rows, cols, stake);
 
@@ -71,11 +72,11 @@ namespace BedeSlots.Web.Controllers
 
                 if (result.Money > 0)
                 {
-                    var winTransaction = await this.transactionService.AddTransactionAsync(TransactionType.Win, user.Id, gameType ,result.Money);
+                    var winTransaction = await this.transactionService.AddTransactionAsync(TransactionType.Win, user.Id, gameType, result.Money);
 
                     await depositService.DepositMoneyAsync(result.Money, user.Id);
                     model.Balance += result.Money;
-                    model.Message = $"You won {result.Money}";
+                    model.Message = $"You won {Math.Round(result.Money, 2)} $";
                 }
                 else
                 {
@@ -109,6 +110,24 @@ namespace BedeSlots.Web.Controllers
             var user = await userManager.GetUserAsync(HttpContext.User);
 
             return user.Balance >= 0 ? Json(true) : Json($"Not enough money!");
+        }
+
+        public async Task<IActionResult> SmallSlotMachine()
+        {
+            var user = await userManager.GetUserAsync(HttpContext.User);
+            var matrix = game.GenerateMatrix(rows, cols, null);
+            var stringMatrix = game.GetCharMatrix(matrix);
+
+            var model = new GameSlotViewModel()
+            {
+                Rows = rows,
+                Cols = cols,
+                Matrix = stringMatrix,
+                Balance = user.Balance,
+                Message = "Good luck!"
+            };
+
+            return View(model);
         }
     }
 }

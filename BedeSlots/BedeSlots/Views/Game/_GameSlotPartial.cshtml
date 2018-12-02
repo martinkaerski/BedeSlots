@@ -1,21 +1,25 @@
 ﻿@model GameSlotViewModel
 <section>
     <table>
+        <hr />  
         @for (int row = 0; row < @Model.Rows; row++)
         {
             <tr>
                 @for (int col = 0; col < @Model.Cols; col++)
                 {
-                    <td><img src="~/images/fruits/@(Model.Matrix[row,col] + ".png")" id="@(row.ToString() + col.ToString()) "></td>
+                    <td><img width="30" height="70" src="~/images/fruits/@(Model.Matrix[row,col] + ".png")" id="@(row.ToString() + col.ToString()) "></td>
                 }
             </tr>
         }
+        
     </table>
 
-    <div class="text text-success">Balance: @Model.Balance</div>
-    <div class="text text-success">Earning: @Model.Stake</div>
+    <hr />
+    <div class="inline text text-info">Balance: <strong> @Math.Round(@Model.Balance, 2)</strong></div>
+    <div class="inline text text-success">Earning:+ <strong>@Math.Round(@Model.Stake, 2)</strong></div>
     <span asp-validation-for="@Model.Stake" class="text-danger"></span>
-    <div class="text text-success"> @Model.Message</div>
+    <div class="inline text text-justify"><strong> @Model.Message</strong></div>
+
 </section>
 
 @section Scripts

@@ -10,9 +10,12 @@
         const dataToSend = $addCardForm.serialize();
 
         $.post($addCardForm.attr('action'), dataToSend, function (serverData) {
-
-            $('#exampleModal').modal('hide');
-            $addCardForm.find('input').val(' ');
+            debugger;
+            $('#AddCardModal').modal('hide');
+            $addCardForm.find('input').val('');
+            //$addCardForm.find('#select-card-dropdown').replaceWith(serverData);
+            $("#select-card-dropdown").empty();
+            $("#select-card-dropdown").html(serverData);
             return false;
         });
     });

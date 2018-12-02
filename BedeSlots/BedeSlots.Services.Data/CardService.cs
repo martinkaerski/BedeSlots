@@ -1,6 +1,8 @@
 ﻿using BedeSlots.Data;
 using BedeSlots.Data.Models;
 using BedeSlots.Services.Data.Contracts;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -12,10 +14,13 @@ namespace BedeSlots.Services.Data
     public class CardService : ICardService
     {
         private readonly BedeSlotsDbContext context;
+        private readonly UserManager<User> userManager;
 
-        public CardService(BedeSlotsDbContext context)
+
+        public CardService(BedeSlotsDbContext context, UserManager<User> userManager)
         {
             this.context = context ?? throw new ArgumentNullException(nameof(context));
+            this.userManager = userManager;
         }
 
         public async Task<ICollection<BankCard>> GetUserCardsAsync(string userId)
@@ -55,5 +60,6 @@ namespace BedeSlots.Services.Data
                 return false;
             }
         }
+
     }
 }

@@ -1,5 +1,6 @@
 ﻿using BedeSlots.Common.CustomAttributes;
 using BedeSlots.Data.Models;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
@@ -15,6 +16,7 @@ namespace BedeSlots.Web.Models
 
         [Required]
         [RegularExpression("^[0-9]{16}$", ErrorMessage = "The card number should be 16 digits.")]
+        [Remote(action: "DoesCardExistInDatabase", controller: "Card", areaName: "")]
         [Display(Name = "Card number")]
         public string CardNumber { get; set; }
 

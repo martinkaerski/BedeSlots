@@ -36,13 +36,14 @@ namespace BedeSlots.Web.Areas.Admin.Controllers
             this.roleManager = roleManager;
         }
 
+        [HttpGet]
         public IActionResult Index()
         {
             return View();
         }
 
         [HttpPost]
-        public async Task<IActionResult> Index(EditRoleViewModel model)
+        public async Task<IActionResult> EditRole(EditRoleViewModel model)
         {
             var role = model.RoleId;
             var user = await this.userManager.FindByIdAsync(model.UserId);
@@ -50,11 +51,11 @@ namespace BedeSlots.Web.Areas.Admin.Controllers
 
             if (userRoles.Contains(WebConstants.MasterAdminRole))
             {
-                return View();
+                return RedirectToAction("Index");
             }
 
             await this.userService.EditUserRoleAsync(model.UserId, model.RoleId);
-            return View();
+            return RedirectToAction("Index");
         }
 
         [HttpGet]
@@ -65,7 +66,7 @@ namespace BedeSlots.Web.Areas.Admin.Controllers
 
             if (userRoles.Contains(WebConstants.MasterAdminRole))
             {
-                return RedirectToAction("Index");
+                return PartialView("_MasterAdminRoleEdit");
             }
 
             var roleId = await userService.GetUserRoleIdAsync(userid);
@@ -83,8 +84,34 @@ namespace BedeSlots.Web.Areas.Admin.Controllers
             return PartialView("_EditRolePartial", model);
         }
 
+        [HttpGet]
+        public async Task<IActionResult> GetRole(string userid)
+        {
+            var user = await this.userManager.FindByIdAsync(userid);
+            var userRoles = await this.userManager.GetRolesAsync(user);
+
+            if (userRoles.Contains(WebConstants.MasterAdminRole))
+            {
+                return RedirectToAction("Index");
+            }
+
+            var roleId = await userService.GetUserRoleIdAsync(userid);
+
+            var roles = await userService.GetAllRolesAsync();
+            var rolesSelectList = roles.Select(r => new SelectListItem { Value = r.Id, Text = r.Name }).ToList();
+            var model = new EditRoleViewModel()
+            {
+                UserId = userid,
+                RoleId = roleId,
+                UserName = user.FirstName + " " + user.LastName,
+                Roles = rolesSelectList
+            };
+
+            return PartialView("_EditRolePartial", model);
+        }
+
         [HttpPost]
-        public IActionResult LoadData()
+        public async Task<IActionResult> LoadData()
         {
             try
             {
@@ -139,7 +166,7 @@ namespace BedeSlots.Web.Areas.Admin.Controllers
                 var data = users
                     .Skip(skip)
                     .Take(pageSize)
-                    .Select( u =>  new
+                    .Select(u => new UserDtoListing
                     {
                         Userid = u.Id,
                         Username = u.Username,
@@ -148,9 +175,8 @@ namespace BedeSlots.Web.Areas.Admin.Controllers
                         Email = u.Email,
                         Balance = u.Balance,
                         Currency = u.Currency.ToString(),
-                        Role = "User"
-                    })
-                    .ToList();
+                        Role = "KAK?"
+                    });
 
                 //Returning Json Data
                 return Json(new { draw = draw, recordsFiltered = recordsTotal, recordsTotal = recordsTotal, data = data });

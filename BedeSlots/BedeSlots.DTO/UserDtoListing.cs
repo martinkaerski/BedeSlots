@@ -1,12 +1,10 @@
-﻿using BedeSlots.Data.Models;
-using System;
-using System.Collections.Generic;
+﻿using System;
 
 namespace BedeSlots.DTO
 {
-    public class UserDto
+    public class UserDtoListing
     {
-        public string Id { get; set; }
+        public string Userid { get; set; }
 
         public string Username { get; set; }
 
@@ -18,12 +16,10 @@ namespace BedeSlots.DTO
 
         public string Email { get; set; }
 
-        public Currency Currency { get; set; }
+        public string Currency { get; set; }
 
         public decimal Balance { get; set; }
 
-        public ICollection<BankCard> Cards { get; set; }
-
-        public ICollection<Transaction> Transactions { get; set; }
+        public string Role { get; set; }
     }
 }

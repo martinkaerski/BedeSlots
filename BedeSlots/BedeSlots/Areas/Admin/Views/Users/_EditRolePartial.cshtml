@@ -1,32 +1,26 @@
-﻿
+﻿@model BedeSlots.Web.Areas.Admin.Models.Users.EditRoleViewModel
+
 @{
     ViewData["Title"] = "_EditRolePartial";
 }
 
 <h2>Change the role of @Model.UserName </h2>
 
-@model BedeSlots.Web.Areas.Admin.Models.Users.EditRoleViewModel
-
 <div>
-
     <form id="myForm">
         @Html.HiddenFor(m => m.UserId)
 
-        @Html.DropDownListFor(model => model.RoleId, Model.Roles, "Select Role", new { @class = "form-control" }) 
+        @Html.DropDownListFor(model => model.RoleId, Model.Roles, new { @class = "form-control" }) 
 
         <a href="#" id="btnSubmit" class="btn btn-success btn-block">Update</a>
-
     </form>
 
     <div style="text-align:center;display:none" id="loaderDiv">
         <img src="//media.giphy.com/media/xTk9ZvMnbIiIew7IpW/giphy.gif" width="150" />
     </div>
-
 </div>
 
-
 <script>
-
     $(document).ready(function () {
 
         $("#btnSubmit").click(function () {
@@ -36,21 +30,15 @@
             var myformdata = $("#myForm").serialize();
 
             $.ajax({
-
                 type: "POST",
-                url: "/Admin/Users/Index",
+                url: "/Admin/Users/EditRole",
                 data: myformdata,
                 success: function () {
                     $("#loaderDiv").hide();
                     $("#myModal").modal("hide");
                     window.location.href = "/Admin/Users/Index";
-
                 }
-
             })
         })
-
     })
-
-
 </script>

@@ -45,7 +45,7 @@
 @section Scripts{
     <script src="//cdn.datatables.net/1.10.9/js/jquery.dataTables.min.js"></script>
 
-    <script>    
+    <script>
         var EditRole = function (userid) {
 
             console.log('vatrer e')
@@ -55,7 +55,6 @@
                 $("#myModal1").modal("show");
 
             })
-
         };
 
         $(document).ready(function () {
@@ -74,6 +73,9 @@
                     [{
                         "targets": [6],
                         "orderable": false,
+                        "searchable": false,
+                        "targets": [7],
+                        "orderable": false,
                         "searchable": false
                     }],
                 "columns": [
@@ -86,23 +88,21 @@
                     { "data": "role", "name": "Role", "autoWidth": true },
                     {
                         "data": "userid",
+                        "autowidth": true,
                         "render": function (userid, type, full, meta) {
                             //return '<button type="button" id="edit" value =' + userid + '>Edit</button>'
-                            return '<a href="#" class="btn btn-success" onclick="EditRole(&quot;' + userid + '&quot;)"> edit </a>'
+                            return '<a href="#" class="btn btn-success" onclick="EditRole(&quot;' + userid + '&quot;)"> Edit </a>'
                         }
                     },
                 ]
             });
 
-                   
             $("#edit").click(function () {
                 $.ajax({
                     url: "/Admin/Users",
                     type: "Get",
                     data: userid,
                     success: function () {
-
-                        console.log('lopge')
                         //$("#myModalBodyDiv1").load(url, function () {
                         //    $("#myModal1").modal("show");
 

@@ -44,7 +44,7 @@ namespace BedeSlots.Services.Data
         public IQueryable<UserDto> GetAllUsers()
         {
             var users = this.context
-                .Users.Include(u => u.Transactions)
+                .Users
                 .Select(u => new UserDto
                 {
                     Id = u.Id,

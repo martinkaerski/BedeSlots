@@ -1,4 +1,5 @@
-﻿using BedeSlots.Data.Models;
+﻿using BedeSlots.Data;
+using BedeSlots.Data.Models;
 using BedeSlots.DTO;
 using BedeSlots.Services.Data.Contracts;
 using BedeSlots.Web.Areas.Admin.Models;
@@ -111,7 +112,7 @@ namespace BedeSlots.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> LoadData()
+        public IActionResult LoadData()
         {
             try
             {
@@ -175,8 +176,8 @@ namespace BedeSlots.Web.Areas.Admin.Controllers
                         Email = u.Email,
                         Balance = u.Balance,
                         Currency = u.Currency.ToString(),
-                        Role = "KAK?"
-                    });
+                        //Role = this.userService.GetUserRoleName(u.Id)
+                    }).ToList();
 
                 //Returning Json Data
                 return Json(new { draw = draw, recordsFiltered = recordsTotal, recordsTotal = recordsTotal, data = data });

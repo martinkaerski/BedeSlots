@@ -7,6 +7,6 @@ namespace BedeSlots.Services.Data.Contracts
     {
         Task<User> DepositMoneyAsync(decimal amount, string userId);
 
-        Task<User> WithdrawMoneyAsync(decimal amount, string userId);
+        Task<User> GetMoneyAsync(decimal amount, string userId);
     }
 }

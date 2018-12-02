@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace BedeSlots.Services.Data
@@ -17,20 +18,36 @@ namespace BedeSlots.Services.Data
         private readonly ITransactionService transactionService;
         private readonly RoleManager<IdentityRole> roleManager;
         private readonly UserManager<User> userManager;
+        private readonly ICurrencyConverterService currencyConverterService;
 
-        public UserService(BedeSlotsDbContext bedeSlotsDbContext, ITransactionService transactionService, RoleManager<IdentityRole> roleManager, UserManager<User> userManager)
+        public UserService(BedeSlotsDbContext bedeSlotsDbContext, 
+            ITransactionService transactionService, 
+            RoleManager<IdentityRole> roleManager, 
+            UserManager<User> userManager,
+            ICurrencyConverterService currencyConverterService)
         {
             this.context = bedeSlotsDbContext;
             this.transactionService = transactionService;
             this.roleManager = roleManager;
             this.userManager = userManager;
+            this.currencyConverterService = currencyConverterService;
         }
 
         public async Task<decimal> GetUserBalanceByIdAsync(string userId)
         {
-            var user = await this.context.Users.FirstOrDefaultAsync(u => u.Id == userId);
+            var user = await this.context
+                .Users
+                .Select(u => new
+                {
+                    Id = u.Id,
+                    Balance = u.Balance,
+                    Currency = u.Currency
+                })
+                .FirstOrDefaultAsync(u => u.Id == userId);
 
-            return user.Balance;
+            var convertedBalance = await this.currencyConverterService.ConvertFromBaseToOther(user.Balance, user.Currency);
+
+            return convertedBalance;
         }
 
         public User GetUserById(string id)
@@ -117,6 +134,5 @@ namespace BedeSlots.Services.Data
 
             return newRole;
         }
-
     }
 }

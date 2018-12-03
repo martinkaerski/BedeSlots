@@ -8,10 +8,23 @@
 <link href="~/css/game.css" rel="stylesheet" />
 
 <div class="row">
+    <div class="smallgame col-md-4">
+        <a asp-controller="Game" asp-action="SmallSlotMachine" class="btn">
+            <img class="smallgame-poster" src="~/images/img-history-fruit-big.jpg" alt="Resposive Image" />
+        </a>
+        <a asp-controller="Game" asp-action="SmallSlotMachine" class="form-control btn btn-danger" >Small game</a>
+    </div>
     <div class="col-md-4">
         <a asp-controller="Game" asp-action="SmallSlotMachine" class="btn">
-            <img src="~/images/img-history-fruit-big.jpg" alt="Resposive Image" />
+            <img class="mediumgame-poster" src="~/images/img-history-fruit-big.jpg" alt="Resposive Image" />
         </a>
+        <a asp-controller="Game" asp-action="SmallSlotMachine" class="form-control btn btn-danger" >Medium game</a>
+    </div>
+    <div class="col-md-4">
+        <a asp-controller="Game" asp-action="SmallSlotMachine" class="btn">
+            <img class="biggame-poster" src="~/images/img-history-fruit-big.jpg" alt="Resposive Image" />
+        </a>
+        <a asp-controller="Game" asp-action="SmallSlotMachine" class="form-control btn btn-danger" >Big game</a>
     </div>
 </div>
 

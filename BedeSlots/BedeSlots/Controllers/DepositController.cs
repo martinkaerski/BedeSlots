@@ -38,15 +38,8 @@ namespace BedeSlots.Web.Controllers
         public async Task<IActionResult> Deposit()
         {
             var user = await this.userManager.GetUserAsync(HttpContext.User);
-            // TODO temp check before private funtionality implementation is done
 
-            var cards = await this.cardService.GetUserCardsAsync(user.Id);
-            var cardsSelectList = cards.Select(x => new SelectListItem { Value = x.Id.ToString(), Text = x.Number }).ToList();
-
-            var cardTypes = Enum.GetValues(typeof(CardType)).Cast<CardType>();
-            var cardTypesSelectList = cardTypes.Select(c => new SelectListItem { Value = c.ToString(), Text = c.ToString() }).ToList();
-
-            var depositVM = new DepositViewModel() { BankCards = cardsSelectList, CardTypes = cardTypesSelectList };
+            var depositVM = new DepositViewModel() { };
 
             return View(depositVM);
         }
@@ -68,7 +61,8 @@ namespace BedeSlots.Web.Controllers
 
             var depositTransaction = await this.depositService.DepositMoneyAsync(depositViewModel.DepositAmount, user.Id);
 
-            return View("DepositInfo");
+            return Json(new { message = $"Successfully deposit {depositViewModel.DepositAmount} $!" });
+
         }
 
         public IActionResult DepositInfo()

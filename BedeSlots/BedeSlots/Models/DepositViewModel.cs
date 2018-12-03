@@ -14,11 +14,6 @@ namespace BedeSlots.Web.Models
         [Range(1, double.MaxValue, ErrorMessage = "Deposit value must be positive number!")]
         public decimal DepositAmount { get; set; }
 
-        [Display(Name = "Select card")]
-        public List<SelectListItem> BankCards { get; set; }
-
-        public List<SelectListItem> CardTypes { get; set; }
-
         public DepositViewModel()
         {
 

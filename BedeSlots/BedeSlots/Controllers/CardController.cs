@@ -82,7 +82,7 @@ namespace BedeSlots.Web.Controllers
         [AcceptVerbs("Get", "Post")]
         public async Task<JsonResult> DoesCardExistInDatabase(string cardNumber)
         {
-            var userId = this.userManager.GetUserId(HttpContext.User);
+                var userId = this.userManager.GetUserId(HttpContext.User);
 
             var cards = await this.cardService.GetUserCardsAsync(userId);
 

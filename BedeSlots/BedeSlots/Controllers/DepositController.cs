@@ -46,7 +46,7 @@ namespace BedeSlots.Web.Controllers
             var cardTypes = Enum.GetValues(typeof(CardType)).Cast<CardType>();
             var cardTypesSelectList = cardTypes.Select(c => new SelectListItem { Value = c.ToString(), Text = c.ToString() }).ToList();
 
-            var depositVM = new DepositViewModel() { BankCards = cardsSelectList, CardTypes = cardTypesSelectList };
+            var depositVM = new DepositViewModel() { BankCards = cardsSelectList, CardTypes = cardTypesSelectList};
 
             return View(depositVM);
         }

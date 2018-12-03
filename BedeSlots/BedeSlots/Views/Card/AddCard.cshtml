@@ -6,37 +6,26 @@
 
 <h2>AddCard</h2>
 
-<div class="row">
-    <div class="col-md-4 col-md-offset-4">
+<partial name="_AddCardPartial" model="@Model" />
 
-        <form asp-controller="Card" asp-action="AddCard" method="post">
-            <div class="well form-group">
-                <label asp-for="CardNumber" class="control-label"></label>
-                <input asp-for="CardNumber" type="text" name="CardNumber" placeholder="Card number" class="form-control" />
-                <span asp-validation-for="CardNumber" class="text-danger"></span>
-            </div>
-            <div class="well form-group">
-                <label asp-for="Cvv" class="control-label"></label>
-                <input asp-for="Cvv" type="text" name="cvv" placeholder="cvv" class="form-control" />
-                <span asp-validation-for="Cvv" class="text-danger"></span>
-            </div>
-            <div class="well form-group">
-                <label asp-for="Expiry" class="control-label"></label>
-                <input asp-for="Expiry" type="date" name="expiry" placeholder="expiry" class="form-control" />
-                <span asp-validation-for="Expiry" class="text-danger"></span>
-            </div>
-            <div class="well form-group">
-                <label asp-for="CardType" class="control-label"></label>
-                <select asp-for="CardType" asp-items="Html.GetEnumSelectList<CardType>()" class="form-control"></select>
-                <span asp-validation-for="CardType" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <button type="submit" class="btn btn-primary form-control">Add</button>
-            </div>
-        </form>
-    </div>
-</div>
 
-@section Scripts {
+@section Scripts{
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script src="~/lib/jquery/dist/jquery.card.js"></script>
+    <script>
+
+        $('#form').card({
+
+            container: '.card-wrapper', // *required*
+
+            formSelectors: {
+                numberInput: 'input#number', // optional — default input[name="number"]
+                expiryInput: 'input#expiry', // optional — default input[name="expiry"]
+                cvcInput: 'input#cvc', // optional — default input[name="cvc"]
+                nameInput: 'input#name' // optional - defaults input[name="name"]
+            }
+        });
+
+    </script>
 }

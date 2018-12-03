@@ -16,7 +16,10 @@
             //$addCardForm.find('#select-card-dropdown').replaceWith(serverData);
             $("#select-card-dropdown").empty();
             $("#select-card-dropdown").html(serverData);
+
             return false;
         });
+
+        $.validator.unobtrusive.parse("#addCardForm");
     });
 });

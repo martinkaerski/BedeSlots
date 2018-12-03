@@ -6,6 +6,10 @@ namespace BedeSlots.Web.Models
 {
     public class DepositViewModel
     {
+        public DepositViewModel()
+        {
+        }
+
         [Required(ErrorMessage = "Please add a card before deposit!")]
         [Range(1, int.MaxValue)]
         public int BankCardId { get; set; }
@@ -18,10 +22,5 @@ namespace BedeSlots.Web.Models
         public List<SelectListItem> BankCards { get; set; }
 
         public List<SelectListItem> CardTypes { get; set; }
-
-        public DepositViewModel()
-        {
-
-        }
     }
 }

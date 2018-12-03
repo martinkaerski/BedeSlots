@@ -1,5 +1,4 @@
-﻿using BedeSlots.Common;
-using BedeSlots.Data.Models;
+﻿using BedeSlots.Data.Models;
 using BedeSlots.Services.Data.Contracts;
 using BedeSlots.Web.Models;
 using Microsoft.AspNetCore.Identity;
@@ -25,7 +24,7 @@ namespace BedeSlots.Web.Controllers
             this.userService = userService;
             this.cardService = cardService;
         }
-        // TODO method is not async at all..
+
         [HttpGet]
         public IActionResult AddCard()
         {
@@ -41,20 +40,23 @@ namespace BedeSlots.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddCard(AddCardViewModel model)
         {
-            var user = await this.userManager.GetUserAsync(HttpContext.User);
+            var userId = this.userManager.GetUserId(HttpContext.User);
 
             if (!ModelState.IsValid)
             {
                 return Redirect("AddCard");
             }
 
+            var cardNumberWithoutSpaces = model.CardNumber.Replace(" ", "");
+
             var card = new BankCard()
             {
-                Number = model.CardNumber,
+                Number = cardNumberWithoutSpaces,
+                CardholerName = model.CardholderName,
                 CvvNumber = model.Cvv,
                 ExpiryDate = model.Expiry,
                 Type = model.CardType,
-                UserId = user.Id
+                UserId = userId,
             };
 
             await this.cardService.AddCardAsync(card);
@@ -72,9 +74,9 @@ namespace BedeSlots.Web.Controllers
                 CardType = card.Type,
                 Cvv = card.CvvNumber.ToString(),
                 Expiry = card.ExpiryDate.ToShortDateString(),
-                Owner = card.User
-            };
+                Owner = card.User,
 
+            };
 
             return View(cardInfo);
         }
@@ -82,11 +84,13 @@ namespace BedeSlots.Web.Controllers
         [AcceptVerbs("Get", "Post")]
         public async Task<JsonResult> DoesCardExistInDatabase(string cardNumber)
         {
+            var cardNumberWithoutSpaces = cardNumber.Replace(" ", "");
+
             var userId = this.userManager.GetUserId(HttpContext.User);
 
             var cards = await this.cardService.GetUserCardsAsync(userId);
 
-            var doesExists = cards.Any(c => c.Number == cardNumber);
+            var doesExists = cards.Any(c => c.Number == cardNumberWithoutSpaces);
 
             if (!doesExists)
             {

@@ -1,4 +1,5 @@
-﻿using BedeSlots.Data;
+﻿using BedeSlots.Common;
+using BedeSlots.Data;
 using BedeSlots.Data.Models;
 using BedeSlots.Services.Data.Contracts;
 using Microsoft.EntityFrameworkCore;
@@ -25,7 +26,7 @@ namespace BedeSlots.Services.Data
         {
             var user = await this.context.Users.FirstOrDefaultAsync(u => u.Id == userId);
 
-            if (user.Currency != Currency.USD)
+            if (user.Currency != CommonConstants.BaseCurrency)
             {
                 amount = await this.currencyConverterService.ConvertToBaseCurrency(amount, user.Currency);
             }
@@ -41,7 +42,7 @@ namespace BedeSlots.Services.Data
         {
             var user = await this.context.Users.FirstOrDefaultAsync(u => u.Id == userId);
 
-            if (user.Currency != Currency.USD)
+            if (user.Currency != CommonConstants.BaseCurrency)
             {
                 amount = await this.currencyConverterService.ConvertToBaseCurrency(amount, user.Currency);
             }

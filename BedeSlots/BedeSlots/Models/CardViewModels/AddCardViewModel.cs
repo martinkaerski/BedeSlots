@@ -15,18 +15,25 @@ namespace BedeSlots.Web.Models
         }
 
         [Required]
-        [RegularExpression("^[0-9]{16}$", ErrorMessage = "The card number should be 16 digits.")]
         [Remote(action: "DoesCardExistInDatabase", controller: "Card", areaName: "")]
+        [StringLength(19, MinimumLength =19, ErrorMessage ="The card number should be 16 digits.")]
         [Display(Name = "Card number")]
         public string CardNumber { get; set; }
 
         [Required]
-        [RegularExpression("^[0-9]{3}$", ErrorMessage = "The CVV number should be 3 digits.")]
+        [MinLength(3, ErrorMessage = "The cardholder name should be at least 3 symbols.")]
+        [Display(Name = "Cardholder name")]
+        public string CardholderName { get; set; }
+
+        [Required]
+        [StringLength(4, MinimumLength = 3, ErrorMessage = "The CVV should be 3 or 4 numbers.")]
         [Display(Name = "CVV")]
         public string Cvv { get; set; }
 
         [Required]
         [ExpiryDate(ErrorMessage = "Invalid expiry date!")]
+        [DisplayFormat(DataFormatString = "{0:MM-yy}")]
+        [DataType(DataType.Date)]
         [Display(Name = "Expiry")]
         public DateTime Expiry { get; set; }
 

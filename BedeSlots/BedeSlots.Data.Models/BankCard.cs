@@ -1,4 +1,4 @@
-﻿using BedeSlots.Common.CustomAttributes;
+﻿
 using System;
 using System.ComponentModel.DataAnnotations;
 
@@ -15,8 +15,12 @@ namespace BedeSlots.Data.Models
         public string CvvNumber { get; set; }
 
         [Required]
-        [ExpiryDate]
+        //TODO ExpiryDate atribute?
         public DateTime ExpiryDate { get; set; }
+
+        [Required]
+        [MinLength(3, ErrorMessage = "The cardholder name should be at least 3 symbols.")]
+        public string CardholerName { get; set; }
 
         [Required]
         public CardType Type { get; set; }

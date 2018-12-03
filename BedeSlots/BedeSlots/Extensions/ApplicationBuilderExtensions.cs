@@ -1,4 +1,5 @@
-﻿using BedeSlots.Data;
+﻿using BedeSlots.Common;
+using BedeSlots.Data;
 using BedeSlots.Data.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
@@ -52,8 +53,8 @@ namespace BedeSlots.Web.Extensions
                                 UserName = adminEmail,
                                 FirstName = adminName,
                                 LastName = adminName,
-                                Birthdate = new DateTime(1980, 01, 01),
-                                Currency = Currency.USD
+                                Birthdate = new DateTime(1970, 01, 01),
+                                Currency = CommonConstants.BaseCurrency
                             };
 
                             var createAdmin = await userManager.CreateAsync(adminUser, "123456");

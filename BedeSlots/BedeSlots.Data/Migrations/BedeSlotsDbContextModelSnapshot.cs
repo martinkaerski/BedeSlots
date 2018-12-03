@@ -25,6 +25,9 @@ namespace BedeSlots.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("CardholerName")
+                        .IsRequired();
+
                     b.Property<DateTime?>("CreatedOn");
 
                     b.Property<string>("CvvNumber")

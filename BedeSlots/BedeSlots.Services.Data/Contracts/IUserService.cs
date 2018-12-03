@@ -9,7 +9,7 @@ namespace BedeSlots.Services.Data.Contracts
 {
     public interface IUserService
     {
-        User GetUserById(string id);
+        Task<User> GetUserByIdAsync(string id);
 
         Task<decimal> GetUserBalanceByIdAsync(string userId);
 
@@ -25,7 +25,7 @@ namespace BedeSlots.Services.Data.Contracts
 
         Task<IdentityUserRole<string>> GetUserRoleAsync(string userId);
 
-        string GetUserRoleName(string userId);
+        Task<string> GetUserRoleNameAsync(string userId);
 
     }
 }

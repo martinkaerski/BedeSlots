@@ -1,5 +1,4 @@
-﻿using BedeSlots.Data;
-using BedeSlots.Data.Models;
+﻿using BedeSlots.Data.Models;
 using BedeSlots.DTO;
 using BedeSlots.Services.Data.Contracts;
 using BedeSlots.Web.Areas.Admin.Models;
@@ -9,6 +8,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -25,11 +25,8 @@ namespace BedeSlots.Web.Areas.Admin.Controllers
         private readonly UserManager<User> userManager;
         private readonly RoleManager<IdentityRole> roleManager;
 
-        public UsersController(
-            IUserService userService,
-            UserManager<User> userManager,
-            ITransactionService transactionService,
-            RoleManager<IdentityRole> roleManager)
+        public UsersController(IUserService userService, UserManager<User> userManager,
+            ITransactionService transactionService, RoleManager<IdentityRole> roleManager)
         {
             this.userService = userService;
             this.transactionService = transactionService;
@@ -73,12 +70,14 @@ namespace BedeSlots.Web.Areas.Admin.Controllers
             var roleId = await userService.GetUserRoleIdAsync(userid);
 
             var roles = await userService.GetAllRolesAsync();
+            roles = roles.Where(x => x.Name != WebConstants.MasterAdminRole).ToList();
+
             var rolesSelectList = roles.Select(r => new SelectListItem { Value = r.Id, Text = r.Name }).ToList();
             var model = new EditRoleViewModel()
             {
                 UserId = userid,
                 RoleId = roleId,
-                UserName =  user.FirstName + " " + user.LastName,
+                UserName = user.FirstName + " " + user.LastName,
                 Roles = rolesSelectList
             };
 
@@ -162,11 +161,11 @@ namespace BedeSlots.Web.Areas.Admin.Controllers
 
                 //Total number of rows count 
                 recordsTotal = users.Count();
-
+               
                 //Paging 
                 var data = users
                     .Skip(skip)
-                    .Take(pageSize)
+                    .Take(pageSize).AsEnumerable()
                     .Select(u => new UserDtoListing
                     {
                         Userid = u.Id,
@@ -176,8 +175,8 @@ namespace BedeSlots.Web.Areas.Admin.Controllers
                         Email = u.Email,
                         Balance = u.Balance,
                         Currency = u.Currency.ToString(),
-                        //Role = this.userService.GetUserRoleName(u.Id)
-                    }).ToList();
+                        Role = u.Role
+                    });
 
                 //Returning Json Data
                 return Json(new { draw = draw, recordsFiltered = recordsTotal, recordsTotal = recordsTotal, data = data });

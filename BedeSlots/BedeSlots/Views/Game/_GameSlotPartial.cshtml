@@ -1,4 +1,7 @@
 ﻿@model GameSlotViewModel
+
+<link href="~/css/game.css" rel="stylesheet" />
+
 <section>
     <table class="table">
         @for (int row = 0; row < @Model.Rows; row++)
@@ -6,7 +9,7 @@
             <tr>
                 @for (int col = 0; col < @Model.Cols; col++)
                 {
-                    <td><img width="30" height="70" src="~/images/fruits/@(Model.Matrix[row,col] + ".png")" id="@(row.ToString() + col.ToString()) "></td>
+                    <td><img class="gameimg img-responsive"  src="~/images/fruits/@(Model.Matrix[row,col] + ".png")" id="@(row.ToString() + col.ToString()) "></td>
                 }
             </tr>
         }

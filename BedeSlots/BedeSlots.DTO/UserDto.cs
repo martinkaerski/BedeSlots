@@ -22,6 +22,8 @@ namespace BedeSlots.DTO
 
         public decimal Balance { get; set; }
 
+        public string Role { get; set; }
+
         public ICollection<BankCard> Cards { get; set; }
 
         public ICollection<Transaction> Transactions { get; set; }

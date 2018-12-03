@@ -1,6 +1,26 @@
-﻿img {
+﻿.gameimg {
     width: 100px;
+    height: 80px;
+}
+.smallgame-poster{
+    width: 60%;
+    border:1px solid;
+    border-color:black;
+}
+.smallgame-btn {
+    text-align: center;
+    
+}
+.mediumgame-poster {
+    width: 80%;
+    border: 1px solid;
+    border-color: black;
+}.biggame-poster {
+    width: 100%;
+    border: 1px solid;
+    border-color: black;
 }
 table {
-    margin: 5%;
+    margin: 0px auto;
 }
+

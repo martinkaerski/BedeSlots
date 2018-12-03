@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace BedeSlots.Services.Data
@@ -19,47 +18,42 @@ namespace BedeSlots.Services.Data
         private readonly ITransactionService transactionService;
         private readonly RoleManager<IdentityRole> roleManager;
         private readonly UserManager<User> userManager;
-        private readonly ICurrencyConverterService currencyConverterService;
 
-        public UserService(BedeSlotsDbContext bedeSlotsDbContext, 
-            ITransactionService transactionService, 
-            RoleManager<IdentityRole> roleManager, 
-            UserManager<User> userManager,
-            ICurrencyConverterService currencyConverterService)
+        public UserService(BedeSlotsDbContext bedeSlotsDbContext, ITransactionService transactionService,
+            RoleManager<IdentityRole> roleManager, UserManager<User> userManager)
         {
             this.context = bedeSlotsDbContext;
             this.transactionService = transactionService;
             this.roleManager = roleManager;
             this.userManager = userManager;
-            this.currencyConverterService = currencyConverterService;
         }
 
         public async Task<decimal> GetUserBalanceByIdAsync(string userId)
         {
-            var user = await this.context
-                .Users
-                .Select(u => new
-                {
-                    Id = u.Id,
-                    Balance = u.Balance,
-                    Currency = u.Currency
-                })
-                .FirstOrDefaultAsync(u => u.Id == userId);
+            var user = await this.context.Users.FirstOrDefaultAsync(u => u.Id == userId);
 
-            var convertedBalance = await this.currencyConverterService.ConvertFromBaseToOther(user.Balance, user.Currency);
-
-            return convertedBalance;
+            return user.Balance;
         }
 
-        public User GetUserById(string id)
+        public async Task<User> GetUserByIdAsync(string id)
         {
-            var user = this.context.Users.FirstOrDefault(x => x.Id == id);
+            var user = await this.context.Users.FirstOrDefaultAsync(x => x.Id == id);
 
             return user;
         }
 
         public IQueryable<UserDto> GetAllUsers()
         {
+            var usersRoles = context.UserRoles.Where(x => x.RoleId != null);
+
+            var allRoles = context.Roles.ToList();
+            var roleDictionary = new Dictionary<string, string>();
+
+            foreach (var role in usersRoles)
+            {
+                roleDictionary.Add(role.UserId, allRoles.FirstOrDefault(x => x.Id == role.RoleId).Name);
+            }
+
             var users = this.context
                 .Users
                 .Select(u => new UserDto
@@ -71,7 +65,8 @@ namespace BedeSlots.Services.Data
                     Email = u.Email,
                     Birthdate = u.Birthdate,
                     Balance = u.Balance,
-                    Currency = u.Currency
+                    Currency = u.Currency,
+                    Role = roleDictionary[u.Id]
                 })
                 .AsQueryable();
 
@@ -96,9 +91,9 @@ namespace BedeSlots.Services.Data
             return role;
         }
 
-        public string GetUserRoleName(string userId)
+        public async Task<string> GetUserRoleNameAsync(string userId)
         {
-            var role = this.context.UserRoles.FirstOrDefault(u => u.UserId == userId);
+            var role = await this.context.UserRoles.FirstOrDefaultAsync(u => u.UserId == userId);
             var roleId = role.RoleId;
             var roleName = this.context.Roles.SingleOrDefault(r => r.Id == roleId).Name;
 
@@ -114,7 +109,8 @@ namespace BedeSlots.Services.Data
 
         public async Task<ICollection<IdentityRole>> GetAllRolesAsync()
         {
-            var roles = await this.context.Roles.Where(r => r.Name != "MasterAdmin").ToListAsync();
+            var roles = await this.context.Roles.ToListAsync();
+
             return roles;
         }
 
@@ -124,7 +120,7 @@ namespace BedeSlots.Services.Data
             this.context.UserRoles.Remove(userRole);
 
             var newRole = await this.context.Roles.FirstOrDefaultAsync(r => r.Id == newRoleId);
-            var user = GetUserById(userId);
+            var user = await GetUserByIdAsync(userId);
 
             if (newRole == null || user == null)
             {
@@ -135,5 +131,7 @@ namespace BedeSlots.Services.Data
 
             return newRole;
         }
+
+
     }
 }

@@ -18,8 +18,35 @@
     </table>
 
     <hr />
-    <div class="inline text text-info">Balance: <strong> @Math.Round(@Model.Balance, 2)</strong></div>
-    <div class="inline text text-success">Earning:+ <strong>@Math.Round(@Model.Stake, 2)</strong></div>
+    <div class="inline text text-info">
+        @if (Model.Currency != Currency.BGN)
+        {
+            <strong>
+                Balance: @WebConstants.CurrencySymbols[Model.Currency]@Math.Round(@Model.Balance, 2)
+            </strong>
+        }
+        else
+        {
+            <strong>
+                Balance: @Math.Round(@Model.Balance, 2)@WebConstants.CurrencySymbols[Model.Currency]
+            </strong>
+        }
+    </div>
+    <div class="inline text text-success">
+        @if (Model.Currency != Currency.BGN)
+        {
+            <strong>
+                Earning: +@WebConstants.CurrencySymbols[Model.Currency]@Math.Round(@Model.Stake, 2)
+            </strong>
+        }
+        else
+        {
+            <strong>
+                Earning: + @Math.Round(@Model.Stake, 2)@WebConstants.CurrencySymbols[Model.Currency]
+            </strong>
+        }
+    </div>
+
     <span asp-validation-for="@Model.Stake" class="text-danger"></span>
     <div class="inline text text-justify"><strong> @Model.Message</strong></div>
 

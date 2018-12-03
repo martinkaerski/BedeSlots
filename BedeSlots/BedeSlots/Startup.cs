@@ -92,7 +92,6 @@ namespace BedeSlots
             services.AddTransient<IDepositService, DepositService>();
             services.AddTransient<ICurrencyConverterService, CurrencyConverterService>();
             services.AddTransient<IExchangeRateApiCallService, ExchangeRateApiCallService>();
-            //TODO: should it be here?
             services.AddTransient<IExchangeRatesApiCaller, ExchangeRatesApiCaller>();
             services.AddTransient<IGame, Game>();
         }

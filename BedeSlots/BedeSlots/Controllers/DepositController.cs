@@ -56,8 +56,9 @@ namespace BedeSlots.Web.Controllers
             var card = await this.cardService.GetCardByIdAsync(depositViewModel.BankCardId);
 
             var cardNumberLastFourDigits = card.Number.Substring(12, 4);
+
             var transaction = await this.transactionService.AddTransactionAsync(TransactionType.Deposit, user.Id,
-                cardNumberLastFourDigits, depositViewModel.DepositAmount);
+                cardNumberLastFourDigits, depositViewModel.DepositAmount, user.Currency);
 
             var depositTransaction = await this.depositService.DepositMoneyAsync(depositViewModel.DepositAmount, user.Id);
 

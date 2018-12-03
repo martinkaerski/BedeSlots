@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using BedeSlots.Data.Models;
+using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 
 namespace BedeSlots.Web.Models
@@ -19,5 +20,7 @@ namespace BedeSlots.Web.Models
         public decimal Balance { get; set; }
 
         public string Message { get; set; }
+
+        public Currency Currency { get; set; }
     }
 }

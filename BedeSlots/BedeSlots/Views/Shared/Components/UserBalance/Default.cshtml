@@ -6,7 +6,20 @@
 
 <ul class="nav navbar-nav navbar-right">
     <li>
-        <a>Balance: @Model.Balance $</a>
+        <a>
+            @if (Model.Currency != Currency.BGN)
+            {
+                <strong>
+                    Balance: @WebConstants.CurrencySymbols[Model.Currency]@Math.Round(@Model.Balance, 2)
+                </strong>
+            }
+            else
+            {
+                <strong>
+                    Balance: @Math.Round(@Model.Balance, 2)@WebConstants.CurrencySymbols[Model.Currency]
+                </strong>
+            }
+        </a>
     </li>
 </ul>
 

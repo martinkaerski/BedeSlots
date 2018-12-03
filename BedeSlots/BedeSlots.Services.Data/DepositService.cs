@@ -37,7 +37,7 @@ namespace BedeSlots.Services.Data
             return user;
         }
 
-        public async Task<User> WithdrawMoneyAsync(decimal amount, string userId)
+        public async Task<User> GetMoneyAsync(decimal amount, string userId)
         {
             var user = await this.context.Users.FirstOrDefaultAsync(u => u.Id == userId);
 

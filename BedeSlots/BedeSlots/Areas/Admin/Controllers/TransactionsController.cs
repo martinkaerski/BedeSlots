@@ -1,4 +1,5 @@
-﻿using BedeSlots.Data.Models;
+﻿using BedeSlots.Common;
+using BedeSlots.Data.Models;
 using BedeSlots.Services.Data.Contracts;
 using BedeSlots.Web.Areas.Admin.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -91,14 +92,14 @@ namespace BedeSlots.Web.Areas.Admin.Controllers
                             .OrderByDescending(t => t.GetType().GetProperty(sortColumn).GetValue(t));
                     }
                 }
-                
+
                 //Search
                 if (!string.IsNullOrEmpty(searchValue))
                 {
                     transactions = transactions
-                        .Where(t => t.User.Email.Contains(searchValue)  
-                        || t.Description.Contains(searchValue) 
-                        ||  t.Type.ToString().Contains(searchValue));
+                        .Where(t => t.User.Email.Contains(searchValue)
+                        || t.Description.Contains(searchValue)
+                        || t.Type.ToString().Contains(searchValue));
                 }
 
                 //Total number of rows count 
@@ -112,9 +113,9 @@ namespace BedeSlots.Web.Areas.Admin.Controllers
                     {
                         Date = t.Date.ToString("G", CultureInfo.InvariantCulture),
                         Type = t.Type.ToString(),
-                        Amount = t.Amount.ToString(),                        
-                        Description = t.Type == TransactionType.Deposit 
-                        ? $"Deposit with card **** **** **** {t.Description}" 
+                        Amount = CommonConstants.BaseCurrencySymbol + t.Amount.ToString(),
+                        Description = t.Type == TransactionType.Deposit
+                        ? $"Deposit with card **** **** **** {t.Description}"
                         : $"{t.Type.ToString()} on game {t.Description}",
                         User = t.User.Email
                     })

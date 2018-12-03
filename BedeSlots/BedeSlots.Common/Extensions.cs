@@ -16,5 +16,14 @@ namespace BedeSlots.Common
                             .GetCustomAttribute<DisplayAttribute>()
                             .GetName();
         }
+
+        public static string GetCurrencySymbol(this Enum enumValue)
+        {
+            return enumValue.GetType()
+                            .GetMember(enumValue.ToString())
+                            .First()
+                            .GetCustomAttribute<DisplayAttribute>()
+                            .GetName();
+        }
     }
 }

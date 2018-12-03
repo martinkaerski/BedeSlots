@@ -24,8 +24,8 @@ namespace BedeSlots.Web.ViewComponents
         public async Task<IViewComponentResult> InvokeAsync()
         {
             var user = await this.userManager.GetUserAsync(HttpContext.User);
-            var cards = await this.cardService.GetUserCardsAsync(user.Id);
-            var cardsSelectList = cards.Select(x => new SelectListItem { Value = x.Id.ToString(), Text = x.Number }).ToList();
+            var cards = await this.cardService.GetUserCardsNumbersAsync(user.Id);
+            var cardsSelectList = cards.Select(c => new SelectListItem { Value = c.Id.ToString(), Text = "**** **** **** " + c.CardNumberLastDigits }).ToList();
             var selectCardViewModel = new SelectCardViewModel() { CardsList = cardsSelectList };
 
             return View("Default", selectCardViewModel);

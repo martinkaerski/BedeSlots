@@ -1,7 +1,7 @@
 ﻿using BedeSlots.Data;
 using BedeSlots.Data.Models;
+using BedeSlots.DTO;
 using BedeSlots.Services.Data.Contracts;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -15,8 +15,7 @@ namespace BedeSlots.Services.Data
     {
         private readonly BedeSlotsDbContext context;
         private readonly UserManager<User> userManager;
-
-
+        
         public CardService(BedeSlotsDbContext context, UserManager<User> userManager)
         {
             this.context = context ?? throw new ArgumentNullException(nameof(context));
@@ -30,6 +29,20 @@ namespace BedeSlots.Services.Data
                 .ToListAsync();
 
             return cards;
+        }
+
+        public async Task<ICollection<CardDto>> GetUserCardsNumbersAsync(string userId)
+        {
+            var cardsNumbers = await context.BankCards
+                .Where(c => c.UserId == userId)
+                .Select(c => new CardDto
+                {
+                    Id = c.Id,
+                    CardNumberLastDigits = c.Number.Substring(12)
+                })
+                .ToListAsync();
+
+            return cardsNumbers;
         }
 
         public async Task<BankCard> AddCardAsync(BankCard bankCard)
@@ -60,6 +73,5 @@ namespace BedeSlots.Services.Data
                 return false;
             }
         }
-
     }
 }

@@ -5,10 +5,9 @@
 
 
 <div class="well form-group">
-    <label asp-for="CardsList" class="control-label"></label>
+    <label asp-for="@Model.CardsList" class="control-label"></label>
     <select asp-for="@Model.BankCardId" asp-items="@Model.CardsList" class="form-control"></select>
-    <span asp-validation-for="BankCardId" class="text-danger"></span>
-    @*<a class="btn btn-default" asp-controller="Card" asp-action="AddCard">Add card</a>*@
+    <span asp-validation-for="@Model.BankCardId" class="text-danger"></span>
 
     <button type="button" class="btn btn-primary form-control" data-toggle="modal" data-target="#AddCardModal">Add card</button>
 

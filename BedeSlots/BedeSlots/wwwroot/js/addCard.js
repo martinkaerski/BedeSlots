@@ -4,6 +4,7 @@
     $addCardForm.on('submit', function (event) {
         event.preventDefault();
 
+        //TODO: delete it?
         const $cardnumberVal = $addCardForm.find('#CardNumber').val();
         const $tokenVal = $addCardForm.find('input[name="__RequestVerificationToken"]').val();
 
@@ -13,7 +14,6 @@
             debugger;
             $('#AddCardModal').modal('hide');
             $addCardForm.find('input').val('');
-            //$addCardForm.find('#select-card-dropdown').replaceWith(serverData);
             $("#select-card-dropdown").empty();
             $("#select-card-dropdown").html(serverData);
 

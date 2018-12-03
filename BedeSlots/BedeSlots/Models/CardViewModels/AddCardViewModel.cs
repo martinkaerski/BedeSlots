@@ -17,12 +17,12 @@ namespace BedeSlots.Web.Models
         [Required]
         [Remote(action: "DoesCardExistInDatabase", controller: "Card", areaName: "")]
         [StringLength(19, MinimumLength =19, ErrorMessage ="The card number should be 16 digits.")]
-        [Display(Name = "Card number")]
+        [Display(Name = "Card Number")]
         public string CardNumber { get; set; }
 
         [Required]
         [MinLength(3, ErrorMessage = "The cardholder name should be at least 3 symbols.")]
-        [Display(Name = "Cardholder name")]
+        [Display(Name = "Card Holder")]
         public string CardholderName { get; set; }
 
         [Required]
@@ -34,7 +34,7 @@ namespace BedeSlots.Web.Models
         [ExpiryDate(ErrorMessage = "Invalid expiry date!")]
         [DisplayFormat(DataFormatString = "{0:MM-yy}")]
         [DataType(DataType.Date)]
-        [Display(Name = "Expiry")]
+        [Display(Name = "Expiry Date")]
         public DateTime Expiry { get; set; }
 
         [Required]

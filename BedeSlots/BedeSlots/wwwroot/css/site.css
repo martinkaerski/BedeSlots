@@ -45,3 +45,14 @@
     display: inline-block;
     margin: 2%;
 }
+
+.card-wrapper {
+    padding-top: 50px;
+}
+
+@media only screen and (max-width: 600px) {
+    .card-wrapper {
+        display:none;
+    }
+}
+

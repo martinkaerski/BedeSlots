@@ -1,8 +1,15 @@
 ﻿@model BedeSlots.Web.Models.DepositViewModel
 @{
     ViewData["Title"] = "Deposit";
-}
+}<style>
 
+    .modal-dialog {
+        width: 800px;
+        margin: 30px auto;
+    }
+
+
+    </style>
 <h2 class="text-center">Deposit</h2>
 <div class="row">
     <div class="col-md-4 col-md-offset-4">
@@ -24,7 +31,7 @@
     </div>
     @*modal*@
     <div class="modal fade" id="AddCardModal" tabindex="-1" role="dialog">
-        <div class="modal-dialog" role="document">
+        <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <div>
@@ -53,16 +60,27 @@
     <script src="~/lib/jquery/dist/jquery.card.js"></script>
 
     <script>    
-        $('#form').card({
-
-            container: '.card-wrapper', // *required*
+        $('#addCardForm').card({
+            container: '.card-wrapper', 
 
             formSelectors: {
-                numberInput: 'input#number', // optional — default input[name="number"]
-                expiryInput: 'input#expiry', // optional — default input[name="expiry"]
-                cvcInput: 'input#cvv', // optional — default input[name="cvc"]
-                nameInput: 'input#name' // optional - defaults input[name="name"]
-            }
+                numberInput: 'input#number', 
+                expiryInput: 'input#expiry', 
+                cvcInput: 'input#cvv',
+                nameInput: 'input#name' 
+            },
+
+            messages: {
+                validDate: 'valid\ndate', // optional - default 'valid\nthru'
+                monthYear: 'mm/yyyy', // optional - default 'month/year'
+            },
+
+            placeholders: {
+                number: '•••• •••• •••• ••••',
+                name: 'Full Name',
+                expiry: '••/••',
+                cvc: '•••'
+            },
         });
     </script>
     <script src="~/js/deposit.js"></script>

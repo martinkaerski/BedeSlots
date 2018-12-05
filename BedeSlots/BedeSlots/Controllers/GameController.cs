@@ -2,6 +2,7 @@
 using BedeSlots.Games.Contracts;
 using BedeSlots.Services.Data.Contracts;
 using BedeSlots.Web.Models;
+using BedeSlots.Web.Models.GameViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -13,8 +14,8 @@ namespace BedeSlots.Web.Controllers
     [Authorize]
     public class GameController : Controller
     {
-        const int rows = 4;
-        const int cols = 3;
+        private int rows = 4;
+        private int cols = 3;
 
         private readonly IGame game;
         private readonly UserManager<User> userManager;
@@ -31,27 +32,18 @@ namespace BedeSlots.Web.Controllers
             this.userService = userService;
         }
 
-        public async Task<IActionResult> Index()
+        public  IActionResult Index()
         {
-            var user = await userManager.GetUserAsync(HttpContext.User);
-            var matrix = game.GenerateMatrix(rows, cols, null);
-            var stringMatrix = game.GetCharMatrix(matrix);
-
-            var model = new GameSlotViewModel()
-            {
-                Rows = rows,
-                Cols = cols,
-                Matrix = stringMatrix,
-                Balance = await this.userService.GetUserBalanceByIdAsync(user.Id),
-                Message = "Good luck!",
-                Currency = user.Currency
-            };
-
-            return View(model);
+            return View();
         }
 
-        public async Task<IActionResult> Spin(decimal stake)
+        [HttpPost]
+        public async Task<IActionResult> Spin(GameStakeViewModel stakeModel)
         {
+            decimal stake = stakeModel.Stake;
+            rows = stakeModel.Rows;
+            cols = stakeModel.Cols;
+
             var user = await userManager.GetUserAsync(HttpContext.User);
             var convertedUserBalance = await this.userService.GetUserBalanceByIdAsync(user.Id);
 
@@ -59,8 +51,8 @@ namespace BedeSlots.Web.Controllers
             {
                 await this.depositService.GetMoneyAsync(stake, user.Id);
                 string gameType = GameType._4x3.ToString().Substring(1);
-                
-                var stakeTransaction = await this.transactionService.AddTransactionAsync(TransactionType.Stake, user.Id, gameType ,stake, user.Currency);
+
+                var stakeTransaction = await this.transactionService.AddTransactionAsync(TransactionType.Stake, user.Id, gameType, stake, user.Currency);
 
                 var result = game.Spin(rows, cols, stake);
 
@@ -76,7 +68,7 @@ namespace BedeSlots.Web.Controllers
 
                 if (result.Money > 0)
                 {
-                    var winTransaction = await this.transactionService.AddTransactionAsync(TransactionType.Win, user.Id, gameType ,result.Money, user.Currency);
+                    var winTransaction = await this.transactionService.AddTransactionAsync(TransactionType.Win, user.Id, gameType, result.Money, user.Currency);
 
                     await depositService.DepositMoneyAsync(result.Money, user.Id);
                     model.Balance += result.Money;
@@ -117,8 +109,24 @@ namespace BedeSlots.Web.Controllers
             return user.Balance >= 0 ? Json(true) : Json($"Not enough money!");
         }
 
-        public async Task<IActionResult> SmallSlotMachine()
-        {
+        public async Task<IActionResult> SlotMachine(string size)
+        { 
+            switch (size)
+            {
+                case "4x3":
+                    rows = 4;
+                    cols = 3;
+                    break;
+                case "5x5":
+                    rows = 5;
+                    cols = 5;
+                    break;
+                case "8x5":
+                    rows = 8;
+                    cols = 5;
+                    break;
+            }
+
             var user = await userManager.GetUserAsync(HttpContext.User);
             var matrix = game.GenerateMatrix(rows, cols, null);
             var stringMatrix = game.GetCharMatrix(matrix);

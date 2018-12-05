@@ -19,8 +19,11 @@
         <form id="spin-form">
             <div class="form-group col-m-4 col-md-offset-2">
                 <label asp-for="@Model.Stake" class="control-label"></label>
-                <input asp-for="@Model.Stake" id="data" />
+                <input asp-for="@Model.Stake" id="stake" />
                 <span asp-validation-for="@Model.Stake" class="text-danger"></span>
+
+                <input asp-for="@Model.Rows" id="rows" hidden />
+                <input asp-for="@Model.Cols" id="cols" hidden />
             </div>
             <button type="submit" id="spin-button" class="btn btn-success btn-block">Spin</button>
         </form>
@@ -29,16 +32,12 @@
 
 
 @section Scripts{
-    <script>
-        
-    </script>
 
     <script>
         $("#spin-form").submit(function (event) {
             event.preventDefault();
-            const $spinForm = $("spin-form");
+            const $spinForm = $("#spin-form");
             const dataToSend = $spinForm.serialize();
-            const data = $("#data").serialize();
 
             $("#10").attr("src", "/images/fruits/w.png");
             $("#20").attr("src", "/images/fruits/w.png");
@@ -48,8 +47,8 @@
 
             $.ajax({
                 url: "/Game/Spin",
-                type: "Get",
-                data: data,
+                type: "Post",
+                data: dataToSend,
                 success: function (partialViewResult) {
                     $("#partial").empty();
                     $("#partial").html(partialViewResult);
@@ -64,32 +63,32 @@
             console.log(dataToSend);
             let container = $("#component-balance");
 
-            let counter = 0;
+            //let counter = 0;
 
-            let Random = setInterval(function () {
-                counter++;
+            //let Random = setInterval(function () {
+            //    counter++;
 
-                for (var i = 0; i < 4; i++) {
-                    for (var j = 0; j < 3; j++) {
-                        let rnd = Math.floor(Math.random() * 4);
+            //    for (var i = 0; i < 4; i++) {
+            //        for (var j = 0; j < 3; j++) {
+            //            let rnd = Math.floor(Math.random() * 4);
 
-                        let idName = ""+ i + j;
-                        let full = "#" + idName;
-                       // let top = "'" + full + "'";
-                        console.log(full)
-                        console.log($(full).src);
-                        $("#11").attr("src", "a.png");
+            //            let idName = ""+ i + j;
+            //            let full = "#" + idName;
+            //           // let top = "'" + full + "'";
+            //            console.log(full)
+            //            console.log($(full).src);
+            //            $("#11").attr("src", "a.png");
 
-                    }
-                }
+            //        }
+            //    }
 
-                //Show the pictures during the process.
-                if (counter > 10) {
-                    counter = 0;
-                    clearInterval(Random);
-                    // After the result will be displayed the random number generating process should be closed.
-                }
-            }, 140)();
+            //    //Show the pictures during the process.
+            //    if (counter > 10) {
+            //        counter = 0;
+            //        clearInterval(Random);
+            //        // After the result will be displayed the random number generating process should be closed.
+            //    }
+            //}, 140)();
         });
     </script>
 }

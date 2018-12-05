@@ -40,22 +40,6 @@ namespace BedeSlots.Web.Areas.Admin.Controllers
             return View();
         }
 
-        [HttpPost]
-        public async Task<IActionResult> EditRole(EditRoleViewModel model)
-        {
-            var role = model.RoleId;
-            var user = await this.userManager.FindByIdAsync(model.UserId);
-            var userRoles = await this.userManager.GetRolesAsync(user);
-
-            if (userRoles.Contains(WebConstants.MasterAdminRole))
-            {
-                return RedirectToAction("Index");
-            }
-
-            await this.userService.EditUserRoleAsync(model.UserId, model.RoleId);
-            return RedirectToAction("Index");
-        }
-
         [HttpGet]
         public async Task<IActionResult> EditRole(string userid)
         {
@@ -64,7 +48,7 @@ namespace BedeSlots.Web.Areas.Admin.Controllers
 
             if (userRoles.Contains(WebConstants.MasterAdminRole))
             {
-                return PartialView("_MasterAdminRoleEdit");
+                return PartialView("_MasterAdminEdit");
             }
 
             var roleId = await userService.GetUserRoleIdAsync(userid);
@@ -82,6 +66,22 @@ namespace BedeSlots.Web.Areas.Admin.Controllers
             };
 
             return PartialView("_EditRolePartial", model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditRole(EditRoleViewModel model)
+        {
+            var role = model.RoleId;
+            var user = await this.userManager.FindByIdAsync(model.UserId);
+            var userRoles = await this.userManager.GetRolesAsync(user);
+
+            if (userRoles.Contains(WebConstants.MasterAdminRole))
+            {
+                return RedirectToAction("Index");
+            }
+
+            await this.userService.EditUserRoleAsync(model.UserId, model.RoleId);
+            return RedirectToAction("Index");
         }
 
         [HttpGet]
@@ -108,6 +108,33 @@ namespace BedeSlots.Web.Areas.Admin.Controllers
             };
 
             return PartialView("_EditRolePartial", model);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Delete(string userid)
+        {
+            var user = await this.userManager.FindByIdAsync(userid);
+            var userRoles = await this.userManager.GetRolesAsync(user);
+
+            if (userRoles.Contains(WebConstants.MasterAdminRole))
+            {
+                return PartialView("_MasterAdminEdit");
+            }
+
+            var model = new DeleteUserViewModel()
+            {
+                Id = userid,
+                UserName = user.FirstName + " " + user.LastName
+            };
+
+            return PartialView("_DeleteUserPartial", model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Delete(DeleteUserViewModel model)
+        {
+            await this.userService.DeleteUserAsync(model.Id);
+            return RedirectToAction("Index");
         }
 
         [HttpPost]

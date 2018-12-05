@@ -22,6 +22,7 @@
                     <th>Currency</th>
                     <th>Role</th>
                     <th>Edit Role</th>
+                    <th>Delete</th>
                 </tr>
             </thead>
         </table>
@@ -46,14 +47,19 @@
     <script src="//cdn.datatables.net/1.10.9/js/jquery.dataTables.min.js"></script>
 
     <script>
-        var EditRole = function (userid) {
-
-            console.log('vatrer e')
-            var url = "/Admin/Users/EditRole?userid=" + userid;
+        let EditRole = function (userid) {
+            let url = "/Admin/Users/EditRole?userid=" + userid;
 
             $("#myModalBodyDiv1").load(url, function () {
                 $("#myModal1").modal("show");
+            })
+        };
 
+        let Delete = function (userid) {
+            let url = "/Admin/Users/Delete?userid=" + userid;
+
+            $("#myModalBodyDiv1").load(url, function () {
+                $("#myModal1").modal("show");
             })
         };
 
@@ -89,9 +95,15 @@
                     {
                         "data": "userid",
                         "autowidth": true,
-                        "render": function (userid, type, full, meta) {
-                            //return '<button type="button" id="edit" value =' + userid + '>Edit</button>'
+                        "render": function (userid, type, full, meta) {                         
                             return '<a href="#" class="btn btn-success" onclick="EditRole(&quot;' + userid + '&quot;)"> Edit </a>'
+                        }
+                    },
+                    {
+                        "data": "userid",
+                        "autowidth": true,
+                        "render": function (userid, type, full, meta) {
+                            return '<a href="#" class="btn btn-danger" onclick="Delete(&quot;' + userid + '&quot;)"> Delete </a>'
                         }
                     },
                 ]
@@ -103,10 +115,10 @@
                     type: "Get",
                     data: userid,
                     success: function () {
-                        //$("#myModalBodyDiv1").load(url, function () {
-                        //    $("#myModal1").modal("show");
+                        $("#myModalBodyDiv1").load(url, function () {
+                            $("#myModal1").modal("show");
 
-                        //})
+                        })
                     },
                     error: function (arg, data, value) {
                         console.log(arg + data + value);

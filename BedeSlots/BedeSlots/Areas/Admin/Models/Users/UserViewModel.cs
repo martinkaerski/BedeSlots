@@ -1,8 +1,5 @@
 ﻿using BedeSlots.Data.Models;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace BedeSlots.Web.Areas.Admin.Models.Users
 {

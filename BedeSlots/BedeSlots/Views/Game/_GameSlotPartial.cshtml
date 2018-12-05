@@ -3,55 +3,61 @@
 <link href="~/css/game.css" rel="stylesheet" />
 
 <section>
-    <table class="table">
+    <table cellpadding="0" cellspacing="0" align="center" class="slot">
         @for (int row = 0; row < @Model.Rows; row++)
         {
             <tr>
                 @for (int col = 0; col < @Model.Cols; col++)
                 {
-                    <td><img class="gameimg img-responsive"  src="~/images/fruits/@(Model.Matrix[row,col] + ".png")" id="@(row.ToString() + col.ToString()) "></td>
+                    <td><img class="gameimg img-responsive" src="~/images/fruits/@(Model.Rows + Model.Matrix[row,col] + ".png")" id="@(row.ToString() + col.ToString()) "></td>
                 }
             </tr>
         }
 
     </table>
 
-    <hr />
-    <div class="inline text text-info">
-        @if (Model.Currency != Currency.BGN)
-        {
-            <strong>
-                Balance: @WebConstants.CurrencySymbols[Model.Currency]@Math.Round(@Model.Balance, 2)
-            </strong>
-        }
-        else
-        {
-            <strong>
-                Balance: @Math.Round(@Model.Balance, 2)@WebConstants.CurrencySymbols[Model.Currency]
-            </strong>
-        }
-    </div>
-    <div class="inline text text-success">
-        @if (Model.Currency != Currency.BGN)
-        {
-            <strong>
-                Earning: +@WebConstants.CurrencySymbols[Model.Currency]@Math.Round(@Model.Stake, 2)
-            </strong>
-        }
-        else
-        {
-            <strong>
-                Earning: + @Math.Round(@Model.Stake, 2)@WebConstants.CurrencySymbols[Model.Currency]
-            </strong>
-        }
+    <div class="center-block text-center">
+        <div class="inline text text-info">
+            @if (Model.Currency != Currency.BGN)
+            {
+                <strong>
+                    Balance: @WebConstants.CurrencySymbols[Model.Currency]@Math.Round(@Model.Balance, 2)
+                </strong>
+            }
+            else
+            {
+                <strong>
+                    Balance: @Math.Round(@Model.Balance, 2)@WebConstants.CurrencySymbols[Model.Currency]
+                </strong>
+            }
+        </div>
+        <div class="inline text text-success">
+
+            @if (Model.Currency != Currency.BGN)
+            {
+                <strong>
+                    Earning: +@WebConstants.CurrencySymbols[Model.Currency]@Math.Round(@Model.Stake, 2)
+                </strong>
+            }
+            else
+            {
+                <strong>
+                    Earning: + @Math.Round(@Model.Stake, 2)@WebConstants.CurrencySymbols[Model.Currency]
+                </strong>
+            }
+        </div>
+        <div class="inline text text-justify"><strong> @Model.Message</strong></div>
     </div>
 
-    <span asp-validation-for="@Model.Stake" class="text-danger"></span>
-    <div class="inline text text-justify"><strong> @Model.Message</strong></div>
 
 </section>
 
-@section Scripts
-    {
-    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+@section Scripts{
+    <script>
+
+
+    </script>
+
+
 }
+

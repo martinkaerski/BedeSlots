@@ -58,7 +58,6 @@ namespace BedeSlots.Web.Controllers
                 return ViewComponent("SelectCard");
             }
 
-
             var user = await this.userManager.GetUserAsync(HttpContext.User);
             var card = await this.cardService.GetCardByIdAsync(depositViewModel.BankCardId);
 
@@ -75,9 +74,10 @@ namespace BedeSlots.Web.Controllers
             return PartialView("_StatusMessage", this.StatusMessage);
         }
 
-        public IActionResult DepositInfo()
+        [HttpGet]
+        public IActionResult BalanceViewComponent()
         {
-            return View();
+            return ViewComponent("UserBalance");
         }
     }
 }

@@ -46,7 +46,7 @@ namespace BedeSlots.Web.Controllers
 
             GameType gameType;
 
-            if (rows == 3 && cols == 4)
+            if (rows == 4 && cols == 3)
             {
                 gameType = GameType._4x3;
             }
@@ -68,7 +68,7 @@ namespace BedeSlots.Web.Controllers
 
             if (convertedUserBalance >= stake)
             {
-                await this.depositService.GetMoneyAsync(stake, user.Id);
+                await this.depositService.RetrieveMoneyAsync(stake, user.Id);
                 string gameTypeString = gameType.ToString().Substring(1);
 
                 var stakeTransaction = await this.transactionService.AddTransactionAsync(TransactionType.Stake, user.Id, gameTypeString, stake, user.Currency);
@@ -115,6 +115,7 @@ namespace BedeSlots.Web.Controllers
             }
         }
 
+        [HttpGet]
         public IActionResult BalanceViewComponent()
         {
             return ViewComponent("UserBalance");

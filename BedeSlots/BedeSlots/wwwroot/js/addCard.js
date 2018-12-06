@@ -19,7 +19,6 @@
                 $addCardForm.find('input').val('');
                 $("#select-card-dropdown").empty();
                 $("#select-card-dropdown").html(serverData);
-
             }
         });
 

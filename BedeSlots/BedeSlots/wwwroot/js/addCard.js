@@ -11,7 +11,6 @@
             if (serverData.message != null) {
                 debugger;
                 alert(serverData.message);
-                //$('#\\#AddCardModal').modal('show');
                 return false;
             }
             else {

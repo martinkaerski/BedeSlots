@@ -28,7 +28,7 @@ namespace BedeSlots.Services.Data
             this.roleManager = roleManager;
             this.userManager = userManager;
         }
-
+        // TODO must be removed after successfully integrate in UserBalanceService
         public async Task<decimal> GetUserBalanceByIdAsync(string userId)
         {
             var user = await this.context.Users.FirstOrDefaultAsync(u => u.Id == userId);

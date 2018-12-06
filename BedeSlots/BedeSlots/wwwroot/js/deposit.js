@@ -6,7 +6,12 @@
         debugger;
         var f = $(this);
         $.post(f.attr('action'), f.serialize(), function (res) {
-            debugger;
+            debugger;            
+                dform.find('input').val('0');
+
+                $('#balance-dropdown').empty();
+                $('#balance-dropdown').html(res);
+                    
                 $('#status-msg').html(res);
         });
     });

@@ -38,7 +38,7 @@
                     <li><a asp-area="" asp-controller="Home" asp-action="Contact">Contact</a></li>
                     @if (User.Identity.IsAuthenticated)
                     {
-                        <li><a asp-area="" asp-controller="Deposit" asp-action="Deposit">Deposit</a></li>
+                        <li> <a asp-area="" asp-controller="Deposit" asp-action="Deposit">Deposit</a></li>
                         <li><a asp-area="" asp-controller="Game" asp-action="Index">Games</a></li>
                     }
                     @if (User.Identity.IsAuthenticated)
@@ -53,7 +53,7 @@
                 @await Html.PartialAsync("_LoginPartial")
 
                 <div id="component-balance">
-                    @if (SignInManager.IsSignedIn(User))
+                    @if (User.Identity.IsAuthenticated)
                     {
                         @await Component.InvokeAsync("UserBalance");
                     }

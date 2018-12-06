@@ -1,13 +1,14 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace BedeSlots.Data.Models
 {
-    public class CardType : Entity
+    public enum CardType
     {
-        [Required]
-        public string Name { get; set; }
-
-        public ICollection<BankCard> Cards { get; set; }
+        [Display(Name = "Visa")]
+        Visa = 1,
+        [Display(Name = "Master Card")]
+        MasterCard = 2,
+        [Display(Name = "American Express")]
+        AmericanExpress = 3
     }
 }

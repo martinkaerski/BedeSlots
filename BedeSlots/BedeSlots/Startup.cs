@@ -1,6 +1,12 @@
 ﻿using BedeSlots.Data;
 using BedeSlots.Data.Models;
+using BedeSlots.Games;
+using BedeSlots.Games.Contracts;
 using BedeSlots.Services;
+using BedeSlots.Services.Data;
+using BedeSlots.Services.Data.Contracts;
+using BedeSlots.Services.External;
+using BedeSlots.Services.External.Contracts;
 using BedeSlots.Web.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -58,6 +64,10 @@ namespace BedeSlots
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
+                    name: "areas",
+                    template: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+
+                routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
@@ -75,6 +85,15 @@ namespace BedeSlots
         private void RegisterServices(IServiceCollection services)
         {
             services.AddTransient<IEmailSender, EmailSender>();
+            services.AddTransient<ICardService, CardService>();
+            services.AddTransient<IUserService, UserService>();
+            services.AddTransient<ICurrencyService, CurrencyService>();
+            services.AddTransient<ITransactionService, TransactionService>();
+            services.AddTransient<IUserBalanceService, UserBalanceService>();
+            services.AddTransient<ICurrencyConverterService, CurrencyConverterService>();
+            services.AddTransient<IExchangeRateApiCallService, ExchangeRateApiCallService>();
+            services.AddTransient<IExchangeRatesApiCaller, ExchangeRatesApiCaller>();
+            services.AddTransient<IGame, Game>();
         }
 
         private void RegisterAuthentication(IServiceCollection services)
@@ -106,9 +125,11 @@ namespace BedeSlots
         {
             services.AddRouting(options => options.LowercaseUrls = true);
 
+            services.AddMemoryCache();
+
             services.AddMvc(options =>
             {
-                options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
+                //options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
             })
             .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }

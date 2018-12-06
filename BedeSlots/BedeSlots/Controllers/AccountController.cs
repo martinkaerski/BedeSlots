@@ -1,19 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
+﻿using BedeSlots.Data.Models;
+using BedeSlots.Models.AccountViewModels;
+using BedeSlots.Services;
+using BedeSlots.Services.Data.Contracts;
+using BedeSlots.Web;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-using BedeSlots.Models;
-using BedeSlots.Models.AccountViewModels;
-using BedeSlots.Services;
-using BedeSlots.Data.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace BedeSlots.Controllers
 {
@@ -25,17 +25,20 @@ namespace BedeSlots.Controllers
         private readonly SignInManager<User> _signInManager;
         private readonly IEmailSender _emailSender;
         private readonly ILogger _logger;
+        private readonly ICurrencyService currencyService;
 
         public AccountController(
             UserManager<User> userManager,
             SignInManager<User> signInManager,
             IEmailSender emailSender,
-            ILogger<AccountController> logger)
+            ILogger<AccountController> logger,
+            ICurrencyService currencyService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _emailSender = emailSender;
             _logger = logger;
+            this.currencyService = currencyService;
         }
 
         [TempData]
@@ -207,10 +210,17 @@ namespace BedeSlots.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public IActionResult Register(string returnUrl = null)
+        public async Task<IActionResult> Register(string returnUrl = null)
         {
             ViewData["ReturnUrl"] = returnUrl;
-            return View();
+
+            var currensciesListItems = GetCurrencies().ToList();
+            var model = new RegisterViewModel()
+            {
+                Currencies = currensciesListItems
+            };
+
+            return View(model);
         }
 
         [HttpPost]
@@ -219,12 +229,25 @@ namespace BedeSlots.Controllers
         public async Task<IActionResult> Register(RegisterViewModel model, string returnUrl = null)
         {
             ViewData["ReturnUrl"] = returnUrl;
+
             if (ModelState.IsValid)
             {
-                var user = new User { UserName = model.Email, Email = model.Email };
+                var user = new User
+                {
+                    UserName = model.Email,
+                    Email = model.Email,
+                    FirstName = model.FirstName,
+                    LastName = model.LastName,
+                    Currency = model.Currency,
+                    Birthdate = model.Birthdate
+                };
+
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
+                    var currentUser = await _userManager.FindByNameAsync(user.UserName);
+                    var roleresult = await _userManager.AddToRoleAsync(currentUser, WebConstants.UserRole);
+
                     _logger.LogInformation("User created a new account with password.");
 
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
@@ -438,6 +461,28 @@ namespace BedeSlots.Controllers
             return View();
         }
 
+        //TODO: wrap datetime
+        [AcceptVerbs("Get", "Post")]
+        [AllowAnonymous]
+        public JsonResult AgeValidation(DateTime birthdate)
+        {
+            DateTime today = DateTime.Today;
+            int age = today.Year - birthdate.Year;
+            if (birthdate > today.AddYears(-age))
+            {
+                age--;
+            }
+        
+            if (age < 18)
+            {
+                return Json($"Invalid birthdate! You should be over 18 years old.");
+            }
+            else
+            {
+                return Json(true);
+            }
+        }
+
         #region Helpers
 
         private void AddErrors(IdentityResult result)
@@ -458,6 +503,20 @@ namespace BedeSlots.Controllers
             {
                 return RedirectToAction(nameof(HomeController.Index), "Home");
             }
+        }
+
+        private  IEnumerable<SelectListItem> GetCurrencies()
+        {
+            var currencies = this.currencyService.GetAllCurrenciesNames();
+            var currenciesListItems = currencies
+                .Select(c => new SelectListItem
+                {
+                    Text = c.ToString(),
+                    Value = c.ToString()
+                })
+                .ToList();
+
+            return currenciesListItems;
         }
 
         #endregion

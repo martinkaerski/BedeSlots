@@ -2,8 +2,11 @@
 using BedeSlots.Data.Models.Contracts;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using System;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace BedeSlots.Data
 {
@@ -15,38 +18,31 @@ namespace BedeSlots.Data
 
         public DbSet<BankCard> BankCards { get; set; }
 
-        public DbSet<CardType> CardTypes { get; set; }
-
-        public DbSet<Currency> Currencies { get; set; }
-
         public DbSet<Transaction> Transactions { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             //modelBuilder.ApplyConfiguration(new UserConfiguration());
-            modelBuilder
-               .Entity<User>()
-               .HasOne(u => u.Currency)
-               .WithMany(c => c.Users)
-               .HasForeignKey(u => u.CurrencyId);
-
-            modelBuilder
-               .Entity<BankCard>()
-               .HasOne(c => c.Type)
-               .WithMany(t => t.Cards)
-               .HasForeignKey(u => u.TypeId);
-
+                        
             modelBuilder
                .Entity<BankCard>()
                .HasOne(c => c.User)
                .WithMany(u => u.Cards)
-               .HasForeignKey(u => u.UserId);
+               .HasForeignKey(u => u.UserId)
+              .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder
               .Entity<Transaction>()
               .HasOne(t => t.User)
               .WithMany(u => u.Transactions)
               .HasForeignKey(u => u.UserId);
+
+            var transactionTypeConverter = new EnumToStringConverter<TransactionType>();
+
+            modelBuilder
+                .Entity<Transaction>()
+                .Property(t => t.Type)
+                .HasConversion(transactionTypeConverter);
 
             base.OnModelCreating(modelBuilder);
         }
@@ -55,6 +51,12 @@ namespace BedeSlots.Data
         {
             this.ApplyAuditInfoRules();
             return base.SaveChanges();
+        }
+
+        public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default(CancellationToken))
+        {
+            this.ApplyAuditInfoRules();
+            return await base.SaveChangesAsync(cancellationToken);
         }
 
         private void ApplyAuditInfoRules()
@@ -78,3 +80,4 @@ namespace BedeSlots.Data
         }
     }
 }
+

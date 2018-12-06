@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace BedeSlots.Data.Models
@@ -10,13 +11,19 @@ namespace BedeSlots.Data.Models
         public string Number { get; set; }
 
         [Required]
-        public int CvvNumber { get; set; }
+        [RegularExpression("^[0-9]{3}$", ErrorMessage = "The CVV number should be 3 digits.")]
+        public string CvvNumber { get; set; }
 
         [Required]
+        //TODO ExpiryDate atribute?
         public DateTime ExpiryDate { get; set; }
 
-        public int TypeId { get; set; }
+        [Required]
+        [MinLength(3, ErrorMessage = "The cardholder name should be at least 3 symbols.")]
+        [RegularExpression("^[A-Za-z]$", ErrorMessage = "The cardholer name should contains only letters.")]
+        public string CardholerName { get; set; }
 
+        [Required]
         public CardType Type { get; set; }
 
         public string UserId { get; set; }

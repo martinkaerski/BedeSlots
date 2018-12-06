@@ -33,3 +33,35 @@
         display: none;
     }
 }
+
+.hiddenRow {
+    padding: 0 !important;
+}
+
+.well {
+    background-color: lightblue;
+}
+.inline {
+    display: inline-block;
+    margin: 3%;
+}
+
+.card-wrapper {
+    padding-top: 50px;
+}
+
+@media only screen and (max-width: 600px) {
+    .card-wrapper {
+        display:none;
+    }
+}
+
+#modal-add-card {
+    width: 800px;
+    margin: 30px auto;
+}
+
+#modal-details-card {
+    width: 400px;
+    margin: 30px auto;
+}

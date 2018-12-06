@@ -16,12 +16,12 @@ namespace BedeSlots.Data.Models
         public TransactionType Type { get; set; }
 
         [Required]
-        [Range(1,double.MaxValue)]
-        public double Amount { get; set; }
+        [Range(1, double.MaxValue)]
+        public decimal Amount { get; set; }
 
         [Required]
         public string Description { get; set; }
-                
+
         public string UserId { get; set; }
 
         [Required]

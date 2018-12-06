@@ -1,0 +1,113 @@
+﻿@model GameSlotViewModel
+@inject IJsonHelper Json
+
+@{
+    ViewData["Title"] = "SmallSlotMachine";
+}
+
+<h2 class="text-center">SlotMachine</h2>
+
+<div class="row">
+    <div class="col-md-6 col-md-offset-3">
+        <div id="partial">
+            <partial name="_GameSlotPartial" model="@Model" />
+        </div>
+
+        @*<form id="spin-form" method="post" asp-controller="Game" asp-action="Spin">*@
+        <form id="spin-form">
+            <div class="form-group col-md-6 col-md-offset-3">
+                <label asp-for="@Model.Stake" class="control-label"></label>
+                <input asp-for="@Model.Stake" id="stake" />
+                <span asp-validation-for="@Model.Stake" class="text-danger"></span>
+
+                <input asp-for="@Model.Rows" id="rows" hidden />
+                <input asp-for="@Model.Cols" id="cols" hidden />
+            </div>
+            <button type="submit" id="spin-button" class="btn btn-success btn-block">Spin</button>
+        </form>
+    </div>
+</div>
+
+
+<audio id="spin" src="/audio/snip.mp3"></audio>
+<audio id="lose" src="/audio/lose.mp3"></audio>
+<audio id="win" src="~/audio/win.mp3"></audio>
+
+<button id="btn">play</button>
+@section Scripts{
+    <script>
+        $("#spin-form").submit(function (event) {
+            event.preventDefault();
+            const $spinForm = $("#spin-form");
+            const dataToSend = $spinForm.serialize();
+
+            $("#10").attr("src", "/images/fruits/w.png");
+            $("#20").attr("src", "/images/fruits/w.png");
+            $("#30").attr("src", "/images/fruits/w.png");
+            $("#31").attr("src", "/images/fruits/w.png");
+            $("#32").attr("src", "/images/fruits/w.png");
+
+            $.ajax({
+                url: '@Url.Action("Spin", "Game")',
+                type: "Post",
+                data: dataToSend,
+                success: function (partialViewResult) {
+                    $("#partial").empty();
+                    $("#partial").html(partialViewResult);
+            let container = $("#component-balance");
+                    $.get("/Game/BalanceViewComponent", function (data) { container.html(data); });
+                },
+                error: function (arg, data, value) {
+                    console.log(arg + data + value);
+                }
+            })
+
+
+            //let counter = 0;
+
+            //let Random = setInterval(function () {
+            //    counter++;
+
+            //    for (var i = 0; i < 4; i++) {
+            //        for (var j = 0; j < 3; j++) {
+            //            let rnd = Math.floor(Math.random() * 4);
+
+            //            let idName = ""+ i + j;
+            //            let full = "#" + idName;
+            //           // let top = "'" + full + "'";
+            //            console.log(full)
+            //            console.log($(full).src);
+            //            $("#11").attr("src", "a.png");
+
+            //        }
+            //    }
+
+            //    //Show the pictures during the process.
+            //    if (counter > 10) {
+            //        counter = 0;
+            //        clearInterval(Random);
+            //        // After the result will be displayed the random number generating process should be closed.
+            //    }
+            //}, 140)();
+        });
+
+        $(document).ready(function () {
+
+            let stake = function () { return '@Model.Stake' };
+            if (stake > 0) {
+                debugger;
+                $('#win').get(0).play();
+        }
+
+            $('#btn').click(function () {
+                if (false) {
+                    $('#win').get(0).play();
+                } else {
+                    $('#win').get(0).play();
+                }
+            });
+        });
+
+
+    </script>
+}

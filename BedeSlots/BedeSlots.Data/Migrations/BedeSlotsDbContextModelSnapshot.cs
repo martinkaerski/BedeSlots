@@ -25,9 +25,13 @@ namespace BedeSlots.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("CardholerName")
+                        .IsRequired();
+
                     b.Property<DateTime?>("CreatedOn");
 
-                    b.Property<int>("CvvNumber");
+                    b.Property<string>("CvvNumber")
+                        .IsRequired();
 
                     b.Property<DateTime?>("DeletedOn");
 
@@ -40,67 +44,16 @@ namespace BedeSlots.Data.Migrations
                     b.Property<string>("Number")
                         .IsRequired();
 
-                    b.Property<int>("TypeId");
+                    b.Property<int>("Type");
 
                     b.Property<string>("UserId")
                         .IsRequired();
 
                     b.HasKey("Id");
 
-                    b.HasIndex("TypeId");
-
                     b.HasIndex("UserId");
 
                     b.ToTable("BankCards");
-                });
-
-            modelBuilder.Entity("BedeSlots.Data.Models.CardType", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTime?>("CreatedOn");
-
-                    b.Property<DateTime?>("DeletedOn");
-
-                    b.Property<bool>("IsDeleted");
-
-                    b.Property<DateTime?>("ModifiedOn");
-
-                    b.Property<string>("Name")
-                        .IsRequired();
-
-                    b.HasKey("Id");
-
-                    b.ToTable("CardTypes");
-                });
-
-            modelBuilder.Entity("BedeSlots.Data.Models.Currency", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTime?>("CreatedOn");
-
-                    b.Property<DateTime?>("DeletedOn");
-
-                    b.Property<bool>("IsDeleted");
-
-                    b.Property<DateTime?>("ModifiedOn");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(3);
-
-                    b.Property<string>("Symbol")
-                        .IsRequired()
-                        .HasConversion(new ValueConverter<string, string>(v => default(string), v => default(string), new ConverterMappingHints(size: 1)));
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Currencies");
                 });
 
             modelBuilder.Entity("BedeSlots.Data.Models.Transaction", b =>
@@ -109,14 +62,15 @@ namespace BedeSlots.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<double>("Amount");
+                    b.Property<decimal>("Amount");
 
                     b.Property<DateTime>("Date");
 
                     b.Property<string>("Description")
                         .IsRequired();
 
-                    b.Property<int>("Type");
+                    b.Property<string>("Type")
+                        .IsRequired();
 
                     b.Property<string>("UserId")
                         .IsRequired();
@@ -135,25 +89,39 @@ namespace BedeSlots.Data.Migrations
 
                     b.Property<int>("AccessFailedCount");
 
+                    b.Property<decimal>("Balance");
+
                     b.Property<DateTime>("Birthdate");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken();
 
-                    b.Property<int>("CurrencyId");
+                    b.Property<DateTime?>("CreatedOn");
+
+                    b.Property<int>("Currency");
+
+                    b.Property<DateTime?>("DeletedOn");
 
                     b.Property<string>("Email")
                         .HasMaxLength(256);
 
                     b.Property<bool>("EmailConfirmed");
 
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasMaxLength(30);
+
+                    b.Property<bool>("IsDeleted");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasMaxLength(30);
+
                     b.Property<bool>("LockoutEnabled");
 
                     b.Property<DateTimeOffset?>("LockoutEnd");
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(100);
+                    b.Property<DateTime?>("ModifiedOn");
 
                     b.Property<string>("NormalizedEmail")
                         .HasMaxLength(256);
@@ -175,8 +143,6 @@ namespace BedeSlots.Data.Migrations
                         .HasMaxLength(256);
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CurrencyId");
 
                     b.HasIndex("NormalizedEmail")
                         .HasName("EmailIndex");
@@ -301,15 +267,10 @@ namespace BedeSlots.Data.Migrations
 
             modelBuilder.Entity("BedeSlots.Data.Models.BankCard", b =>
                 {
-                    b.HasOne("BedeSlots.Data.Models.CardType", "Type")
-                        .WithMany("Cards")
-                        .HasForeignKey("TypeId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
                     b.HasOne("BedeSlots.Data.Models.User", "User")
                         .WithMany("Cards")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("BedeSlots.Data.Models.Transaction", b =>
@@ -317,14 +278,6 @@ namespace BedeSlots.Data.Migrations
                     b.HasOne("BedeSlots.Data.Models.User", "User")
                         .WithMany("Transactions")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("BedeSlots.Data.Models.User", b =>
-                {
-                    b.HasOne("BedeSlots.Data.Models.Currency", "Currency")
-                        .WithMany("Users")
-                        .HasForeignKey("CurrencyId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

@@ -1,0 +1,30 @@
+﻿@model UserBalanceViewModel
+
+@{
+    ViewData["Title"] = "Default";
+}
+
+<ul class="nav navbar-nav navbar-default pull-right">
+    <li class="dropdown" id="balance-dropdown">
+        <a class="dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+            @if (Model.Currency != Currency.BGN)
+            {
+                <strong>
+                    Balance: @WebConstants.CurrencySymbols[Model.Currency]@Math.Round(@Model.Balance, 2)
+                </strong>
+            }
+            else
+            {
+                <strong>
+                    Balance: @Math.Round(@Model.Balance, 2)@WebConstants.CurrencySymbols[Model.Currency]
+                </strong>
+            }
+            <span class="caret"></span>
+        </a>
+        <ul class="dropdown-menu" aria-labelledby="balance-dropdown">
+            @*<li><a class="text-center" asp-area="" asp-controller="Deposit" asp-action="Deposit">Deposit</a></li>*@
+            <li><a class="text-center" asp-area="" asp-controller="Retrieve" asp-action="Index">Retrieve</a></li>
+            <li><a class="text-center" asp-area="" asp-controller="Transaction" asp-action="UserTransaction">History</a></li>
+        </ul>
+    </li>
+</ul>

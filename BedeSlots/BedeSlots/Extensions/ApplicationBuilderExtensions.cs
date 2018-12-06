@@ -1,4 +1,5 @@
-﻿using BedeSlots.Data;
+﻿using BedeSlots.Common;
+using BedeSlots.Data;
 using BedeSlots.Data.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
@@ -25,7 +26,8 @@ namespace BedeSlots.Web.Extensions
                     {
                         var roles = new[]
                         {
-                            WebConstants.AdministratorRole,
+                            WebConstants.MasterAdminRole,
+                            WebConstants.AdminRole,
                             WebConstants.UserRole
                         };
 
@@ -40,7 +42,7 @@ namespace BedeSlots.Web.Extensions
                         }
 
                         var adminEmail = WebConstants.AdminEmail;
-                        var adminName = WebConstants.AdministratorRole;
+                        var adminName = WebConstants.AdminName;
                         var adminUser = await userManager.FindByEmailAsync(adminEmail);
 
                         if (adminUser == null)
@@ -49,16 +51,17 @@ namespace BedeSlots.Web.Extensions
                             {
                                 Email = adminEmail,
                                 UserName = adminEmail,
-                                Name = adminName,
-                                Birthdate = new DateTime(1980, 01, 01),
-                                Currency = new Currency() { Name = "USD", Symbol = '$' }
+                                FirstName = adminName,
+                                LastName = adminName,
+                                Birthdate = new DateTime(1970, 01, 01),
+                                Currency = CommonConstants.BaseCurrency
                             };
 
                             var createAdmin = await userManager.CreateAsync(adminUser, "123456");
 
                             if (createAdmin.Succeeded)
                             {
-                                await userManager.AddToRoleAsync(adminUser, WebConstants.AdministratorRole);
+                                await userManager.AddToRoleAsync(adminUser, WebConstants.MasterAdminRole);
                             }
                         }
                     })

@@ -1,27 +1,26 @@
 ﻿@model BedeSlots.Web.Models.DepositViewModel
 @{
     ViewData["Title"] = "Deposit";
-}<style>
+}
 
-    .modal-dialog {
-        width: 800px;
-        margin: 30px auto;
-    }
-
-
-    </style>
 <h2 class="text-center">Deposit</h2>
 <div class="row">
     <div class="col-md-4 col-md-offset-4">
         <form id="depositform" asp-controller="Deposit" asp-action="Deposit" method="post">
-            <div class="well form-group">
+            <div class="well form-group text-center">
                 <div id="select-card-dropdown">
                     @await Component.InvokeAsync("SelectCard")
                 </div>
+
+                <button type="button" id="details-btn" class="btn btn-primary" data-toggle="modal" data-target="#card-details">Card Details</button>
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#AddCardModal">Add New Card</button>
             </div>
-            <div class="well form-group">
-                <label asp-for="@Model.DepositAmount" class="control-label"></label>
-                <input type="text" asp-for="@Model.DepositAmount" placeholder="Amount" class="form-control" />
+            <div class="well form-group text-center">
+                <label asp-for="@Model.DepositAmount" class="control-label text-center"></label>
+                <div >
+                    <input type="number" asp-for="@Model.DepositAmount" placeholder="Amount"  />
+                    @WebConstants.CurrencySymbols[Model.Currency]
+                </div>
                 <span asp-validation-for="@Model.DepositAmount" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -29,9 +28,10 @@
             </div>
         </form>
     </div>
-    @*modal*@
+
+    @*modal add card*@
     <div class="modal fade" id="AddCardModal" tabindex="-1" role="dialog">
-        <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-dialog modal-lg" role="document" id="modal-add-card">
             <div class="modal-content">
                 <div class="modal-header">
                     <div>
@@ -45,7 +45,29 @@
                     @await Component.InvokeAsync("AddCard");
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary form-control" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-default form-control" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    @*modalend*@
+
+    @*modal card details*@
+    <div class="modal fade" id="card-details" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-sm" role="document" id="modal-details-card">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <h2 class="modal-title text-center" id="card-details-modal">Card Details</h2>
+                </div>
+                <div class="modal-body" id="details-result">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default form-control" data-dismiss="modal">Close</button>
                 </div>
             </div>
         </div>
@@ -58,31 +80,15 @@
 
     <script src="~/js/addCard.js"></script>
     <script src="~/lib/jquery/dist/jquery.card.js"></script>
-
+    <script src="~/js/Card/cardDetails.js"></script>
+    <script src="~/js/Card/cardWrapper.js"></script>
     <script src="~/js/deposit.js"></script>
-    <script>    
-        debugger;
-        $('#addCardForm').card({
-            container: '.card-wrapper', 
 
-            formSelectors: {
-                numberInput: 'input#number', 
-                expiryInput: 'input#expiry', 
-                cvcInput: 'input#cvv',
-                nameInput: 'input#name' 
-            },
+    <script>
+        let MyAppUrlSettings = {
+    CardDetailsUrl : '@Url.Action("Details","Card")'
+}
 
-            messages: {
-                validDate: 'valid\ndate', // optional - default 'valid\nthru'
-                monthYear: 'mm/yyyy', // optional - default 'month/year'
-            },
-
-            placeholders: {
-                number: '•••• •••• •••• ••••',
-                name: 'Full Name',
-                expiry: '••/••',
-                cvc: '•••'
-            },
-        });
+        
     </script>
 }

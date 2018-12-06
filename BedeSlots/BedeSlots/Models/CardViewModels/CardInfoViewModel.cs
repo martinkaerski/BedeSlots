@@ -9,27 +9,27 @@ namespace BedeSlots.Web.Models
 {
     public class CardInfoViewModel
     {
-        [Display(Name = "Card number")]
+        public CardInfoViewModel()
+        {
+        }
+
+        public int Id { get; set; }
+
+        [Display(Name = "Card Number")]
         public string CardNumber { get; set; }
 
         [Display(Name = "CVV")]
         public string Cvv { get; set; }
 
-        [Display(Name = "Expiry date")]
-        public string Expiry { get; set; }
+        [Display(Name = "Expiry Date")]
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:MM-yy}")]
+        public DateTime Expiry { get; set; }
 
-        [Display(Name = "Card type")]
-        public CardType CardType { get; set; }
+        [Display(Name = "Card Type")]
+        public string CardType { get; set; }
 
-        [Display(Name = "Currency")]
-        public Currency Currency { get; set; }
-
-        [Display(Name = "Owner")]
-        public User Owner { get; set; }
-
-        public CardInfoViewModel()
-        {
-
-        }
+        [Display(Name = "Cardholder Name")]
+        public string Cardholder { get; set; }
     }
 }

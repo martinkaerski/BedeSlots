@@ -1,14 +1,12 @@
 ﻿using BedeSlots.Data.Models;
 using BedeSlots.DTO;
 using BedeSlots.Services.Data.Contracts;
-using BedeSlots.Web.Areas.Admin.Models;
 using BedeSlots.Web.Areas.Admin.Models.Users;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -188,7 +186,7 @@ namespace BedeSlots.Web.Areas.Admin.Controllers
 
                 //Total number of rows count 
                 recordsTotal = users.Count();
-               
+
                 //Paging 
                 var data = users
                     .Skip(skip)

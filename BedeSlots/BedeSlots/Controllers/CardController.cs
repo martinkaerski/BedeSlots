@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using BedeSlots.Common;
 
 namespace BedeSlots.Web.Controllers
 {
@@ -64,21 +65,30 @@ namespace BedeSlots.Web.Controllers
             return ViewComponent("SelectCard");
         }
 
-        public async Task<IActionResult> CardInfo(int id)
+        //TODO: change deposit
+        [HttpGet]
+        public async Task<IActionResult> Delete(int id)
         {
-            var card = await this.cardService.GetCardByIdAsync(id);
+            var card = await this.cardService.DeleteCardAsync(id);
+            return RedirectToAction("Deposit", "Deposit");
+        }
 
-            var cardInfo = new CardInfoViewModel()
+        [HttpGet]
+        public async Task<IActionResult> Details(int cardId)
+        {
+            var card = await this.cardService.GetCardByIdAsync(cardId);
+
+            var model = new CardInfoViewModel()
             {
-                CardNumber = card.Number,
-                CardType = card.Type,
-                Cvv = card.CvvNumber.ToString(),
-                Expiry = card.ExpiryDate.ToShortDateString(),
-                Owner = card.User,
-
+                Id = card.Id,
+                CardNumber = card.Number.Substring(12),
+                CardType = card.Type.GetDisplayName(),
+                Cvv = card.CvvNumber,
+                Expiry = card.ExpiryDate,
+                Cardholder = card.CardholerName
             };
 
-            return View(cardInfo);
+            return PartialView("_DetailsCardPartial", model);
         }
 
         [AcceptVerbs("Get", "Post")]
@@ -88,9 +98,9 @@ namespace BedeSlots.Web.Controllers
 
             var userId = this.userManager.GetUserId(HttpContext.User);
 
-            var cards = await this.cardService.GetUserCardsAsync(userId);
+            var cardsNumbers = await this.cardService.GetUserCardsAllNumbersAsync(userId);
 
-            var doesExists = cards.Any(c => c.Number == cardNumberWithoutSpaces);
+            var doesExists = cardsNumbers.Any(c => c.Number == cardNumberWithoutSpaces);
 
             if (!doesExists)
             {

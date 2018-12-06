@@ -39,7 +39,10 @@ namespace BedeSlots.Web.Controllers
         {
             var user = await this.userManager.GetUserAsync(HttpContext.User);
 
-            var depositVM = new DepositViewModel() { };
+            var depositVM = new DepositViewModel()
+            {
+                Currency = user.Currency
+            };
 
             return View(depositVM);
         }
@@ -62,8 +65,7 @@ namespace BedeSlots.Web.Controllers
 
             var depositTransaction = await this.depositService.DepositMoneyAsync(depositViewModel.DepositAmount, user.Id);
 
-            return ViewComponent("UserBalance");
-
+            return Json(new { message = $"Successfully deposit {depositViewModel.DepositAmount} $!" });
         }
 
         public IActionResult DepositInfo()

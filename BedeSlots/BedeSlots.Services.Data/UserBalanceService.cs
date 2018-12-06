@@ -2,14 +2,12 @@
 using BedeSlots.Data;
 using BedeSlots.Data.Models;
 using BedeSlots.Services.Data.Contracts;
-using BedeSlots.Services.Data.Exceptions;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Threading.Tasks;
 
 namespace BedeSlots.Services.Data
 {
-    //TODO: change the name of the service
     public class UserBalanceService : IUserBalanceService
     {
         private readonly BedeSlotsDbContext context;
@@ -39,7 +37,7 @@ namespace BedeSlots.Services.Data
             return user;
         }
 
-        public async Task<User> RetrieveMoneyAsync(decimal amount, string userId)
+        public async Task<User> GetMoneyAsync(decimal amount, string userId)
         {
             var user = await this.context.Users.FirstOrDefaultAsync(u => u.Id == userId);
 
@@ -54,20 +52,13 @@ namespace BedeSlots.Services.Data
             }
             else
             {
-                throw new ServiceException("Not enough money!");
+                throw new InvalidOperationException("Not enough money!");
+                //TODO: what to do?
             }
 
             this.context.Update(user);
             await this.context.SaveChangesAsync();
             return user;
         }
-
-        public async Task<decimal> GetUserBalanceByIdAsync(string userId)
-        {
-            var user = await this.context.Users.FirstOrDefaultAsync(u => u.Id == userId);
-
-            return user.Balance;
-        }
-
     }
 }

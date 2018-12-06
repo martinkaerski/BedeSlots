@@ -4,6 +4,7 @@ using BedeSlots.Services.Data.Contracts;
 using BedeSlots.Web.Areas.Admin.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Globalization;
 using System.Linq;
@@ -77,6 +78,20 @@ namespace BedeSlots.Web.Areas.Admin.Controllers
                 int recordsTotal = 0;
 
                 var transactions = this.transactionService.GetAllTransactions();
+                
+                //Search
+                if (!string.IsNullOrEmpty(searchValue))
+                {
+                  transactions =   transactions.Where(t =>
+                       EF.Functions.Like(t.User.Email, "%" + searchValue + "%") ||
+                       EF.Functions.Like(t.Description, "%" + searchValue + "%") ||
+                       EF.Functions.Like(t.Type.ToString(), "%" + searchValue + "%"));
+
+                    //transactions = transactions
+                    //    .Where(t => t.User.Email.Contains(searchValue)
+                    //    || t.Description.Contains(searchValue)
+                    //    || t.Type.ToString().Contains(searchValue));
+                }
 
                 //Sorting
                 if (!(string.IsNullOrEmpty(sortColumn) && string.IsNullOrEmpty(sortColumnDirection)))
@@ -91,15 +106,6 @@ namespace BedeSlots.Web.Areas.Admin.Controllers
                         transactions = transactions
                             .OrderByDescending(t => t.GetType().GetProperty(sortColumn).GetValue(t));
                     }
-                }
-
-                //Search
-                if (!string.IsNullOrEmpty(searchValue))
-                {
-                    transactions = transactions
-                        .Where(t => t.User.Email.Contains(searchValue)
-                        || t.Description.Contains(searchValue)
-                        || t.Type.ToString().Contains(searchValue));
                 }
 
                 //Total number of rows count 

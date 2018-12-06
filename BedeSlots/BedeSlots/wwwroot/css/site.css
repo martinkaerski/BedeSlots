@@ -2,6 +2,7 @@
     padding-top: 50px;
     padding-bottom: 20px;
 }
+
 /* Wrapping element */
 /* Set some basic padding to keep content from hitting the edges */
 .body-content {
@@ -53,4 +54,14 @@
     .card-wrapper {
         display:none;
     }
+}
+
+#modal-add-card {
+    width: 800px;
+    margin: 30px auto;
+}
+
+#modal-details-card {
+    width: 400px;
+    margin: 30px auto;
 }

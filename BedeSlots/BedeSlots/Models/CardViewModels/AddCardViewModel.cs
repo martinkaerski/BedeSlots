@@ -22,18 +22,20 @@ namespace BedeSlots.Web.Models
 
         [Required]
         [MinLength(3, ErrorMessage = "The cardholder name should be at least 3 symbols.")]
+        [RegularExpression("^[A-Za-z]+$", ErrorMessage = "The cardholer name should contains only letters.")]
         [Display(Name = "Card Holder")]
         public string CardholderName { get; set; }
 
         [Required]
-        [StringLength(4, MinimumLength = 3, ErrorMessage = "The CVV should be 3 or 4 numbers.")]
+        [StringLength(4, MinimumLength = 3, ErrorMessage = "The CVV should be 3 or 4 digits.")]
         [Display(Name = "CVV")]
         public string Cvv { get; set; }
 
         [Required]
         [ExpiryDate(ErrorMessage = "Invalid expiry date!")]
-        [DisplayFormat(DataFormatString = "{0:MM-yy}")]
-        [DataType(DataType.Date)]
+        [Remote(action: "IsValidExpiryDate", controller: "Card", areaName: "")]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:MM/yyyy}")]
+        [DataType(DataType.Date),]
         [Display(Name = "Expiry Date")]
         public DateTime Expiry { get; set; }
 

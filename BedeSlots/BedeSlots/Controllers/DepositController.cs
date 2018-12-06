@@ -4,9 +4,6 @@ using BedeSlots.Web.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using System;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace BedeSlots.Web.Controllers
@@ -55,7 +52,8 @@ namespace BedeSlots.Web.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return ViewComponent("SelectCard");
+                this.StatusMessage = "Error! The deposit is not completed.";
+                return PartialView("_StatusMessage", this.StatusMessage);
             }
 
             var user = await this.userManager.GetUserAsync(HttpContext.User);

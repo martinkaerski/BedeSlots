@@ -10,7 +10,8 @@
 
             if (serverData.message != null) {
                 debugger;
-                alert(serverData.message);
+                //alert(serverData.message);
+                $('#status-msg').html(res); 
                 return false;
             }
             else {

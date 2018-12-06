@@ -11,7 +11,6 @@
             //$('#balance-dropdown').html(res);      
             if (typeof (res) === 'string') {
             $('#status-msg').html(res); 
-
             }
 
             let container = $("#component-balance");

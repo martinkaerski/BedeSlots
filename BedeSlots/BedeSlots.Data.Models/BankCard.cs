@@ -20,6 +20,7 @@ namespace BedeSlots.Data.Models
 
         [Required]
         [MinLength(3, ErrorMessage = "The cardholder name should be at least 3 symbols.")]
+        [RegularExpression("^[A-Za-z]$", ErrorMessage = "The cardholer name should contains only letters.")]
         public string CardholerName { get; set; }
 
         [Required]

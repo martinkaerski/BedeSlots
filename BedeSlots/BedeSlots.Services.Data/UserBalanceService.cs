@@ -37,7 +37,7 @@ namespace BedeSlots.Services.Data
             return user;
         }
 
-        public async Task<User> GetMoneyAsync(decimal amount, string userId)
+        public async Task<User> RetrieveMoneyAsync(decimal amount, string userId)
         {
             var user = await this.context.Users.FirstOrDefaultAsync(u => u.Id == userId);
 
@@ -59,6 +59,13 @@ namespace BedeSlots.Services.Data
             this.context.Update(user);
             await this.context.SaveChangesAsync();
             return user;
+        }
+
+        public async Task<decimal> GetUserBalanceByIdAsync(string userId)
+        {
+            var user = await this.context.Users.FirstOrDefaultAsync(u => u.Id == userId);
+
+            return user.Balance;
         }
     }
 }

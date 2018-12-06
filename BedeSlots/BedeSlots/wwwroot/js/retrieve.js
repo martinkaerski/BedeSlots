@@ -10,8 +10,8 @@
             if (serverData.message === undefined) {
                 rform.find('input').val('');
                 
-                $("#balance-dropdown").empty();
-                $("#balance-dropdown").html(serverData);
+                $('#balance-dropdown').empty();
+                $('#balance-dropdown').html(serverData);
                 alert('Retrieving successfull!');
                 
             }

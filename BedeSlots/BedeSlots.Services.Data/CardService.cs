@@ -1,7 +1,9 @@
 ﻿using BedeSlots.Data;
 using BedeSlots.Data.Models;
 using BedeSlots.DTO;
+using BedeSlots.DTO.BankCardDto;
 using BedeSlots.Services.Data.Contracts;
+using BedeSlots.Services.Data.Exceptions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -22,23 +24,46 @@ namespace BedeSlots.Services.Data
             this.userManager = userManager;
         }
 
-        public async Task<ICollection<BankCard>> GetUserCardsAsync(string userId)
+        public async Task<ICollection<CardDetailsDto>> GetUserCardsAsync(string userId)
         {
             var cards = await context.BankCards
-                .Where(c => c.UserId == userId)
+                .Where(c => c.UserId == userId && c.IsDeleted == false)
+                .Select(c => new CardDetailsDto
+                {
+                    
+                    LastFourDigit = c.Number.Substring(12),
+                    CardholerName = c.CardholerName,
+                    Cvv = c.CvvNumber,
+                    ExpiryDate = c.ExpiryDate,
+                    Type = c.Type
+                })
                 .ToListAsync();
 
             return cards;
         }
 
-        public async Task<ICollection<CardDto>> GetUserCardsNumbersAsync(string userId)
+        public async Task<ICollection<CardDto>> GetUserCardsLastNumbersAsync(string userId)
         {
             var cardsNumbers = await context.BankCards
-                .Where(c => c.UserId == userId)
+                .Where(c => c.UserId == userId && c.IsDeleted == false)
                 .Select(c => new CardDto
                 {
                     Id = c.Id,
-                    CardNumberLastDigits = c.Number.Substring(12)
+                    Number = c.Number.Substring(12)
+                })
+                .ToListAsync();
+
+            return cardsNumbers;
+        }
+
+        public async Task<ICollection<CardDto>> GetUserCardsAllNumbersAsync(string userId)
+        {
+            var cardsNumbers = await context.BankCards
+                .Where(c => c.UserId == userId && c.IsDeleted == false)
+                .Select(c => new CardDto
+                {
+                    Id = c.Id,
+                    Number = c.Number
                 })
                 .ToListAsync();
 
@@ -53,11 +78,26 @@ namespace BedeSlots.Services.Data
             return bankCard;
         }
 
+        public async Task<BankCard> DeleteCardAsync(int cardId)
+        {
+            var card = await this.GetCardByIdAsync(cardId);
+            card.IsDeleted = true;
+            await this.context.SaveChangesAsync();
+
+            return card;
+        }
+
         public async Task<BankCard> GetCardByIdAsync(int id)
         {
             var card = await this.context.BankCards
+                .Where(c => c.IsDeleted == false)
                 .Include(c => c.User)
                 .FirstOrDefaultAsync(c => c.Id == id);
+
+            if (card == null)
+            {
+                throw new ServiceException($"There is no card with id {id}");
+            }
 
             return card;
         }

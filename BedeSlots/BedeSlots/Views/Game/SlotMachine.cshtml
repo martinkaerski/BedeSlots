@@ -48,7 +48,7 @@
             $("#32").attr("src", "/images/fruits/w.png");
 
             $.ajax({
-                url: "/Game/Spin",
+                url: '@Url.Action("Spin", "Game")',
                 type: "Post",
                 data: dataToSend,
                 success: function (partialViewResult) {

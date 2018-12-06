@@ -56,3 +56,12 @@
     }
 }
 
+#modal-add-card {
+    width: 800px;
+    margin: 30px auto;
+}
+
+#modal-details-card {
+    width: 400px;
+    margin: 30px auto;
+}

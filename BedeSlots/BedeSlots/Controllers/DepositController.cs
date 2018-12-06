@@ -18,9 +18,9 @@ namespace BedeSlots.Web.Controllers
         private readonly ITransactionService transactionService;
         private readonly IUserService userService;
         private readonly ICardService cardService;
-        private readonly IDepositService depositService;
+        private readonly IUserBalanceService depositService;
 
-        public DepositController(UserManager<User> userManager, IDepositService depositService, ITransactionService transactionService, IUserService userService, ICardService cardService)
+        public DepositController(UserManager<User> userManager, IUserBalanceService depositService, ITransactionService transactionService, IUserService userService, ICardService cardService)
         {
             this.userManager = userManager;
             this.depositService = depositService;
@@ -39,7 +39,10 @@ namespace BedeSlots.Web.Controllers
         {
             var user = await this.userManager.GetUserAsync(HttpContext.User);
 
-            var depositVM = new DepositViewModel() { };
+            var depositVM = new DepositViewModel()
+            {
+                Currency = user.Currency
+            };
 
             return View(depositVM);
         }
@@ -63,7 +66,6 @@ namespace BedeSlots.Web.Controllers
             var depositTransaction = await this.depositService.DepositMoneyAsync(depositViewModel.DepositAmount, user.Id);
 
             return Json(new { message = $"Successfully deposit {depositViewModel.DepositAmount} $!" });
-
         }
 
         public IActionResult DepositInfo()

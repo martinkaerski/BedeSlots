@@ -8,14 +8,13 @@ using System.Threading.Tasks;
 
 namespace BedeSlots.Services.Data
 {
-    //TODO: change the name of the service
-    public class DepositService : IDepositService
+    public class UserBalanceService : IUserBalanceService
     {
         private readonly BedeSlotsDbContext context;
         private readonly ICurrencyConverterService currencyConverterService;
         private readonly ITransactionService transactionService;
 
-        public DepositService(BedeSlotsDbContext context, ICurrencyConverterService currencyConverterService, ITransactionService transactionService)
+        public UserBalanceService(BedeSlotsDbContext context, ICurrencyConverterService currencyConverterService, ITransactionService transactionService)
         {
             this.context = context;
             this.currencyConverterService = currencyConverterService;

@@ -3,7 +3,7 @@ using BedeSlots.Data.Models;
 
 namespace BedeSlots.Services.Data.Contracts
 {
-    public interface IDepositService
+    public interface IUserBalanceService
     {
         Task<User> DepositMoneyAsync(decimal amount, string userId);
 

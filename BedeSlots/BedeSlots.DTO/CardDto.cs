@@ -4,6 +4,6 @@
     {
         public int Id { get; set; }
 
-        public string CardNumberLastDigits { get; set; }
+        public string Number { get; set; }
     }
 }

@@ -1,32 +1,31 @@
-﻿@model EditRoleViewModel
+﻿@model DeleteUserViewModel
 
 @{
-    ViewData["Title"] = "_EditRolePartial";
+    ViewData["Title"] = "_DeleteUserPartial";
 }
 
-<h2>Change the role of @Model.UserName </h2>
+<h2>Are you sure to delete @Model.UserName?</h2>
+
 
 <div>
-    <form id="editRole">
-        <input asp-for="UserId" id="userId" type="text" hidden />
-        @Html.DropDownListFor(model => model.RoleId, Model.Roles, new { @class = "form-control" })
+    <form id="deleteUser">
+        <input asp-for="Id" type="text" hidden />
     </form>
 
-    <button id="btnSubmit" type="submit" class="btn btn-success">Edit</button>
+    <button id="btnSubmit" type="submit" class="btn btn-danger">Yes, delete it</button>
     <button id="btnReject" type="button" class="btn btn-default">No, return back</button>
-
 </div>
 
 <script>
     $(document).ready(function () {
-
         $("#btnSubmit").click(function (event) {
             event.preventDefault();
-            var dataToSend = $("#editRole").serialize();
+            var dataToSend = $("#deleteUser").serialize();
+            console.log(dataToSend);
 
             $.ajax({
                 type: "POST",
-                url: "/Admin/Users/EditRole",
+                url: "/Admin/Users/Delete",
                 data: dataToSend,
                 success: function (data) {
                     $("#myModal1").modal("hide");
@@ -36,7 +35,7 @@
                     }
                     else {
                         alert("Something went wrong!");
-                    }  
+                    }
                 }
             })
         })
@@ -44,9 +43,15 @@
         $("#btnReject").click(function (event) {
             event.preventDefault();
             $("#myModal1").modal("hide");
-            
-        })
 
+            if (data) {
+                oTable = $('#table-users').DataTable();
+                oTable.draw();
+            }
+            else {
+                alert("Something Went Wrong!");
+            }
+        });
     })
 </script>
 

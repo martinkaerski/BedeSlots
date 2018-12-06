@@ -2,6 +2,7 @@
 using BedeSlots.Data.Models;
 using BedeSlots.DTO;
 using BedeSlots.Services.Data.Contracts;
+using BedeSlots.Services.Data.Exceptions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -37,7 +38,14 @@ namespace BedeSlots.Services.Data
 
         public async Task<User> GetUserByIdAsync(string id)
         {
-            var user = await this.context.Users.FirstOrDefaultAsync(x => x.Id == id);
+            var user = await this.context.Users
+                .Where(u => u.IsDeleted == false)
+                .FirstOrDefaultAsync(x => x.Id == id);
+
+            if (user == null)
+            {
+                throw new ServiceException($"There is no user with ID {id}");
+            }
 
             return user;
         }
@@ -56,6 +64,7 @@ namespace BedeSlots.Services.Data
 
             var users = this.context
                 .Users
+                .Where(u => u.IsDeleted == false)
                 .Select(u => new UserDto
                 {
                     Id = u.Id,
@@ -77,7 +86,6 @@ namespace BedeSlots.Services.Data
         {
             var role = await this.context.UserRoles.FirstOrDefaultAsync(u => u.UserId == userId);
             var roleId = role.RoleId;
-            var roleName = this.context.Roles.SingleOrDefault(r => r.Id == roleId).Name;
 
             return roleId;
         }
@@ -85,8 +93,6 @@ namespace BedeSlots.Services.Data
         public async Task<IdentityUserRole<string>> GetUserRoleAsync(string userId)
         {
             var role = await this.context.UserRoles.FirstOrDefaultAsync(u => u.UserId == userId);
-            var roleId = role.RoleId;
-            var roleName = this.context.Roles.SingleOrDefault(r => r.Id == roleId).Name;
 
             return role;
         }
@@ -132,6 +138,13 @@ namespace BedeSlots.Services.Data
             return newRole;
         }
 
+        public async Task<User> DeleteUserAsync(string userId)
+        {
+            var user = await GetUserByIdAsync(userId);
+            user.IsDeleted = true;
+            await this.context.SaveChangesAsync();
 
+            return user;
+        }
     }
 }

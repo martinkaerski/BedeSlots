@@ -96,7 +96,11 @@ namespace BedeSlots.Data.Migrations
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken();
 
+                    b.Property<DateTime?>("CreatedOn");
+
                     b.Property<int>("Currency");
+
+                    b.Property<DateTime?>("DeletedOn");
 
                     b.Property<string>("Email")
                         .HasMaxLength(256);
@@ -107,6 +111,8 @@ namespace BedeSlots.Data.Migrations
                         .IsRequired()
                         .HasMaxLength(30);
 
+                    b.Property<bool>("IsDeleted");
+
                     b.Property<string>("LastName")
                         .IsRequired()
                         .HasMaxLength(30);
@@ -114,6 +120,8 @@ namespace BedeSlots.Data.Migrations
                     b.Property<bool>("LockoutEnabled");
 
                     b.Property<DateTimeOffset?>("LockoutEnd");
+
+                    b.Property<DateTime?>("ModifiedOn");
 
                     b.Property<string>("NormalizedEmail")
                         .HasMaxLength(256);

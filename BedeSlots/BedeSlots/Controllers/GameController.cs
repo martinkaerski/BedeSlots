@@ -20,10 +20,10 @@ namespace BedeSlots.Web.Controllers
         private readonly IGame game;
         private readonly UserManager<User> userManager;
         private readonly ITransactionService transactionService;
-        private readonly IDepositService depositService;
+        private readonly IUserBalanceService depositService;
         private readonly IUserService userService;
 
-        public GameController(IGame game, ITransactionService transactionService, UserManager<User> userManager, IDepositService depositService, IUserService userService)
+        public GameController(IGame game, ITransactionService transactionService, UserManager<User> userManager, IUserBalanceService depositService, IUserService userService)
         {
             this.game = game;
             this.transactionService = transactionService;
@@ -49,7 +49,7 @@ namespace BedeSlots.Web.Controllers
 
             if (convertedUserBalance >= stake)
             {
-                await this.depositService.GetMoneyAsync(stake, user.Id);
+                await this.depositService.RetrieveMoneyAsync(stake, user.Id);
                 string gameType = GameType._4x3.ToString().Substring(1);
 
                 var stakeTransaction = await this.transactionService.AddTransactionAsync(TransactionType.Stake, user.Id, gameType, stake, user.Currency);

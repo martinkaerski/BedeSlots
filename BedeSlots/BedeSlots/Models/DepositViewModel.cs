@@ -19,5 +19,7 @@ namespace BedeSlots.Web.Models
         public decimal DepositAmount { get; set; }
 
         public Currency Currency { get; set; }
+
+        public string StatusMessage { get; set; }
     }
 }

@@ -29,6 +29,9 @@ namespace BedeSlots.Web.Controllers
             this.cardService = cardService;
         }
 
+        [TempData]
+        public string StatusMessage { get; set; }
+
         public IActionResult Index()
         {
             return View();
@@ -55,6 +58,7 @@ namespace BedeSlots.Web.Controllers
                 return ViewComponent("SelectCard");
             }
 
+
             var user = await this.userManager.GetUserAsync(HttpContext.User);
             var card = await this.cardService.GetCardByIdAsync(depositViewModel.BankCardId);
 
@@ -65,7 +69,10 @@ namespace BedeSlots.Web.Controllers
 
             var depositTransaction = await this.depositService.DepositMoneyAsync(depositViewModel.DepositAmount, user.Id);
 
-            return Json(new { message = $"Successfully deposit {depositViewModel.DepositAmount} $!" });
+            string currencySymbol = WebConstants.CurrencySymbols[user.Currency];
+            this.StatusMessage = $"Successfully deposit {depositViewModel.DepositAmount} {currencySymbol}.";
+
+            return PartialView("_StatusMessage", this.StatusMessage);
         }
 
         public IActionResult DepositInfo()

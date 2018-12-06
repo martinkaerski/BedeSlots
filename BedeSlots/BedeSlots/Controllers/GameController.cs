@@ -44,15 +44,34 @@ namespace BedeSlots.Web.Controllers
             rows = stakeModel.Rows;
             cols = stakeModel.Cols;
 
+            GameType gameType;
+
+            if (rows == 3 && cols == 4)
+            {
+                gameType = GameType._4x3;
+            }
+            else if (rows == 5 && cols == 5)
+            {
+                gameType = GameType._5x5;
+            }
+            else if (rows == 5 && cols == 8)
+            {
+                gameType = GameType._8x5;
+            }
+            else
+            {
+                return this.RedirectToAction("Index");
+            }
+
             var user = await userManager.GetUserAsync(HttpContext.User);
             var convertedUserBalance = await this.userService.GetUserBalanceByIdAsync(user.Id);
 
             if (convertedUserBalance >= stake)
             {
                 await this.depositService.GetMoneyAsync(stake, user.Id);
-                string gameType = GameType._4x3.ToString().Substring(1);
+                string gameTypeString = gameType.ToString().Substring(1);
 
-                var stakeTransaction = await this.transactionService.AddTransactionAsync(TransactionType.Stake, user.Id, gameType, stake, user.Currency);
+                var stakeTransaction = await this.transactionService.AddTransactionAsync(TransactionType.Stake, user.Id, gameTypeString, stake, user.Currency);
 
                 var result = game.Spin(rows, cols, stake);
 
@@ -68,7 +87,7 @@ namespace BedeSlots.Web.Controllers
 
                 if (result.Money > 0)
                 {
-                    var winTransaction = await this.transactionService.AddTransactionAsync(TransactionType.Win, user.Id, gameType, result.Money, user.Currency);
+                    var winTransaction = await this.transactionService.AddTransactionAsync(TransactionType.Win, user.Id, gameTypeString, result.Money, user.Currency);
 
                     await depositService.DepositMoneyAsync(result.Money, user.Id);
                     model.Balance += result.Money;
@@ -110,7 +129,7 @@ namespace BedeSlots.Web.Controllers
         }
 
         public async Task<IActionResult> SlotMachine(string size)
-        { 
+        {
             switch (size)
             {
                 case "4x3":
@@ -125,6 +144,8 @@ namespace BedeSlots.Web.Controllers
                     rows = 8;
                     cols = 5;
                     break;
+                default:
+                    return this.RedirectToAction("Index");
             }
 
             var user = await userManager.GetUserAsync(HttpContext.User);

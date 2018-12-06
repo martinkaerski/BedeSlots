@@ -198,7 +198,7 @@ namespace BedeSlots.Web.Areas.Admin.Controllers
                         Firstname = u.Firstname,
                         Lastname = u.Lastname,
                         Email = u.Email,
-                        Balance = u.Balance,
+                        Balance = "$" + u.Balance,
                         Currency = u.Currency.ToString(),
                         Role = u.Role
                     });

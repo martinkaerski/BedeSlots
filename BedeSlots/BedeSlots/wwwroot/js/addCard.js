@@ -3,23 +3,26 @@
 
     $addCardForm.on('submit', function (event) {
         event.preventDefault();
-
-        //TODO: delete it?
-        const $cardnumberVal = $addCardForm.find('#CardNumber').val();
-        const $tokenVal = $addCardForm.find('input[name="__RequestVerificationToken"]').val();
-
+        debugger;
         const dataToSend = $addCardForm.serialize();
 
         $.post($addCardForm.attr('action'), dataToSend, function (serverData) {
-            debugger;
-            $('#AddCardModal').modal('hide');
-            $addCardForm.find('input').val('');
-            $("#select-card-dropdown").empty();
-            $("#select-card-dropdown").html(serverData);
 
-            return false;
+            if (serverData.message != null) {
+                debugger;
+                alert(serverData.message);
+                //$('#\\#AddCardModal').modal('show');
+                return false;
+            }
+            else {
+                debugger;
+                $('#AddCardModal').modal('hide');
+                $addCardForm.find('input').val('');
+                $("#select-card-dropdown").empty();
+                $("#select-card-dropdown").html(serverData);
+
+            }
         });
 
-        $.validator.unobtrusive.parse("#addCardForm");
     });
 });

@@ -44,7 +44,7 @@ namespace BedeSlots.Web.Controllers
 
             if (!ModelState.IsValid)
             {
-                return Redirect("AddCard");
+                return Json(new { message = $"Invalid information submited!" });
             }
 
             var cardNumberWithoutSpaces = model.CardNumber.Replace(" ", "");

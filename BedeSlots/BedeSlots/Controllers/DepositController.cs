@@ -49,7 +49,7 @@ namespace BedeSlots.Web.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return Redirect("Deposit");
+                return ViewComponent("SelectCard");
             }
 
             var user = await this.userManager.GetUserAsync(HttpContext.User);

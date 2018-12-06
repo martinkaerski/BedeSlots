@@ -8,8 +8,8 @@
         $.post(f.attr('action'), f.serialize(), function (res) {
             debugger;
             if (res.message != null) {
-                alert(res.message);
                 window.location.href = '/Game/Index';
+                alert(res.message);
             }
         });
     });

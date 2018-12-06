@@ -84,7 +84,7 @@ namespace BedeSlots.Web.Controllers
                 }
                 else
                 {
-                    model.Message = $"Bad luck. Try again!";
+                    model.Message = $"Try again!";
                 }
 
                 return this.PartialView("_GameSlotPartial", model);

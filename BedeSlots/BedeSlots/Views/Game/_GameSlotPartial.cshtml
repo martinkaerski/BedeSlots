@@ -17,7 +17,7 @@
     </table>
 
     <hr />
-    <div class="inline text text-info">
+    <div class="inline text text-info pull-left">
         @if (Model.Currency != Currency.BGN)
         {
             <strong>
@@ -47,7 +47,7 @@
     </div>
 
     <span asp-validation-for="@Model.Stake" class="text-danger"></span>
-    <div class="inline text text-justify"><strong> @Model.Message</strong></div>
+    <div class="inline text text-justify pull-right"><strong> @Model.Message</strong></div>
 
 </section>
 

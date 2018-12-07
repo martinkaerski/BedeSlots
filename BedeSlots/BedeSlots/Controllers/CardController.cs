@@ -64,14 +64,14 @@ namespace BedeSlots.Web.Controllers
         [HttpGet]
         public async Task<IActionResult> Details(int cardId)
         {
-            var card = await this.cardService.GetCardByIdAsync(cardId);
+            var card = await this.cardService.GetCardDetailsByIdAsync(cardId);
 
             var model = new CardInfoViewModel()
             {
                 Id = card.Id,
-                CardNumber = card.Number.Substring(12),
+                CardNumber = card.LastFourDigit,
                 CardType = card.Type.GetDisplayName(),
-                Cvv = card.CvvNumber,
+                Cvv = card.Cvv,
                 Expiry = card.ExpiryDate,
                 Cardholder = card.CardholerName
             };

@@ -17,10 +17,10 @@ namespace BedeSlots.Services.Data.Contracts
 
         Task<BankCard> AddCardAsync(string cardNumber, string cardholerName, string cvv, DateTime expiryDate, CardType cardType, string userId);
 
-        Task<BankCard> GetCardByIdAsync(int id);
-
         bool CardExists(int bankCardId);
 
         Task<BankCard> DeleteCardAsync(int cardId);
+
+        Task<CardDetailsDto> GetCardDetailsByIdAsync(int id);
     }
 }

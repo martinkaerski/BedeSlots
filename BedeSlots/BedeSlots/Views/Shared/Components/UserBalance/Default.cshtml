@@ -10,20 +10,19 @@
             @if (Model.Currency != Currency.BGN)
             {
                 <strong>
-                    Balance: @WebConstants.CurrencySymbols[Model.Currency]@Math.Round(@Model.Balance, 2)
+                    Balance: @WebConstants.CurrencySymbols[Model.Currency]@Model.Balance
                 </strong>
             }
             else
             {
                 <strong>
-                    Balance: @Math.Round(@Model.Balance, 2)@WebConstants.CurrencySymbols[Model.Currency]
+                    Balance: @Model.Balance @WebConstants.CurrencySymbols[Model.Currency]
                 </strong>
             }
             <span class="caret"></span>
         </a>
         <ul class="dropdown-menu" aria-labelledby="balance-dropdown">
-            @*<li><a class="text-center" asp-area="" asp-controller="Deposit" asp-action="Deposit">Deposit</a></li>*@
-            <li><a class="text-center" asp-area="" asp-controller="Retrieve" asp-action="Index">Retrieve</a></li>
+            <li><a class="text-center" asp-area="" asp-controller="Withdraw" asp-action="Index">Withdraw</a></li>
             <li><a class="text-center" asp-area="" asp-controller="History" asp-action="Index">History</a></li>
         </ul>
     </li>

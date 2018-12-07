@@ -117,5 +117,28 @@ namespace BedeSlots.Services.Data
         {
             return this.context.BankCards.Any(c => c.Id == bankCardId) ? true : false;
         }
+
+        public async Task<CardDetailsDto> GetCardDetailsByIdAsync(int id)
+        {
+            var card = await this.context.BankCards
+                .Where(c => c.IsDeleted == false)
+                .Include(c => c.User).Select(c=> new CardDetailsDto()
+                {
+                    Id = c.Id,
+                    CardholerName = c.CardholerName,
+                    Cvv = c.CvvNumber,
+                    ExpiryDate = c.ExpiryDate,
+                    LastFourDigit = c.Number.Substring(12),
+                    Type = c.Type
+                })
+                .FirstOrDefaultAsync(c => c.Id == id);
+
+            if (card == null)
+            {
+                throw new ServiceException($"There is no card with id {id}");
+            }
+
+            return card;
+        }
     }
 }

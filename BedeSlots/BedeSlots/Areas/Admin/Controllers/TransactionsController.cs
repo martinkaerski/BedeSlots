@@ -83,7 +83,7 @@ namespace BedeSlots.Web.Areas.Admin.Controllers
                 if (!string.IsNullOrEmpty(searchValue))
                 {
                     transactions = transactions.Where(t =>
-                       EF.Functions.Like(t.User.Email, "%" + searchValue + "%") ||
+                       EF.Functions.Like(t.User, "%" + searchValue + "%") ||
                        EF.Functions.Like(t.Description, "%" + searchValue + "%") ||
                        EF.Functions.Like(t.Type.ToString(), "%" + searchValue + "%"));
 
@@ -121,7 +121,7 @@ namespace BedeSlots.Web.Areas.Admin.Controllers
                         Type = t.Type.ToString(),
                         Amount = CommonConstants.BaseCurrencySymbol + t.Amount.ToString(),
                         Description = GetDescriptionByTransactionType(t.Type) + t.Description,
-                        User = t.User.Email
+                        User = t.User
                     })
                     .ToList();
 

@@ -48,13 +48,13 @@ namespace BedeSlots.Web.Controllers
                 int recordsTotal = 0;
 
                 // TODO replace GetAllTransaction() with GetUserTransactionAsync but now is not implemented
-                var transactions = this.transactionService.GetAllTransactions();
+                var transactions = this.transactionService.GetUserTransactionsAsync(HttpContext.User.Claims.FirstOrDefault().Value);
 
                 //Search
                 if (!string.IsNullOrEmpty(searchValue))
                 {
                     transactions = transactions.Where(t =>
-                       EF.Functions.Like(t.User.Email, "%" + searchValue + "%") ||
+                       EF.Functions.Like(t.User, "%" + searchValue + "%") ||
                        EF.Functions.Like(t.Description, "%" + searchValue + "%") ||
                        EF.Functions.Like(t.Type.ToString(), "%" + searchValue + "%"));
 

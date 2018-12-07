@@ -17,7 +17,7 @@ namespace BedeSlots.Services.Data
     {
         private readonly BedeSlotsDbContext context;
         private readonly UserManager<User> userManager;
-        
+
         public CardService(BedeSlotsDbContext context, UserManager<User> userManager)
         {
             this.context = context ?? throw new ArgumentNullException(nameof(context));
@@ -30,7 +30,7 @@ namespace BedeSlots.Services.Data
                 .Where(c => c.UserId == userId && c.IsDeleted == false)
                 .Select(c => new CardDetailsDto
                 {
-                    
+
                     LastFourDigit = c.Number.Substring(12),
                     CardholerName = c.CardholerName,
                     Cvv = c.CvvNumber,
@@ -87,12 +87,36 @@ namespace BedeSlots.Services.Data
             return card;
         }
 
-        public async Task<BankCard> GetCardByIdAsync(int id)
+        private async Task<BankCard> GetCardByIdAsync(int id)
         {
             var card = await this.context.BankCards
                 .Where(c => c.IsDeleted == false)
-                .Include(c => c.User)
-                .FirstOrDefaultAsync(c => c.Id == id);
+                                .Include(c => c.User)
+                                .FirstOrDefaultAsync(c => c.Id == id);
+
+            if (card == null)
+            {
+                throw new ServiceException($"There is no card with id {id}");
+            }
+
+            return card;
+        }
+
+        public async Task<CardDetailsDto> GetCardDetailsByIdAsync(int id)
+        {
+            var card = await this.context.BankCards
+                                 .Where(c => c.IsDeleted == false)
+                                 .Include(c => c.User)
+                                 .Select(c => new CardDetailsDto()
+                                 {
+                                     Id = c.Id,
+                                     LastFourDigit = c.Number.Substring(12, 4),
+                                     Cvv = c.CvvNumber,
+                                     CardholerName = c.CardholerName,
+                                     ExpiryDate = c.ExpiryDate,
+                                     Type = c.Type
+                                 })
+                                 .FirstOrDefaultAsync(c => c.Id == id);
 
             if (card == null)
             {

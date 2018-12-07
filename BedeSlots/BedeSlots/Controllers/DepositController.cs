@@ -57,9 +57,9 @@ namespace BedeSlots.Web.Controllers
             }
 
             var user = await this.userManager.GetUserAsync(HttpContext.User);
-            var card = await this.cardService.GetCardByIdAsync(depositViewModel.BankCardId);
+            var card = await this.cardService.GetCardDetailsByIdAsync(depositViewModel.BankCardId);
 
-            var cardNumberLastFourDigits = card.Number.Substring(12, 4);
+            var cardNumberLastFourDigits = card.LastFourDigit;
 
             var transaction = await this.transactionService.AddTransactionAsync(TransactionType.Deposit, user.Id,
                 cardNumberLastFourDigits, depositViewModel.DepositAmount, user.Currency);

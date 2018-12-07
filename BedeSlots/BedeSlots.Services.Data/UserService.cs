@@ -140,11 +140,17 @@ namespace BedeSlots.Services.Data
 
         public async Task<User> DeleteUserAsync(string userId)
         {
-            var user = await GetUserByIdAsync(userId);
+            var user = await this.GetUserByIdAsync(userId);
             user.IsDeleted = true;
             await this.context.SaveChangesAsync();
 
             return user;
+        }
+
+        public async Task<Currency> GetUserCurrencyByIdAsync(string userId)
+        {
+            var user = await this.context.Users.FirstOrDefaultAsync(u => u.Id == userId);
+            return user.Currency;
         }
     }
 }

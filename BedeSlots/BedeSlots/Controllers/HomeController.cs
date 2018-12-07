@@ -5,6 +5,7 @@ using BedeSlots.Services.Data.Contracts;
 using BedeSlots.Web.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
 
@@ -39,7 +40,7 @@ namespace BedeSlots.Controllers
                     userBalance = user.Balance;
                 }
 
-                ViewData["Balance"] = new UserBalanceViewModel() { Balance = userBalance };
+                ViewData["Balance"] = new UserBalanceViewModel() { Balance = Math.Round(userBalance, 2) };
             }
 
             return View();

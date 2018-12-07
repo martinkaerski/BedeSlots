@@ -78,11 +78,11 @@ namespace BedeSlots.Web.Areas.Admin.Controllers
                 int recordsTotal = 0;
 
                 var transactions = this.transactionService.GetAllTransactions();
-                
+
                 //Search
                 if (!string.IsNullOrEmpty(searchValue))
                 {
-                  transactions =   transactions.Where(t =>
+                    transactions = transactions.Where(t =>
                        EF.Functions.Like(t.User.Email, "%" + searchValue + "%") ||
                        EF.Functions.Like(t.Description, "%" + searchValue + "%") ||
                        EF.Functions.Like(t.Type.ToString(), "%" + searchValue + "%"));
@@ -120,19 +120,28 @@ namespace BedeSlots.Web.Areas.Admin.Controllers
                         Date = t.Date.ToString("G", CultureInfo.InvariantCulture),
                         Type = t.Type.ToString(),
                         Amount = CommonConstants.BaseCurrencySymbol + t.Amount.ToString(),
-                        Description = t.Type == TransactionType.Deposit
-                        ? $"Deposit with card **** **** **** {t.Description}"
-                        : $"{t.Type.ToString()} on game {t.Description}",
+                        Description = GetDescriptionByTransactionType(t.Type) + t.Description,
                         User = t.User.Email
                     })
                     .ToList();
 
                 //Returning Json Data
-                return Json(new { draw = draw, recordsFiltered = recordsTotal, recordsTotal = recordsTotal, data = data });
+                return Json(new { draw, recordsFiltered = recordsTotal, recordsTotal, data });
             }
             catch (Exception)
             {
                 throw;
+            }
+        }
+        private string GetDescriptionByTransactionType(TransactionType type)
+        {
+            if (type == TransactionType.Deposit || type == TransactionType.Withdraw)
+            {
+                return $"{type.ToString()} with card **** **** **** ";
+            }
+            else 
+            {
+                return $"{type.ToString()} on game";
             }
         }
 

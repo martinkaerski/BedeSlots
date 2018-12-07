@@ -28,5 +28,7 @@ namespace BedeSlots.Services.Data.Contracts
         Task<string> GetUserRoleNameAsync(string userId);
 
         Task<User> DeleteUserAsync(string userId);
+
+        Task<Currency> GetUserCurrencyByIdAsync(string userId);
     }
 }

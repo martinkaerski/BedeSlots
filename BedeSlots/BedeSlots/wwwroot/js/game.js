@@ -1,42 +1,80 @@
-﻿var Directry = "images/fruits/";
+﻿$rows = $('#rows').val();
+$cols = $('#cols').val();
 
-var list = new Array();
+let directory = "/images/fruits/";
+
 //var list indicates full path to the images including its file name.
-for (let i = 0; i < 4; i++) {
-    list[i] = Directry + i + ".png";   
-    new Image().src = list[i];
-    //Create image of which src is list[i].
+let list = new Array();
+
+if ($rows == 4) {
+    list[0] = directory + "4b.png";
+    list[1] = directory + "4a.png";
+    list[2] = directory + "4w.png";
+    list[3] = directory + "4p.png";
+}
+else if ($rows == 5) {
+    list[0] = directory + "5b.png";
+    list[1] = directory + "5a.png";
+    list[2] = directory + "5w.png";
+    list[3] = directory + "5p.png";
+}
+else if ($rows == 8) {
+    list[0] = directory + "8b.png";
+    list[1] = directory + "8a.png";
+    list[2] = directory + "8w.png";
+    list[3] = directory + "8p.png";
 }
 
-var counter = 0;
+$("#spin-form").submit(function (event) {
+    event.preventDefault();
+    const $spinForm = $("#spin-form");
+    const dataToSend = $spinForm.serialize();
+    //$('#spin').play();
+    document.getElementById('spin').play();
 
-function spin() {
-    
-}  
+    let counter = 0;
+    function slot(requestFunction) {
 
-﻿$(function () {
-    const $spinForm = $('#spin-form');
+        let Random = setInterval(function () {
+            counter++;
+            for (var i = 0; i < $rows; i++) {
+                for (var j = 0; j < $cols; j++) {
+                    let idName = "" + i + j;
+                    let rnd = Math.floor(Math.random() * 4);
+                    $("#p" + idName).attr("src", list[rnd]);
+                }
+            }
 
-    $spinForm.on('submit', function (event) {
-        event.preventDefault();
+            if (counter > 15) {
+                document.getElementById('spin').pause();
+                requestFunction();
+                counter = 0;
+                clearInterval(Random);
+            }
+        }, 100);
+    }
 
-        $.get($commentForm.attr('action'), function (serverData) {
-            $('#comment-section').prepend(serverData);
-        });
-    });
-});
+    slot(function () {
+        $.ajax({
+            url: '@Url.Action("Spin", "Game")',
+            type: "Post",
+            data: dataToSend,
+            success: function (partialViewResult) {
+                $("#partial").empty();
+                $("#partial").html(partialViewResult);
 
+                $stake = $('#stake-earning').val();
 
-$(document).ready(function () {
-    $("#spin-btn").click(function () {
-        $.post("demo_test_post.asp",
-            {
-                name: "Donald Duck",
-                city: "Duckburg"
+                debugger;
+                if ($stake > 0) {
+                    document.getElementById('win').play();
+                }
+                let container = $("#component-balance");
+                $.get("/Game/BalanceViewComponent", function (data) { container.html(data); });
             },
-            function (data, status) {
-                alert("Data: " + data + "\nStatus: " + status);
-            });
+            error: function (arg, data, value) {
+                console.log(arg + data + value);
+            }
+        })
     });
 });
-

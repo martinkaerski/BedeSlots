@@ -14,10 +14,10 @@
         </div>
 
         @*<form id="spin-form" method="post" asp-controller="Game" asp-action="Spin">*@
-        <form id="spin-form">
+        <form id="spin-form" class="text-center">
             <div class="form-group col-md-6 col-md-offset-3">
-                <label asp-for="@Model.Stake" class="control-label"></label>
-                <input asp-for="@Model.Stake" id="stake" />
+                <label asp-for="@Model.Stake" class="control-label text-info"></label>
+                <input asp-for="@Model.Stake" id="stake" type ="number" min="1" class="form-control" />
                 <span asp-validation-for="@Model.Stake" class="text-danger"></span>
 
                 <input asp-for="@Model.Rows" id="rows" hidden />
@@ -33,88 +33,6 @@
 <audio id="win" src="~/audio/win.mp3"></audio>
 
 @section Scripts{
-    <script>
-        $rows = $('#rows').val();
-        $cols = $('#cols').val();
-
-        var Directry = "/images/fruits/";
-
-        //var list indicates full path to the images including its file name.
-        let list = new Array();
-
-        if ($rows == 4) {
-            list[0] = Directry + "4b.png";
-            list[1] = Directry + "4a.png";
-            list[2] = Directry + "4w.png";
-            list[3] = Directry + "4p.png";
-        }
-        else if ($rows == 5) {
-            list[0] = Directry + "5b.png";
-            list[1] = Directry + "5a.png";
-            list[2] = Directry + "5w.png";
-            list[3] = Directry + "5p.png";
-        }
-        else if ($rows == 8) {
-            list[0] = Directry + "8b.png";
-            list[1] = Directry + "8a.png";
-            list[2] = Directry + "8w.png";
-            list[3] = Directry + "8p.png";
-        }
-
-        $("#spin-form").submit(function (event) {
-            event.preventDefault();
-            const $spinForm = $("#spin-form");
-            const dataToSend = $spinForm.serialize();
-            //$('#spin').play();
-            document.getElementById('spin').play();
-
-            let counter = 0;
-            function slot(requestFunction) {
-
-                let Random = setInterval(function () {
-                    counter++;
-                    for (var i = 0; i < $rows; i++) {
-                        for (var j = 0; j < $cols; j++) {
-                            let idName = "" + i + j;
-
-                            let rnd = Math.floor(Math.random() * 3);
-                          $("#p" + idName).attr("src", list[rnd]);
-                        }
-                    }
-
-                    if (counter > 15) {
-                        document.getElementById('spin').pause();
-                        requestFunction();
-                        counter = 0;
-                        clearInterval(Random);
-                    }
-                }, 100);
-            }
-
-            slot(function () {
-                $.ajax({
-                    url: '@Url.Action("Spin", "Game")',
-                    type: "Post",
-                    data: dataToSend,
-                    success: function (partialViewResult) {
-                        $("#partial").empty();
-                        $("#partial").html(partialViewResult);
-
-                        $stake = $('#stake-earning').val();
-
-                            debugger;
-                        if ($stake > 0) {
-                             //$('#win').play();
-                            document.getElementById('win').play();
-                        }
-                        let container = $("#component-balance");
-                        $.get("/Game/BalanceViewComponent", function (data) { container.html(data); });
-                    },
-                    error: function (arg, data, value) {
-                        console.log(arg + data + value);
-                    }
-                })
-            });
-        });
-    </script>
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+    <script src="~/js/game.js"></script>
 }

@@ -58,6 +58,7 @@ namespace BedeSlots.Web.Areas.Admin.Controllers
         [HttpPost]
         public IActionResult LoadData()
         {
+            //TODO: move it to service
             try
             {
                 var draw = HttpContext.Request.Form["draw"].FirstOrDefault();
@@ -78,7 +79,6 @@ namespace BedeSlots.Web.Areas.Admin.Controllers
                 int recordsTotal = 0;
 
                 var transactions = this.transactionService.GetAllTransactions();
-
 
                 //Search
                 if (!String.IsNullOrEmpty(searchValue.ToLower()))

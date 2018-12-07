@@ -3,10 +3,9 @@
 
     $('#delete-card-btn').on('click', function () {
         const id = $deleteCardBtn.attr('id');
-        debugger;
+   
         const dataToSend = { id: id };
         const url = '@Url.Action("Delete", "Card")';
-        debugger;
 
         $.post($addCardForm.attr('action'), dataToSend, function (serverData) {
             $('#card-details').modal('hide');

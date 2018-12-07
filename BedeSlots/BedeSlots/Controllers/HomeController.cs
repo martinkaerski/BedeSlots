@@ -14,12 +14,10 @@ namespace BedeSlots.Controllers
     public class HomeController : Controller
     {
         private readonly UserManager<User> userManager;
-        private readonly IExchangeRateApiCallService exchangeRateApiCallService;
         private readonly ICurrencyConverterService currencyConverterService;
 
-        public HomeController(IExchangeRateApiCallService exchangeRateApiCallService, UserManager<User> userManager, ICurrencyConverterService currencyConverterService)
+        public HomeController(UserManager<User> userManager, ICurrencyConverterService currencyConverterService)
         {
-            this.exchangeRateApiCallService = exchangeRateApiCallService;
             this.userManager = userManager;
             this.currencyConverterService = currencyConverterService;
         }
@@ -40,6 +38,7 @@ namespace BedeSlots.Controllers
                     userBalance = user.Balance;
                 }
 
+                //TODO: Da se iztrie? 
                 ViewData["Balance"] = new UserBalanceViewModel() { Balance = Math.Round(userBalance, 2) };
             }
 

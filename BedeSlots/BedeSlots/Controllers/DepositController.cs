@@ -14,12 +14,12 @@ namespace BedeSlots.Web.Controllers
         private readonly UserManager<User> userManager;
         private readonly ITransactionService transactionService;
         private readonly ICardService cardService;
-        private readonly IUserBalanceService depositService;
+        private readonly IUserBalanceService userBalanceService;
 
-        public DepositController(UserManager<User> userManager, IUserBalanceService depositService, ITransactionService transactionService, ICardService cardService)
+        public DepositController(UserManager<User> userManager, IUserBalanceService userBalanceService, ITransactionService transactionService, ICardService cardService)
         {
             this.userManager = userManager;
-            this.depositService = depositService;
+            this.userBalanceService = userBalanceService;
             this.transactionService = transactionService;
             this.cardService = cardService;
         }
@@ -57,7 +57,7 @@ namespace BedeSlots.Web.Controllers
             var transaction = await this.transactionService.AddTransactionAsync(TransactionType.Deposit, user.Id,
                 cardNumberLastFourDigits, depositViewModel.DepositAmount, user.Currency);
 
-            var depositTransaction = await this.depositService.DepositMoneyAsync(depositViewModel.DepositAmount, user.Id);
+            var depositTransaction = await this.userBalanceService.DepositMoneyAsync(depositViewModel.DepositAmount, user.Id);
 
             string currencySymbol = WebConstants.CurrencySymbols[user.Currency];
             this.StatusMessage = $"Successfully deposit {depositViewModel.DepositAmount} {currencySymbol}.";

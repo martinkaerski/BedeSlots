@@ -13,7 +13,7 @@ namespace BedeSlots.Web.Models
         public string[,] Matrix { get; set; }
 
         [Required]
-        [Range(1, double.MaxValue, ErrorMessage = "The minimum bet amount is 1 unit!")]
+        [Range(1, double.MaxValue, ErrorMessage = "The minimum bet amount is 1!")]
         [Remote(action: "EnoughMoney", controller: "Game", areaName: "")]
         public decimal Stake { get; set; }
 

@@ -19,7 +19,7 @@
                     <th>Lastname</th>
                     <th>Email</th>
                     <th>Balance</th>
-                    <th>Currency</th>
+                    <th>User Currency</th>
                     <th>Role</th>
                     <th>Edit Role</th>
                     <th>Delete</th>
@@ -80,8 +80,13 @@
                         "searchable": false,
                         "targets": [7],
                         "orderable": false,
-                        "searchable": false
-                    }],
+                        "searchable": false,
+                        "targets": [8],
+                        "orderable": false,
+                        "searchable": false,
+                    },
+                        { className: 'text-center', targets: [1,2,3,4,5,6,7,8] },
+                    ],
                 "columns": [
                     { "data": "username", "name": "Username", "autoWidth": true },
                     { "data": "firstname", "name": "Firstname", "autoWidth": true },

@@ -461,6 +461,28 @@ namespace BedeSlots.Controllers
             return View();
         }
 
+        //TODO: wrap datetime
+        [AcceptVerbs("Get", "Post")]
+        [AllowAnonymous]
+        public JsonResult AgeValidation(DateTime birthdate)
+        {
+            DateTime today = DateTime.Today;
+            int age = today.Year - birthdate.Year;
+            if (birthdate > today.AddYears(-age))
+            {
+                age--;
+            }
+        
+            if (age < 18)
+            {
+                return Json($"Invalid birthdate! You should be over 18 years old.");
+            }
+            else
+            {
+                return Json(true);
+            }
+        }
+
         #region Helpers
 
         private void AddErrors(IdentityResult result)

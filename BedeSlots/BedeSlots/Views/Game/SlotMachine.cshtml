@@ -54,6 +54,7 @@
                 success: function (partialViewResult) {
                     $("#partial").empty();
                     $("#partial").html(partialViewResult);
+            let container = $("#component-balance");
                     $.get("/Game/BalanceViewComponent", function (data) { container.html(data); });
                 },
                 error: function (arg, data, value) {
@@ -61,7 +62,6 @@
                 }
             })
 
-            let container = $("#component-balance");
 
             //let counter = 0;
 

@@ -10,7 +10,8 @@
 
             if (serverData.message != null) {
                 debugger;
-                alert(serverData.message);
+                //alert(serverData.message);
+                $('#status-msg').html(res); 
                 return false;
             }
             else {
@@ -19,7 +20,6 @@
                 $addCardForm.find('input').val('');
                 $("#select-card-dropdown").empty();
                 $("#select-card-dropdown").html(serverData);
-
             }
         });
 

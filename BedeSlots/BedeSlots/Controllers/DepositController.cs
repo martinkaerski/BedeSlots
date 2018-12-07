@@ -4,9 +4,6 @@ using BedeSlots.Web.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using System;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace BedeSlots.Web.Controllers
@@ -28,6 +25,9 @@ namespace BedeSlots.Web.Controllers
             this.userService = userService;
             this.cardService = cardService;
         }
+
+        [TempData]
+        public string StatusMessage { get; set; }
 
         public IActionResult Index()
         {
@@ -52,7 +52,8 @@ namespace BedeSlots.Web.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return ViewComponent("SelectCard");
+                this.StatusMessage = "Error! The deposit is not completed.";
+                return PartialView("_StatusMessage", this.StatusMessage);
             }
 
             var user = await this.userManager.GetUserAsync(HttpContext.User);
@@ -65,12 +66,16 @@ namespace BedeSlots.Web.Controllers
 
             var depositTransaction = await this.depositService.DepositMoneyAsync(depositViewModel.DepositAmount, user.Id);
 
-            return Json(new { message = $"Successfully deposit {depositViewModel.DepositAmount} $!" });
+            string currencySymbol = WebConstants.CurrencySymbols[user.Currency];
+            this.StatusMessage = $"Successfully deposit {depositViewModel.DepositAmount} {currencySymbol}.";
+
+            return PartialView("_StatusMessage", this.StatusMessage);
         }
 
-        public IActionResult DepositInfo()
+        [HttpGet]
+        public IActionResult BalanceViewComponent()
         {
-            return View();
+            return ViewComponent("UserBalance");
         }
     }
 }

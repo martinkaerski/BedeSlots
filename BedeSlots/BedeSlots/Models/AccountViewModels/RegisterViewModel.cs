@@ -1,4 +1,5 @@
 ﻿using BedeSlots.Data.Models;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
@@ -42,6 +43,8 @@ namespace BedeSlots.Models.AccountViewModels
         public Currency Currency { get; set; }
         
         [Required]
+        [Remote(action: "AgeValidation", controller: "Account", areaName: "")]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd-MM-yyyy}")]
         [DataType(DataType.Date)]
         public DateTime Birthdate { get; set; }
 

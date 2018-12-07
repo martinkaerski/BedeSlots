@@ -25,7 +25,7 @@ namespace BedeSlots.Web.Controllers
             this.userService = userService;
             this.cardService = cardService;
         }
-
+        
         [HttpGet]
         public IActionResult AddCard()
         {
@@ -109,6 +109,19 @@ namespace BedeSlots.Web.Controllers
             else
             {
                 return Json($"Card {cardNumber} allready added!");
+            }
+        }
+
+        [AcceptVerbs("Get", "Post")]
+        public JsonResult IsValidExpiryDate(DateTime expiry)
+        {           
+            if (expiry <= DateTime.Now)
+            {
+                return Json($"Invalid expiry date!");
+            }
+            else
+            {
+                return Json(true);
             }
         }
     }

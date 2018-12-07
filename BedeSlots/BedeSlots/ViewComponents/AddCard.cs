@@ -13,7 +13,6 @@ namespace BedeSlots.Web.ViewComponents
     {
         public AddCard()
         {
-
         }
 
         public async Task<IViewComponentResult> InvokeAsync()

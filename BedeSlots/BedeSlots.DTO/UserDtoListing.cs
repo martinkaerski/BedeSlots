@@ -18,7 +18,7 @@ namespace BedeSlots.DTO
 
         public string Currency { get; set; }
 
-        public decimal Balance { get; set; }
+        public string Balance { get; set; }
 
         public string Role { get; set; }
     }

@@ -80,21 +80,16 @@ namespace BedeSlots.Web.Areas.Admin.Controllers
                 var transactions = this.transactionService.GetAllTransactions();
 
                 //Search
-                if (!string.IsNullOrEmpty(searchValue))
+                if (!String.IsNullOrEmpty(searchValue))
                 {
-                    transactions = transactions.Where(t =>
-                       EF.Functions.Like(t.User, "%" + searchValue + "%") ||
-                       EF.Functions.Like(t.Description, "%" + searchValue + "%") ||
-                       EF.Functions.Like(t.Type.ToString(), "%" + searchValue + "%"));
-
-                    //transactions = transactions
-                    //    .Where(t => t.User.Email.Contains(searchValue)
-                    //    || t.Description.Contains(searchValue)
-                    //    || t.Type.ToString().Contains(searchValue));
+                    transactions = transactions
+                        .Where(t => t.User.Contains(searchValue)
+                        || t.Description.Contains(searchValue)
+                        || t.Type.ToString().Contains(searchValue));
                 }
 
                 //Sorting
-                if (!(string.IsNullOrEmpty(sortColumn) && string.IsNullOrEmpty(sortColumnDirection)))
+                if (!(String.IsNullOrEmpty(sortColumn) && String.IsNullOrEmpty(sortColumnDirection)))
                 {
                     if (sortColumnDirection == "asc")
                     {

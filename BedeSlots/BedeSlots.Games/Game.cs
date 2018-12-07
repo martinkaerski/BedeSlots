@@ -1,15 +1,20 @@
 ﻿using BedeSlots.Games.Contracts;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace BedeSlots.Games
 {
     public class Game : IGame
     {
+        private IDictionary<int, Item> items;
+
+        public Game()
+        {
+            items = GenerateItems.GetItems();
+        }
+
         public SpinData Spin(int rows, int cols, decimal money)
         {
-            var items = GetItems();
             var matrix = GenerateMatrix(rows, cols, items);
             var coefficient = CalculateCoefficient(matrix);
 
@@ -83,12 +88,11 @@ namespace BedeSlots.Games
         public Item[,] GenerateMatrix(int rows, int cols, IDictionary<int, Item> items)
         {
             var matrix = new Item[rows, cols];
-            items = GetItems();
             for (int row = 0; row < rows; row++)
             {
                 for (int col = 0; col < cols; col++)
                 {
-                    matrix[row, col] = GenerateItem(items);
+                    matrix[row, col] = GetRandomItem(items);
                 }
             }
 
@@ -112,7 +116,23 @@ namespace BedeSlots.Games
             return stringMatrix;
         }
 
-        private Item GenerateItem(IDictionary<int, Item> items)
+        public string[,] GenerateCharMatrix(int rows, int cols)
+        {
+            string[,] stringMatrix = new string[rows, cols];
+
+            for (int row = 0; row < rows; row++)
+            {
+                for (int col = 0; col < cols; col++)
+                {
+                    stringMatrix[row, col] = GetRandomItem(items).Name;
+                }
+            }
+
+            return stringMatrix;
+        }
+
+        // key - cumulative probability
+        private Item GetRandomItem(IDictionary<int, Item> items)
         {
             var random = new Random();
             var randomNumber = random.Next(1, 101); //the maxValue is exclusive
@@ -120,6 +140,7 @@ namespace BedeSlots.Games
             Item selectedItem = null;
             foreach (var item in items)
             {
+                //randomNumber is betwwen 1 and 100
                 if (randomNumber <= item.Key)
                 {
                     selectedItem = item.Value;
@@ -128,70 +149,6 @@ namespace BedeSlots.Games
             }
 
             return selectedItem;
-        }
-
-        private IDictionary<int, Item> GetItems()
-        {
-            var apple = new Item
-            {
-                Name = "a",
-                Coefficient = 0.4d,
-                Probability = 45,
-                Type = ItemType.Normal
-            };
-
-            var banana = new Item
-            {
-                Name = "b",
-                Coefficient = 0.6d,
-                Probability = 35,
-                Type = ItemType.Normal
-            };
-
-            var pineapple = new Item
-            {
-                Name = "p",
-                Coefficient = 0.8d,
-                Probability = 15,
-                Type = ItemType.Normal
-            };
-
-            var wildcard = new Item
-            {
-                Name = "w",
-                Coefficient = 0d,
-                Probability = 5,
-                Type = ItemType.Wildcard
-
-            };
-
-            var items = new List<Item>
-            {
-                apple,
-                banana,
-                pineapple,
-                wildcard
-            };
-
-            var sortedItems = items.OrderBy(i => i.Probability).ToList();
-
-            int previousCumulativeProb = 0;
-            for (int i = 0; i < sortedItems.Count; i++)
-            {
-                var currentCumulativeProb = sortedItems[i].Probability + previousCumulativeProb;
-                sortedItems[i].CumulativeProbability = currentCumulativeProb;
-                previousCumulativeProb = currentCumulativeProb;
-            }
-
-            var sortedItemsDict = new SortedDictionary<int, Item>
-            {
-                { apple.CumulativeProbability, apple },
-                { pineapple.CumulativeProbability, pineapple },
-                { banana.CumulativeProbability, banana },
-                { wildcard.CumulativeProbability, wildcard }
-            };
-
-            return sortedItemsDict;
         }
     }
 }

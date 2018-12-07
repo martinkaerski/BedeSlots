@@ -28,167 +28,93 @@
     </div>
 </div>
 
-
 <audio id="spin" src="/audio/snip.mp3"></audio>
 <audio id="lose" src="/audio/lose.mp3"></audio>
 <audio id="win" src="~/audio/win.mp3"></audio>
 
-<button id="btn">play</button>
 @section Scripts{
     <script>
+        $rows = $('#rows').val();
+        $cols = $('#cols').val();
+
         var Directry = "/images/fruits/";
-        //Set variables for indicating path to folder includes images.
-        var list = new Array();
+
         //var list indicates full path to the images including its file name.
-        list[1] = Directry +  "4a.png";
-        list[2] = Directry +  "4w.png";
-        list[3] = Directry +  "4p.png";
-        list[0] = Directry +  "4b.png";
+        let list = new Array();
 
-            //var list = "directory to folder" + "one of the numbers(i)" + "extention(png)".
-
-            //Create image of which src is list[i].
-        
-
-        var left = Math.floor(Math.random() * 3);
-        var center = Math.floor(Math.random() * 3);
-        var right = Math.floor(Math.random() * 3);
-
-    
+        if ($rows == 4) {
+            list[0] = Directry + "4b.png";
+            list[1] = Directry + "4a.png";
+            list[2] = Directry + "4w.png";
+            list[3] = Directry + "4p.png";
+        }
+        else if ($rows == 5) {
+            list[0] = Directry + "5b.png";
+            list[1] = Directry + "5a.png";
+            list[2] = Directry + "5w.png";
+            list[3] = Directry + "5p.png";
+        }
+        else if ($rows == 8) {
+            list[0] = Directry + "8b.png";
+            list[1] = Directry + "8a.png";
+            list[2] = Directry + "8w.png";
+            list[3] = Directry + "8p.png";
+        }
 
         $("#spin-form").submit(function (event) {
             event.preventDefault();
             const $spinForm = $("#spin-form");
             const dataToSend = $spinForm.serialize();
+            //$('#spin').play();
+            document.getElementById('spin').play();
 
- 
-            var counter = 0;
-            function slot() {
-                var Random = setInterval(function () {
+            let counter = 0;
+            function slot(requestFunction) {
+
+                let Random = setInterval(function () {
                     counter++;
-                    debugger;
-                    for (var i = 0; i < 4; i++) {
-                        for (var j = 0; j < 3; j++) {
-                            let rnd = Math.floor(Math.random() * 4);
-
+                    for (var i = 0; i < $rows; i++) {
+                        for (var j = 0; j < $cols; j++) {
                             let idName = "" + i + j;
-                            let full = "#" + idName;
 
-                            console.log(full)
-                            var left = Math.floor(Math.random() * 3);
-                            let asd = list[left];
-                            console.log(asd);
-                          $("#p" + idName).attr("src", list[left]);
+                            let rnd = Math.floor(Math.random() * 3);
+                          $("#p" + idName).attr("src", list[rnd]);
                         }
                     }
 
-                    //Show the pictures during the process.
-                    if (counter > 10) {
+                    if (counter > 15) {
+                        document.getElementById('spin').pause();
+                        requestFunction();
                         counter = 0;
                         clearInterval(Random);
-                        // After the result will be displayed the random number generating process should be closed.
                     }
                 }, 100);
             }
 
-            slot();
+            slot(function () {
+                $.ajax({
+                    url: '@Url.Action("Spin", "Game")',
+                    type: "Post",
+                    data: dataToSend,
+                    success: function (partialViewResult) {
+                        $("#partial").empty();
+                        $("#partial").html(partialViewResult);
 
+                        $stake = $('#stake-earning').val();
 
-            //for (var k = 0; k < 1000; k++) {
-
-            //for (var i = 0; i < 4; i++) {
-            //        for (var j = 0; j < 3; j++) {
-            //            let rnd = Math.floor(Math.random() * 4);
-
-            //            let idName = ""+ i + j;
-            //            let full = "#" + idName;
-
-            //            console.log(full)
-
-            //            if (i % 2 == 0) {
-            //                if (j % 2 == 0) {
-            //            $("#p" + idName).attr("src", "/images/fruits/4a.png");
-            //                }
-            //                else {
-            //                    $("#p" + idName).attr("src", "/images/fruits/4w.png");
-            //                }
-            //            }
-            //            else {
-            //                if (j % 2 == 0) {
-            //                    $("#p" + idName).attr("src", "/images/fruits/4b.png");
-            //                }
-            //                else {
-            //                    $("#p" + idName).attr("src", "/images/fruits/4p.png");
-            //                }
-            //            }
-            //    }
-            //    }
-
-            //}
-
-           
-
-            $.ajax({
-                url: '@Url.Action("Spin", "Game")',
-                type: "Post",
-                data: dataToSend,
-                success: function (partialViewResult) {
-                    $("#partial").empty();
-                    $("#partial").html(partialViewResult);
-            let container = $("#component-balance");
-                    $.get("/Game/BalanceViewComponent", function (data) { container.html(data); });
-                },
-                error: function (arg, data, value) {
-                    console.log(arg + data + value);
-                }
-            })
-
-
-            //let counter = 0;
-
-            //let Random = setInterval(function () {
-            //    counter++;
-
-            //    for (var i = 0; i < 4; i++) {
-            //        for (var j = 0; j < 3; j++) {
-            //            let rnd = Math.floor(Math.random() * 4);
-
-            //            let idName = ""+ i + j;
-            //            let full = "#" + idName;
-            //           // let top = "'" + full + "'";
-            //            console.log(full)
-            //            console.log($(full).src);
-            //            $("#11").attr("src", "a.png");
-
-            //        }
-            //    }
-
-            //    //Show the pictures during the process.
-            //    if (counter > 10) {
-            //        counter = 0;
-            //        clearInterval(Random);
-            //        // After the result will be displayed the random number generating process should be closed.
-            //    }
-            //}, 140)();
-        });
-
-        $(document).ready(function () {
-
-            let stake = function () { return '@Model.Stake' };
-            if (stake > 0) {
-                debugger;
-                $('#win').get(0).play();
-        }
-
-            $('#btn').click(function () {
-                if (false) {
-                    $('#win').get(0).play();
-                } else {
-                    $('#win').get(0).play();
-                }
+                            debugger;
+                        if ($stake > 0) {
+                             //$('#win').play();
+                            document.getElementById('win').play();
+                        }
+                        let container = $("#component-balance");
+                        $.get("/Game/BalanceViewComponent", function (data) { container.html(data); });
+                    },
+                    error: function (arg, data, value) {
+                        console.log(arg + data + value);
+                    }
+                })
             });
         });
-
-
     </script>
 }

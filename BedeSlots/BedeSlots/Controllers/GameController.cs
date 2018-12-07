@@ -54,7 +54,7 @@ namespace BedeSlots.Web.Controllers
             {
                 gameType = GameType._5x5;
             }
-            else if (rows == 5 && cols == 8)
+            else if (rows == 8 && cols == 5)
             {
                 gameType = GameType._8x5;
             }
@@ -150,8 +150,7 @@ namespace BedeSlots.Web.Controllers
             }
 
             var user = await userManager.GetUserAsync(HttpContext.User);
-            var matrix = game.GenerateMatrix(rows, cols, null);
-            var stringMatrix = game.GetCharMatrix(matrix);
+            var stringMatrix = game.GenerateCharMatrix(rows, cols);
             var convertedUserBalance = await this.userService.GetUserBalanceByIdAsync(user.Id);
 
             var model = new GameSlotViewModel()

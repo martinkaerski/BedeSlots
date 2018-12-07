@@ -93,7 +93,7 @@ namespace BedeSlots
             services.AddTransient<ICurrencyConverterService, CurrencyConverterService>();
             services.AddTransient<IExchangeRateApiCallService, ExchangeRateApiCallService>();
             services.AddTransient<IExchangeRatesApiCaller, ExchangeRatesApiCaller>();
-            services.AddTransient<IGame, Game>();
+            services.AddSingleton<IGame, Game>();
         }
 
         private void RegisterAuthentication(IServiceCollection services)

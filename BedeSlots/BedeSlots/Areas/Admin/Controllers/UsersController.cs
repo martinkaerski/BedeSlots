@@ -12,8 +12,6 @@ using System.Threading.Tasks;
 
 namespace BedeSlots.Web.Areas.Admin.Controllers
 {
-    //TODO: refactoring
-
     [Area(WebConstants.AdminArea)]
     [Authorize(Roles = WebConstants.AdminRole + "," + WebConstants.MasterAdminRole)]
     public class UsersController : Controller
@@ -44,9 +42,16 @@ namespace BedeSlots.Web.Areas.Admin.Controllers
             var user = await this.userManager.FindByIdAsync(userid);
             var userRoles = await this.userManager.GetRolesAsync(user);
 
+            var currentUserId = userManager.GetUserId(HttpContext.User);
+
+            if (user.Id == currentUserId)
+            {
+                return PartialView("_SelfEditPartial");
+            }
+
             if (userRoles.Contains(WebConstants.MasterAdminRole))
             {
-                return PartialView("_MasterAdminEdit");
+                return PartialView("_MasterAdminEditPartial");
             }
 
             var roleId = await userService.GetUserRoleIdAsync(userid);
@@ -208,7 +213,7 @@ namespace BedeSlots.Web.Areas.Admin.Controllers
             }
             catch (Exception)
             {
-                throw;
+                return RedirectToAction("Index");
             }
         }
     }

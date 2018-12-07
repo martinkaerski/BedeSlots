@@ -9,7 +9,7 @@
             <tr>
                 @for (int col = 0; col < @Model.Cols; col++)
                 {
-                    <td><img class="gameimg img-responsive" src="~/images/fruits/@(Model.Rows + Model.Matrix[row,col] + ".png")" id="@(row.ToString() + col.ToString()) "></td>
+                    <td><img id="p@(row.ToString() + col.ToString())"  class="gameimg img-responsive" src="~/images/fruits/@(Model.Rows + Model.Matrix[row,col] + ".png")" ></td>
                 }
             </tr>
         }

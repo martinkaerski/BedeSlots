@@ -53,7 +53,6 @@ namespace BedeSlots.Services.Data
             else
             {
                 throw new InvalidOperationException("Not enough money!");
-                //TODO: what to do?
             }
 
             this.context.Update(user);

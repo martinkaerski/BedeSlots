@@ -4,6 +4,7 @@ using BedeSlots.DTO;
 using BedeSlots.Services.Data.Contracts;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -20,18 +21,18 @@ namespace BedeSlots.Services.Data
             this.currencyConverterService = currencyConverterService;
         }
 
-        public IQueryable<Transaction> GetAllTransactions()
+        public IQueryable<TransactionDto> GetAllTransactions()
         {
             var transactions = this.context.Transactions
                 .Include(t => t.User)
-                //.Select(t => new TransactionDto
-                //{
-                //    Date = t.Date,
-                //    Amount = t.Amount,
-                //    Description = t.Description,
-                //    Type = t.Type,
-                //    User = t.User.Email
-                //})
+                .Select(t => new TransactionDto
+                {
+                    Date = t.Date,
+                    Amount = t.Amount,
+                    Description = t.Description,
+                    Type = t.Type,
+                    User = t.User.Email
+                })
                 .AsQueryable();
 
             return transactions;
@@ -64,6 +65,24 @@ namespace BedeSlots.Services.Data
             await this.context.SaveChangesAsync();
 
             return transaction;
+        }
+
+        public IQueryable<TransactionDto> GetUserTransactionsAsync(string id)
+        {
+            var transactions = this.context.Transactions
+               .Where(t => t.UserId == id)
+               .Include(t => t.User)
+               .Select(t => new TransactionDto
+               {
+                   Date = t.Date,
+                   Amount = t.Amount,
+                   Description = t.Description,
+                   Type = t.Type,
+                   User = t.User.Email
+               })
+               .AsQueryable();
+
+            return transactions;
         }
     }
 }

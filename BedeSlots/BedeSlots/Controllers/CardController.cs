@@ -47,30 +47,18 @@ namespace BedeSlots.Web.Controllers
             {
                 return Json(new { message = $"Invalid parameters!" });
             }
+            DateTime expiryDate = model.Expiry;
 
-            var cardNumberWithoutSpaces = model.CardNumber.Replace(" ", "");
-
-            var card = new BankCard()
-            {
-                Number = cardNumberWithoutSpaces,
-                CardholerName = model.CardholderName,
-                CvvNumber = model.Cvv,
-                ExpiryDate = model.Expiry,
-                Type = model.CardType,
-                UserId = userId,
-            };
-
-            await this.cardService.AddCardAsync(card);
+            var card = await this.cardService.AddCardAsync(model.CardNumber, model.CardholderName, model.Cvv, expiryDate, model.CardType, userId);
 
             return ViewComponent("SelectCard");
         }
 
-        //TODO: change deposit
         [HttpGet]
         public async Task<IActionResult> Delete(int id)
         {
             var card = await this.cardService.DeleteCardAsync(id);
-            return RedirectToAction("Deposit", "Deposit");
+            return RedirectToAction("Index", "Deposit");
         }
 
         [HttpGet]

@@ -17,8 +17,6 @@ namespace BedeSlots.Services.Data.Contracts
 
         Task<string> GetUserRoleIdAsync(string userId);
 
-        Task<IEnumerable<Transaction>> GetUserTransactionsAsync(string id);
-
         Task<ICollection<IdentityRole>> GetAllRolesAsync();
 
         Task<IdentityRole> EditUserRoleAsync(string userId, string newRoleId);

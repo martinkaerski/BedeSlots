@@ -79,13 +79,13 @@ namespace BedeSlots.Web.Areas.Admin.Controllers
 
                 var transactions = this.transactionService.GetAllTransactions();
 
+
                 //Search
-                if (!String.IsNullOrEmpty(searchValue))
+                if (!String.IsNullOrEmpty(searchValue.ToLower()))
                 {
                     transactions = transactions
-                        .Where(t => t.User.Contains(searchValue)
-                        || t.Description.Contains(searchValue)
-                        || t.Type.ToString().Contains(searchValue));
+                        .Where(t => t.User.ToLower().Contains(searchValue)
+                        || t.Description.Contains(searchValue));
                 }
 
                 //Sorting
@@ -107,9 +107,12 @@ namespace BedeSlots.Web.Areas.Admin.Controllers
                 recordsTotal = transactions.Count();
 
                 //Paging 
-                var data = transactions
+                var dataFiltered = transactions
                     .Skip(skip)
                     .Take(pageSize)
+                    .ToList();
+
+                var data = dataFiltered
                     .Select(t => new
                     {
                         Date = t.Date.ToString("G", CultureInfo.InvariantCulture),
@@ -136,7 +139,7 @@ namespace BedeSlots.Web.Areas.Admin.Controllers
             }
             else 
             {
-                return $"{type.ToString()} on game";
+                return $"{type.ToString()} on game ";
             }
         }
 

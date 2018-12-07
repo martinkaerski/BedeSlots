@@ -41,6 +41,30 @@
                     "type": "POST",
                     "datatype": "json"
                 },
+                "initComplete": function () {
+                    var input = $('.dataTables_filter input').unbind();
+                    var self = this.api();
+                    $('.dataTables_filter input').bind('keyup', function (e) {
+                        if (e.keyCode == 13) {
+                                self.search(input.val()).draw();
+                        }
+                    });                    
+                        $searchButton = $('<button>')
+                            .text('Search')
+                            .on('click keyup', (function (e) {
+                                if (e.keyCode == 13) {
+                                    self.search(input.val()).draw();
+                                }
+                                self.search(input.val()).draw();
+                            })),
+                        $clearButton = $('<button>')
+                            .text('Clear')
+                            .click(function () {
+                                input.val('');
+                                $searchButton.click();
+                            })
+                    $('.dataTables_filter').append($searchButton, $clearButton);
+                },
                 "columnDefs":
                     [{
                         "targets": [3],
@@ -55,6 +79,7 @@
               { "data": "user", "name": "User", "autoWidth": true }
                 ]
             });
+
         });
     </script>
 }

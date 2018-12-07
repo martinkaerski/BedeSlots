@@ -12,7 +12,6 @@ using System.Threading.Tasks;
 
 namespace BedeSlots.Services.Data
 {
-    //TODO: refactoring
     public class UserService : IUserService
     {
         private readonly BedeSlotsDbContext context;
@@ -104,13 +103,6 @@ namespace BedeSlots.Services.Data
             var roleName = this.context.Roles.SingleOrDefault(r => r.Id == roleId).Name;
 
             return roleName;
-        }
-
-        public async Task<IEnumerable<Transaction>> GetUserTransactionsAsync(string id)
-        {
-            var transactions = await this.context.Transactions.Where(t => t.UserId == id).ToListAsync();
-
-            return transactions;
         }
 
         public async Task<ICollection<IdentityRole>> GetAllRolesAsync()

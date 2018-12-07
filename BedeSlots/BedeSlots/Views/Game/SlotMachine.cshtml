@@ -36,16 +36,97 @@
 <button id="btn">play</button>
 @section Scripts{
     <script>
+        var Directry = "/images/fruits/";
+        //Set variables for indicating path to folder includes images.
+        var list = new Array();
+        //var list indicates full path to the images including its file name.
+        list[1] = Directry +  "4a.png";
+        list[2] = Directry +  "4w.png";
+        list[3] = Directry +  "4p.png";
+        list[0] = Directry +  "4b.png";
+
+            //var list = "directory to folder" + "one of the numbers(i)" + "extention(png)".
+
+            //Create image of which src is list[i].
+        
+
+        var left = Math.floor(Math.random() * 3);
+        var center = Math.floor(Math.random() * 3);
+        var right = Math.floor(Math.random() * 3);
+
+    
+
         $("#spin-form").submit(function (event) {
             event.preventDefault();
             const $spinForm = $("#spin-form");
             const dataToSend = $spinForm.serialize();
 
-            $("#10").attr("src", "/images/fruits/w.png");
-            $("#20").attr("src", "/images/fruits/w.png");
-            $("#30").attr("src", "/images/fruits/w.png");
-            $("#31").attr("src", "/images/fruits/w.png");
-            $("#32").attr("src", "/images/fruits/w.png");
+ 
+            var counter = 0;
+            function slot() {
+                var Random = setInterval(function () {
+                    counter++;
+                    debugger;
+                    for (var i = 0; i < 4; i++) {
+                        for (var j = 0; j < 3; j++) {
+                            let rnd = Math.floor(Math.random() * 4);
+
+                            let idName = "" + i + j;
+                            let full = "#" + idName;
+
+                            console.log(full)
+                            var left = Math.floor(Math.random() * 3);
+                            let asd = list[left];
+                            console.log(asd);
+                          $("#p" + idName).attr("src", list[left]);
+                        }
+                    }
+
+                    //Show the pictures during the process.
+                    if (counter > 10) {
+                        counter = 0;
+                        clearInterval(Random);
+                        // After the result will be displayed the random number generating process should be closed.
+                    }
+                }, 100);
+            }
+
+            slot();
+
+
+            //for (var k = 0; k < 1000; k++) {
+
+            //for (var i = 0; i < 4; i++) {
+            //        for (var j = 0; j < 3; j++) {
+            //            let rnd = Math.floor(Math.random() * 4);
+
+            //            let idName = ""+ i + j;
+            //            let full = "#" + idName;
+
+            //            console.log(full)
+
+            //            if (i % 2 == 0) {
+            //                if (j % 2 == 0) {
+            //            $("#p" + idName).attr("src", "/images/fruits/4a.png");
+            //                }
+            //                else {
+            //                    $("#p" + idName).attr("src", "/images/fruits/4w.png");
+            //                }
+            //            }
+            //            else {
+            //                if (j % 2 == 0) {
+            //                    $("#p" + idName).attr("src", "/images/fruits/4b.png");
+            //                }
+            //                else {
+            //                    $("#p" + idName).attr("src", "/images/fruits/4p.png");
+            //                }
+            //            }
+            //    }
+            //    }
+
+            //}
+
+           
 
             $.ajax({
                 url: '@Url.Action("Spin", "Game")',

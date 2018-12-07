@@ -1,6 +1,7 @@
 ﻿using BedeSlots.Data.Models;
 using BedeSlots.DTO;
 using BedeSlots.DTO.BankCardDto;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -14,7 +15,7 @@ namespace BedeSlots.Services.Data.Contracts
 
         Task<ICollection<CardDto>> GetUserCardsAllNumbersAsync(string userId);
 
-        Task<BankCard> AddCardAsync(BankCard bankCard);
+        Task<BankCard> AddCardAsync(string cardNumber, string cardholerName, string cvv, DateTime expiryDate, CardType cardType, string userId);
 
         Task<BankCard> GetCardByIdAsync(int id);
 

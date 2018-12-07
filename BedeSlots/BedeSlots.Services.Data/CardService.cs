@@ -29,8 +29,7 @@ namespace BedeSlots.Services.Data
             var cards = await context.BankCards
                 .Where(c => c.UserId == userId && c.IsDeleted == false)
                 .Select(c => new CardDetailsDto
-                {
-                    
+                {                    
                     LastFourDigit = c.Number.Substring(12),
                     CardholerName = c.CardholerName,
                     Cvv = c.CvvNumber,
@@ -70,12 +69,24 @@ namespace BedeSlots.Services.Data
             return cardsNumbers;
         }
 
-        public async Task<BankCard> AddCardAsync(BankCard bankCard)
+        public async Task<BankCard> AddCardAsync(string cardNumber, string cardholerName, string cvv, DateTime expiryDate, CardType cardType, string userId)
         {
-            await this.context.BankCards.AddAsync(bankCard);
+            var cardNumberWithoutSpaces = cardNumber.Replace(" ", "");
+
+            var card = new BankCard()
+            {
+                Number = cardNumberWithoutSpaces,
+                CardholerName = cardholerName,
+                CvvNumber = cvv,
+                ExpiryDate = expiryDate,
+                Type = cardType,
+                UserId = userId,
+            };
+
+            await this.context.BankCards.AddAsync(card);
             await this.context.SaveChangesAsync();
 
-            return bankCard;
+            return card;
         }
 
         public async Task<BankCard> DeleteCardAsync(int cardId)
@@ -104,14 +115,7 @@ namespace BedeSlots.Services.Data
 
         public bool CardExists(int bankCardId)
         {
-            if (this.context.BankCards.Any(c => c.Id == bankCardId))
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            return this.context.BankCards.Any(c => c.Id == bankCardId) ? true : false;
         }
     }
 }

@@ -83,7 +83,7 @@ namespace BedeSlots.Web.Areas.Admin.Controllers
                 if (!string.IsNullOrEmpty(searchValue))
                 {
                   transactions =   transactions.Where(t =>
-                       EF.Functions.Like(t.User.Email, "%" + searchValue + "%") ||
+                       EF.Functions.Like(t.User, "%" + searchValue + "%") ||
                        EF.Functions.Like(t.Description, "%" + searchValue + "%") ||
                        EF.Functions.Like(t.Type.ToString(), "%" + searchValue + "%"));
 
@@ -123,7 +123,7 @@ namespace BedeSlots.Web.Areas.Admin.Controllers
                         Description = t.Type == TransactionType.Deposit
                         ? $"Deposit with card **** **** **** {t.Description}"
                         : $"{t.Type.ToString()} on game {t.Description}",
-                        User = t.User.Email
+                        User = t.User
                     })
                     .ToList();
 

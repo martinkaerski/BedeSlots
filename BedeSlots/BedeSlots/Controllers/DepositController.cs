@@ -13,29 +13,22 @@ namespace BedeSlots.Web.Controllers
     {
         private readonly UserManager<User> userManager;
         private readonly ITransactionService transactionService;
-        private readonly IUserService userService;
         private readonly ICardService cardService;
         private readonly IUserBalanceService depositService;
 
-        public DepositController(UserManager<User> userManager, IUserBalanceService depositService, ITransactionService transactionService, IUserService userService, ICardService cardService)
+        public DepositController(UserManager<User> userManager, IUserBalanceService depositService, ITransactionService transactionService, ICardService cardService)
         {
             this.userManager = userManager;
             this.depositService = depositService;
             this.transactionService = transactionService;
-            this.userService = userService;
             this.cardService = cardService;
         }
 
         [TempData]
         public string StatusMessage { get; set; }
 
-        public IActionResult Index()
-        {
-            return View();
-        }
-
         [HttpGet]
-        public async Task<IActionResult> Deposit()
+        public async Task<IActionResult> Index()
         {
             var user = await this.userManager.GetUserAsync(HttpContext.User);
 

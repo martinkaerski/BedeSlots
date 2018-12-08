@@ -96,7 +96,7 @@ namespace BedeSlots.Web.Controllers
             }
             else
             {
-                return Json($"Card {cardNumber} allready added!");
+                return Json($"Card {cardNumber} already added!");
             }
         }
 

@@ -35,7 +35,7 @@ namespace BedeSlots.Web.Models
         [ExpiryDate(ErrorMessage = "Invalid expiry date!")]
         [Remote(action: "IsValidExpiryDate", controller: "Card", areaName: "")]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:MM/yyyy}")]
-        [DataType(DataType.Date),]
+        [DataType(DataType.Date)]
         [Display(Name = "Expiry Date")]
         public DateTime Expiry { get; set; }
 

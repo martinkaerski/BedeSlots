@@ -39,8 +39,8 @@
                     @if (User.Identity.IsAuthenticated)
                     {
                         
-                        <li> <a asp-area="" asp-controller="Deposit" asp-action="Index" class="glyphicon glyphicon-piggy-bank"> Deposit</a></li>
                         <li class="active"><a asp-area="" asp-controller="Game" asp-action="Index" class="glyphicon glyphicon-asterisk"> Games</a></li>
+                        <li> <a asp-area="" asp-controller="Deposit" asp-action="Index" class="glyphicon glyphicon-piggy-bank"> Deposit</a></li>
                     }
                     @if (User.Identity.IsAuthenticated)
                     {

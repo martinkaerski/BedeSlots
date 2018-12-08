@@ -32,30 +32,15 @@ namespace BedeSlots.Web.Controllers
             }
             var userId = HttpContext.User.Claims.FirstOrDefault().Value;
 
+            // simulate transfer between this application and current user's bank account
+            await this.userBalanceService.RetrieveMoneyAsync(model.RetrieveAmount, userId);
 
-            if (userId != null)
-            {
-                try
-                {
-                    // simulate transfer between this application and current user's bank account
-                    await this.userBalanceService.RetrieveMoneyAsync(model.RetrieveAmount, userId);
-                    var card = await this.cardService.GetCardDetailsByIdAsync(model.BankCardId);
-                    var cardLastFourDigits = card.LastFourDigit;
+            var card = await this.cardService.GetCardDetailsByIdAsync(model.BankCardId);
 
-                    var user = await this.userService.GetUserCurrencyByIdAsync(userId);
+            var userCurrency = await this.userService.GetUserCurrencyByIdAsync(userId);
 
-                    await this.transactionService.AddTransactionAsync(Data.Models.TransactionType.Withdraw, userId, cardLastFourDigits, model.RetrieveAmount, user);
-                }
-                catch (Exception)
-                {
-                    return Json(new { message = "Can't retrieve this amount of money!" });
-                }
-
-            }
-            else
-            {
-                return Json(new { message = "Invalid user!" });
-            }
+            await this.transactionService.AddTransactionAsync(Data.Models.TransactionType.Withdraw,
+                userId, card.LastFourDigit, model.RetrieveAmount, userCurrency);
 
             return ViewComponent("UserBalance");
         }
@@ -66,6 +51,21 @@ namespace BedeSlots.Web.Controllers
             var retrieveViewModel = new RetrieveViewModel();
 
             return View(retrieveViewModel);
+        }
+
+        [AcceptVerbs("Get", "Post")]
+        public async Task<JsonResult> HasEnoughMoneyAsync(decimal retrieveAmount)
+        {
+            var userBalance = await this.userBalanceService.GetUserBalanceByIdAsync(this.User.Claims.FirstOrDefault().Value);
+
+            if (userBalance >= retrieveAmount)
+            {
+                return Json(true);
+            }
+            else
+            {
+                return Json("Can't withdraw this amount of money!");
+            }
         }
     }
 }

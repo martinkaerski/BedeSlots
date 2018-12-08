@@ -20,17 +20,20 @@ namespace BedeSlots.Web.Controllers
         private readonly IGame game;
         private readonly UserManager<User> userManager;
         private readonly ITransactionService transactionService;
-        private readonly IUserBalanceService depositService;
+        private readonly IUserBalanceService userBalanceService;
         private readonly IUserService userService;
 
-        public GameController(IGame game, ITransactionService transactionService, UserManager<User> userManager, IUserBalanceService depositService, IUserService userService)
+        public GameController(IGame game, ITransactionService transactionService, UserManager<User> userManager, IUserBalanceService userBalanceService, IUserService userService)
         {
             this.game = game;
             this.transactionService = transactionService;
             this.userManager = userManager;
-            this.depositService = depositService;
+            this.userBalanceService = userBalanceService;
             this.userService = userService;
         }
+
+        [TempData]
+        public string StatusMessage { get; set; }
 
         public  IActionResult Index()
         {
@@ -40,6 +43,11 @@ namespace BedeSlots.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> Spin(GameStakeViewModel stakeModel)
         {
+            if (!ModelState.IsValid)
+            {
+                return Json(new { message = "Error! This bet is invalid!." });
+            }
+
             decimal stake = stakeModel.Stake;
             rows = stakeModel.Rows;
             cols = stakeModel.Cols;
@@ -54,7 +62,7 @@ namespace BedeSlots.Web.Controllers
             {
                 gameType = GameType._5x5;
             }
-            else if (rows == 5 && cols == 8)
+            else if (rows == 8 && cols == 5)
             {
                 gameType = GameType._8x5;
             }
@@ -68,7 +76,7 @@ namespace BedeSlots.Web.Controllers
 
             if (convertedUserBalance >= stake)
             {
-                await this.depositService.RetrieveMoneyAsync(stake, user.Id);
+                await this.userBalanceService.RetrieveMoneyAsync(stake, user.Id);
                 string gameTypeString = gameType.ToString().Substring(1);
 
                 var stakeTransaction = await this.transactionService.AddTransactionAsync(TransactionType.Stake, user.Id, gameTypeString, stake, user.Currency);
@@ -89,7 +97,7 @@ namespace BedeSlots.Web.Controllers
                 {
                     var winTransaction = await this.transactionService.AddTransactionAsync(TransactionType.Win, user.Id, gameTypeString, result.Money, user.Currency);
 
-                    await depositService.DepositMoneyAsync(result.Money, user.Id);
+                    await userBalanceService.DepositMoneyAsync(result.Money, user.Id);
                     model.Balance += result.Money;
                     model.Message = $"You won {Math.Round(result.Money, 2)}";
                 }
@@ -122,11 +130,12 @@ namespace BedeSlots.Web.Controllers
         }
 
         [AcceptVerbs("Get", "Post")]
-        public async Task<JsonResult> EnoughMoney(decimal amount, string userId)
+        public async Task<JsonResult> EnoughMoney(decimal stake)
         {
             var user = await userManager.GetUserAsync(HttpContext.User);
+            var userBalance = await this.userBalanceService.GetUserBalanceByIdAsync(user.Id);
 
-            return user.Balance >= 0 ? Json(true) : Json($"Not enough money!");
+            return stake <= userBalance ? Json(true) : Json($"You don't have enough money! Please reduce your bet or make a deposit.");
         }
 
         public async Task<IActionResult> SlotMachine(string size)
@@ -150,8 +159,7 @@ namespace BedeSlots.Web.Controllers
             }
 
             var user = await userManager.GetUserAsync(HttpContext.User);
-            var matrix = game.GenerateMatrix(rows, cols, null);
-            var stringMatrix = game.GetCharMatrix(matrix);
+            var stringMatrix = game.GenerateCharMatrix(rows, cols);
             var convertedUserBalance = await this.userService.GetUserBalanceByIdAsync(user.Id);
 
             var model = new GameSlotViewModel()

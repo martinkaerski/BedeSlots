@@ -14,10 +14,10 @@
         </div>
 
         @*<form id="spin-form" method="post" asp-controller="Game" asp-action="Spin">*@
-        <form id="spin-form">
+        <form id="spin-form" class="text-center">
             <div class="form-group col-md-6 col-md-offset-3">
-                <label asp-for="@Model.Stake" class="control-label"></label>
-                <input asp-for="@Model.Stake" id="stake" />
+                <label asp-for="@Model.Stake" class="control-label text-info"></label>
+                <input asp-for="@Model.Stake" id="stake" type ="number" min="1" class="form-control" />
                 <span asp-validation-for="@Model.Stake" class="text-danger"></span>
 
                 <input asp-for="@Model.Rows" id="rows" hidden />
@@ -28,167 +28,11 @@
     </div>
 </div>
 
-
 <audio id="spin" src="/audio/snip.mp3"></audio>
 <audio id="lose" src="/audio/lose.mp3"></audio>
 <audio id="win" src="~/audio/win.mp3"></audio>
 
-<button id="btn">play</button>
 @section Scripts{
-    <script>
-        var Directry = "/images/fruits/";
-        //Set variables for indicating path to folder includes images.
-        var list = new Array();
-        //var list indicates full path to the images including its file name.
-        list[1] = Directry +  "4a.png";
-        list[2] = Directry +  "4w.png";
-        list[3] = Directry +  "4p.png";
-        list[0] = Directry +  "4b.png";
-
-            //var list = "directory to folder" + "one of the numbers(i)" + "extention(png)".
-
-            //Create image of which src is list[i].
-        
-
-        var left = Math.floor(Math.random() * 3);
-        var center = Math.floor(Math.random() * 3);
-        var right = Math.floor(Math.random() * 3);
-
-    
-
-        $("#spin-form").submit(function (event) {
-            event.preventDefault();
-            const $spinForm = $("#spin-form");
-            const dataToSend = $spinForm.serialize();
-
- 
-            var counter = 0;
-            function slot() {
-                var Random = setInterval(function () {
-                    counter++;
-                    debugger;
-                    for (var i = 0; i < 4; i++) {
-                        for (var j = 0; j < 3; j++) {
-                            let rnd = Math.floor(Math.random() * 4);
-
-                            let idName = "" + i + j;
-                            let full = "#" + idName;
-
-                            console.log(full)
-                            var left = Math.floor(Math.random() * 3);
-                            let asd = list[left];
-                            console.log(asd);
-                          $("#p" + idName).attr("src", list[left]);
-                        }
-                    }
-
-                    //Show the pictures during the process.
-                    if (counter > 10) {
-                        counter = 0;
-                        clearInterval(Random);
-                        // After the result will be displayed the random number generating process should be closed.
-                    }
-                }, 100);
-            }
-
-            slot();
-
-
-            //for (var k = 0; k < 1000; k++) {
-
-            //for (var i = 0; i < 4; i++) {
-            //        for (var j = 0; j < 3; j++) {
-            //            let rnd = Math.floor(Math.random() * 4);
-
-            //            let idName = ""+ i + j;
-            //            let full = "#" + idName;
-
-            //            console.log(full)
-
-            //            if (i % 2 == 0) {
-            //                if (j % 2 == 0) {
-            //            $("#p" + idName).attr("src", "/images/fruits/4a.png");
-            //                }
-            //                else {
-            //                    $("#p" + idName).attr("src", "/images/fruits/4w.png");
-            //                }
-            //            }
-            //            else {
-            //                if (j % 2 == 0) {
-            //                    $("#p" + idName).attr("src", "/images/fruits/4b.png");
-            //                }
-            //                else {
-            //                    $("#p" + idName).attr("src", "/images/fruits/4p.png");
-            //                }
-            //            }
-            //    }
-            //    }
-
-            //}
-
-           
-
-            $.ajax({
-                url: '@Url.Action("Spin", "Game")',
-                type: "Post",
-                data: dataToSend,
-                success: function (partialViewResult) {
-                    $("#partial").empty();
-                    $("#partial").html(partialViewResult);
-            let container = $("#component-balance");
-                    $.get("/Game/BalanceViewComponent", function (data) { container.html(data); });
-                },
-                error: function (arg, data, value) {
-                    console.log(arg + data + value);
-                }
-            })
-
-
-            //let counter = 0;
-
-            //let Random = setInterval(function () {
-            //    counter++;
-
-            //    for (var i = 0; i < 4; i++) {
-            //        for (var j = 0; j < 3; j++) {
-            //            let rnd = Math.floor(Math.random() * 4);
-
-            //            let idName = ""+ i + j;
-            //            let full = "#" + idName;
-            //           // let top = "'" + full + "'";
-            //            console.log(full)
-            //            console.log($(full).src);
-            //            $("#11").attr("src", "a.png");
-
-            //        }
-            //    }
-
-            //    //Show the pictures during the process.
-            //    if (counter > 10) {
-            //        counter = 0;
-            //        clearInterval(Random);
-            //        // After the result will be displayed the random number generating process should be closed.
-            //    }
-            //}, 140)();
-        });
-
-        $(document).ready(function () {
-
-            let stake = function () { return '@Model.Stake' };
-            if (stake > 0) {
-                debugger;
-                $('#win').get(0).play();
-        }
-
-            $('#btn').click(function () {
-                if (false) {
-                    $('#win').get(0).play();
-                } else {
-                    $('#win').get(0).play();
-                }
-            });
-        });
-
-
-    </script>
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+    <script src="~/js/game.js"></script>
 }

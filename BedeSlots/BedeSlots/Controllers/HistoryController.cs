@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Threading.Tasks;
-using BedeSlots.Common;
+﻿using BedeSlots.Common;
 using BedeSlots.Data.Models;
 using BedeSlots.Services.Data.Contracts;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Globalization;
+using System.Linq;
 
 namespace BedeSlots.Web.Controllers
 {

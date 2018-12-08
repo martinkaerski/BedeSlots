@@ -24,7 +24,6 @@ namespace BedeSlots.Services.Data
         public IQueryable<TransactionDto> GetAllTransactions()
         {
             var transactions = this.context.Transactions
-                .Include(t => t.User)
                 .Select(t => new TransactionDto
                 {
                     Date = t.Date,

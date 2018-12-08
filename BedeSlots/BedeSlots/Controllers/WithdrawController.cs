@@ -1,13 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using BedeSlots.Services.Data.Contracts;
+using BedeSlots.Web.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
-using BedeSlots.Services.Data.Contracts;
-using BedeSlots.Web.Models;
-using Microsoft.AspNetCore.Mvc;
 
 namespace BedeSlots.Web.Controllers
 {
+    [Authorize]
     public class WithdrawController : Controller
     {
         private readonly IUserBalanceService userBalanceService;
@@ -23,13 +24,18 @@ namespace BedeSlots.Web.Controllers
             this.cardService = cardService;
         }
 
+        [TempData]
+        public string StatusMessage { get; set; }
+
         [HttpPost]
         public async Task<IActionResult> Retrieve(RetrieveViewModel model)
         {
             if (!ModelState.IsValid)
             {
-                return Json("Invalid parameters passed!");
+                this.StatusMessage = "Error! The withdraw is not completed.";
+                return PartialView("_StatusMessage", this.StatusMessage);
             }
+
             var userId = HttpContext.User.Claims.FirstOrDefault().Value;
 
             // simulate transfer between this application and current user's bank account

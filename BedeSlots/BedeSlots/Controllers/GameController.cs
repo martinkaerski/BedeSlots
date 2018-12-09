@@ -96,7 +96,7 @@ namespace BedeSlots.Web.Controllers
                 Cols = cols,
                 Matrix = result.Matrix,
                 Stake = result.Amount,
-                Balance = convertedUserBalance - stake,
+                Balance = Math.Round((convertedUserBalance - stake),2),
                 Currency = user.Currency
             };
 
@@ -125,6 +125,7 @@ namespace BedeSlots.Web.Controllers
             return stake <= userBalance ? Json(true) : Json($"You don't have enough money! Please reduce your bet or make a deposit.");
         }
 
+        [HttpGet]
         public async Task<IActionResult> SlotMachine(string size)
         {
             switch (size)
@@ -154,7 +155,7 @@ namespace BedeSlots.Web.Controllers
                 Rows = rows,
                 Cols = cols,
                 Matrix = stringMatrix,
-                Balance = convertedUserBalance,
+                Balance = Math.Round(convertedUserBalance,2),
                 Message = "Good luck!",
                 Currency = user.Currency
             };

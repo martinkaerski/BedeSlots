@@ -77,7 +77,7 @@ namespace BedeSlots.Controllers
                 }
                 if (result.IsLockedOut)
                 {
-                    _logger.LogWarning("User account locked out.");
+                    _logger.LogWarning("User account locked out. For more information please contact us.");
                     return RedirectToAction(nameof(Lockout));
                 }
                 else

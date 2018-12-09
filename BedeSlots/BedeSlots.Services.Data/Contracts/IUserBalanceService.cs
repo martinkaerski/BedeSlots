@@ -5,9 +5,9 @@ namespace BedeSlots.Services.Data.Contracts
 {
     public interface IUserBalanceService
     {
-        Task<User> DepositMoneyAsync(decimal amount, string userId);
+        Task<decimal> DepositMoneyAsync(decimal amount, string userId);
 
-        Task<User> ReduceMoneyAsync(decimal amount, string userId);
+        Task<decimal> ReduceMoneyAsync(decimal amount, string userId);
 
         Task<decimal> GetUserBalanceByIdAsync(string userId);
 

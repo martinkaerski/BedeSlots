@@ -127,6 +127,7 @@ namespace BedeSlots.Services.Data
         {
             var user = await this.GetUserByIdAsync(userId);
             user.IsDeleted = true;
+            user.LockoutEnabled = true;
             await this.context.SaveChangesAsync();
 
             return user;

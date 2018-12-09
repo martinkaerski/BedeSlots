@@ -22,7 +22,7 @@ namespace BedeSlots.Services.Data
             this.transactionService = transactionService;
         }
 
-        public async Task<User> DepositMoneyAsync(decimal amount, string userId)
+        public async Task<decimal> DepositMoneyAsync(decimal amount, string userId)
         {
             var user = await this.context.Users.FirstOrDefaultAsync(u => u.Id == userId);
 
@@ -35,10 +35,10 @@ namespace BedeSlots.Services.Data
 
             this.context.Update(user);
             await this.context.SaveChangesAsync();
-            return user;
+            return amount;
         }
 
-        public async Task<User> ReduceMoneyAsync(decimal amount, string userId)
+        public async Task<decimal> ReduceMoneyAsync(decimal amount, string userId)
         {
             var user = await this.context.Users.FirstOrDefaultAsync(u => u.Id == userId);
 
@@ -58,7 +58,7 @@ namespace BedeSlots.Services.Data
 
             this.context.Update(user);
             await this.context.SaveChangesAsync();
-            return user;
+            return amount;
         }
 
         public async Task<decimal> GetUserBalanceByIdAsync(string userId)
@@ -76,7 +76,7 @@ namespace BedeSlots.Services.Data
 
             if (user.Currency != CommonConstants.BaseCurrency)
             {
-                balance = await this.currencyConverterService.ConvertToBaseCurrency(balance, user.Currency);
+                balance = await this.currencyConverterService.ConvertFromBaseToOther(balance, user.Currency);
             }
 
             return balance;

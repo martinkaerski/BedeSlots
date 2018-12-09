@@ -4,10 +4,8 @@
 
     $rform.on('submit', function (e) {
         e.preventDefault();
-        debugger;
         var f = $(this);
         $.post(f.attr('action'), f.serialize(), function (serverData) {
-            debugger;
             if (serverData.message === undefined) {
                 $rform.find('input').val('');
                 

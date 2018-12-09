@@ -1,4 +1,6 @@
-﻿namespace BedeSlots.Web.Models
+﻿using Microsoft.AspNetCore.Mvc;
+
+namespace BedeSlots.Web.Models
 {
     public class RetrieveViewModel
     {

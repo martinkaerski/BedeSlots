@@ -18,7 +18,7 @@ namespace BedeSlots.Services.Data
             this.context = context;
         }
 
-        public async Task<Currency> GetUserCurrency(string userId)
+        public async Task<Currency> GetUserCurrencyAsync(string userId)
         {
             var currency = await this.context.Users
                 .Where(u => u.Id == userId)

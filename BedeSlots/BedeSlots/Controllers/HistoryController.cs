@@ -46,22 +46,15 @@ namespace BedeSlots.Web.Controllers
                 int pageSize = length != null ? int.Parse(length) : 0;
                 int skip = start != null ? int.Parse(start) : 0;
                 int recordsTotal = 0;
-
-                // TODO replace GetAllTransaction() with GetUserTransactionAsync but now is not implemented
+              
                 var transactions = this.transactionService.GetUserTransactionsAsync(HttpContext.User.Claims.FirstOrDefault().Value);
 
                 //Search
                 if (!string.IsNullOrEmpty(searchValue))
                 {
-                    transactions = transactions.Where(t =>
-                       EF.Functions.Like(t.User, "%" + searchValue + "%") ||
-                       EF.Functions.Like(t.Description, "%" + searchValue + "%") ||
-                       EF.Functions.Like(t.Type.ToString(), "%" + searchValue + "%"));
-
-                    //transactions = transactions
-                    //    .Where(t => t.User.Email.Contains(searchValue)
-                    //    || t.Description.Contains(searchValue)
-                    //    || t.Type.ToString().Contains(searchValue));
+                    transactions = transactions
+                        .Where(t => t.User.Contains(searchValue)
+                        || t.Description.Contains(searchValue));
                 }
 
                 //Sorting
@@ -90,7 +83,7 @@ namespace BedeSlots.Web.Controllers
                     {
                         Date = t.Date.ToString("G", CultureInfo.InvariantCulture),
                         Type = t.Type.ToString(),
-                        Amount = CommonConstants.BaseCurrencySymbol + t.Amount.ToString(),
+                        Amount = WebConstants.CurrencySymbols[Currency.BGN] + t.Amount.ToString(),
                         Description = t.Type == TransactionType.Deposit
                         ? $"Deposit with card **** **** **** {t.Description}"
                         : $"{t.Type.ToString()} on game {t.Description}",

@@ -8,6 +8,6 @@ namespace BedeSlots.Services.Data.Contracts
     {
         ICollection<Currency> GetAllCurrenciesNames();
 
-        Task<Currency> GetUserCurrency(string userId);
+        Task<Currency> GetUserCurrencyAsync(string userId);
     }
 }

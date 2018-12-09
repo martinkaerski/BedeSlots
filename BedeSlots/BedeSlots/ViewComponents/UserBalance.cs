@@ -13,21 +13,20 @@ namespace BedeSlots.Web.ViewComponents
 {
     public class UserBalance : ViewComponent
     {
-        private readonly IUserService userService;
+        private readonly IUserBalanceService userBalanceService;
         private readonly UserManager<User> userManager;
 
-        public UserBalance(IUserService userService, UserManager<User> userManager)
+        public UserBalance(IUserBalanceService userBalanceService, UserManager<User> userManager)
         {
-            this.userService = userService;
+            this.userBalanceService = userBalanceService;
             this.userManager = userManager;
         }
 
         public async Task<IViewComponentResult> InvokeAsync()
         {
-            //var id = HttpContext.User.Claims.FirstOrDefault();
             var user = await this.userManager.GetUserAsync(HttpContext.User);
 
-            var balance = await this.userService.GetUserBalanceByIdAsync(user.Id);
+            var balance = await this.userBalanceService.GetUserBalanceByIdAsync(user.Id);
             var userBalanceVM = new UserBalanceViewModel()
             {
                 Balance = Math.Round(balance, 2),

@@ -9,33 +9,39 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Text;
+using BedeSlots.Services.Data.Exceptions;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace BedeSlots.Services.Tests.CardService
 {
     [TestClass]
     public class GetUserCardsAsync_Should
     {
+        private ServiceProvider serviceProvider = new ServiceCollection().AddEntityFrameworkInMemoryDatabase().BuildServiceProvider();
+
         [TestMethod]
-        public async Task ThrowArgumentNullException_WhenNullParameterIsPassed()
+        public async Task ThrowServiceException_WhenNullParameterIsPassed()
         {
             var userStoreMock = new Mock<IUserStore<User>>();
             var userManager = new UserManager<User>(userStoreMock.Object, null, null, null, null, null, null, null, null);
             var contexOptions = new DbContextOptionsBuilder<BedeSlotsDbContext>()
-     .UseInMemoryDatabase(databaseName: "ThrowArgumentNullException_WhenNullParameterIsPassed").Options;
+     .UseInMemoryDatabase(databaseName: "ThrowServiceException_WhenNullParameterIsPassed").UseInternalServiceProvider(serviceProvider)
+     .Options;
 
             using (var bedeSlotsContext = new BedeSlotsDbContext(contexOptions))
             {
                 var cardService = new Data.CardService(bedeSlotsContext, userManager);
-                await Assert.ThrowsExceptionAsync<ArgumentNullException>(async () => await cardService.GetUserCardsAsync(null));
+                await Assert.ThrowsExceptionAsync<ServiceException>(async () => await cardService.GetUserCardsAsync(null));
             }
         }
         [TestMethod]
-        public async Task ThrowArgumentException_WhenUnexistingUserIdIsPassed()
+        public async Task ThrowServiceException_WhenUnexistingUserIdIsPassed()
         {
             var userStoreMock = new Mock<IUserStore<User>>();
             var userManager = new UserManager<User>(userStoreMock.Object, null, null, null, null, null, null, null, null);
             var contexOptions = new DbContextOptionsBuilder<BedeSlotsDbContext>()
-     .UseInMemoryDatabase(databaseName: "ThrowArgumentException_WhenUnexistingUserIdIsPassed").Options;
+     .UseInMemoryDatabase(databaseName: "ThrowServiceException_WhenUnexistingUserIdIsPassed")
+     .UseInternalServiceProvider(serviceProvider).Options;
 
             string notExistingId = "not existing id";
 
@@ -43,7 +49,7 @@ namespace BedeSlots.Services.Tests.CardService
             {
                 //    bedeSlotsContext.Users.Add()
                 var cardService = new Data.CardService(bedeSlotsContext, userManager);
-                await Assert.ThrowsExceptionAsync<ArgumentException>(async () =>
+                await Assert.ThrowsExceptionAsync<ServiceException>(async () =>
                 await cardService.GetUserCardsAsync(notExistingId));
             }
         }
@@ -54,7 +60,8 @@ namespace BedeSlots.Services.Tests.CardService
             var userManager = new UserManager<User>(userStoreMock.Object, null, null, null, null, null, null, null, null);
 
             var contexOptions = new DbContextOptionsBuilder<BedeSlotsDbContext>()
-     .UseInMemoryDatabase(databaseName: "ReturnUserCards_WhenExistingUserIdIsPassed").Options;
+     .UseInMemoryDatabase(databaseName: "ReturnUserCards_WhenExistingUserIdIsPassed")
+     .UseInternalServiceProvider(serviceProvider).Options;
 
             var user = new User();
             var card = new BankCard()

@@ -11,8 +11,6 @@ namespace BedeSlots.Services.Data.Contracts
     {
         Task<User> GetUserByIdAsync(string id);
 
-        Task<decimal> GetUserBalanceByIdAsync(string userId);
-
         IQueryable<UserDto> GetAllUsers();
 
         Task<string> GetUserRoleIdAsync(string userId);

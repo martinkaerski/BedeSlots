@@ -2,6 +2,7 @@
 using BedeSlots.Data.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System;
@@ -14,6 +15,8 @@ namespace BedeSlots.Services.Tests.CardService
     [TestClass]
     public class GetCardByIdAsync_Should
     {
+        private ServiceProvider serviceProvider = new ServiceCollection().AddEntityFrameworkInMemoryDatabase().BuildServiceProvider();
+
         [TestMethod]
         public async Task ReturnCardById_WhenValidIdIsPassed()
         {
@@ -21,7 +24,8 @@ namespace BedeSlots.Services.Tests.CardService
             var userManager = new UserManager<User>(userStoreMock.Object, null, null, null, null, null, null, null, null);
 
             var contexOptions = new DbContextOptionsBuilder<BedeSlotsDbContext>()
-     .UseInMemoryDatabase(databaseName: "ReturnUserCards_WhenExistingUserIdIsPassed").Options;
+     .UseInMemoryDatabase(databaseName: "ReturnUserCards_WhenExistingUserIdIsPassed").UseInternalServiceProvider(serviceProvider)
+     .Options;
 
             Data.CardService cardService;
 

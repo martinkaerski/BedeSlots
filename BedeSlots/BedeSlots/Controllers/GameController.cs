@@ -23,7 +23,9 @@ namespace BedeSlots.Web.Controllers
         private readonly IUserBalanceService userBalanceService;
         private readonly IUserService userService;
 
-        public GameController(IGame game, ITransactionService transactionService, UserManager<User> userManager, IUserBalanceService userBalanceService, IUserService userService)
+        public GameController(IGame game, ITransactionService transactionService,
+            UserManager<User> userManager, IUserBalanceService userBalanceService,
+            IUserService userService)
         {
             this.game = game;
             this.transactionService = transactionService;
@@ -72,7 +74,7 @@ namespace BedeSlots.Web.Controllers
             }
 
             var user = await userManager.GetUserAsync(HttpContext.User);
-            var convertedUserBalance = await this.userService.GetUserBalanceByIdAsync(user.Id);
+            var convertedUserBalance = await this.userBalanceService.GetUserBalanceByIdAsync(user.Id);
 
             if (convertedUserBalance >= stake)
             {
@@ -160,7 +162,7 @@ namespace BedeSlots.Web.Controllers
 
             var user = await userManager.GetUserAsync(HttpContext.User);
             var stringMatrix = game.GenerateCharMatrix(rows, cols);
-            var convertedUserBalance = await this.userService.GetUserBalanceByIdAsync(user.Id);
+            var convertedUserBalance = await this.userBalanceService.GetUserBalanceByIdAsync(user.Id);
 
             var model = new GameSlotViewModel()
             {

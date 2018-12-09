@@ -17,19 +17,30 @@ namespace BedeSlots.Services.Data
     {
         private readonly BedeSlotsDbContext context;
         private readonly UserManager<User> userManager;
-        
+
         public CardService(BedeSlotsDbContext context, UserManager<User> userManager)
         {
             this.context = context ?? throw new ArgumentNullException(nameof(context));
-            this.userManager = userManager;
+            this.userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
         }
 
         public async Task<ICollection<CardDetailsDto>> GetUserCardsAsync(string userId)
         {
+            if (userId == null)
+            {
+                throw new ArgumentNullException("userId is null!");
+            }
+            var exists = await this.context.Users.AnyAsync(u => u.Id == userId);
+
+            if (!exists)
+            {
+                throw new ArgumentException($"User with id:{userId} doesn't exist!");
+            }
+
             var cards = await context.BankCards
                 .Where(c => c.UserId == userId && c.IsDeleted == false)
                 .Select(c => new CardDetailsDto
-                {                    
+                {
                     LastFourDigit = c.Number.Substring(12),
                     CardholerName = c.CardholerName,
                     Cvv = c.CvvNumber,
@@ -43,6 +54,17 @@ namespace BedeSlots.Services.Data
 
         public async Task<ICollection<CardDto>> GetUserCardsLastNumbersAsync(string userId)
         {
+            if (userId == null)
+            {
+                throw new ArgumentNullException("userId is null!");
+            }
+            var exists = await this.context.Users.AnyAsync(u => u.Id == userId);
+
+            if (!exists)
+            {
+                throw new ArgumentException($"User with id:{userId} doesn't exist!");
+            }
+
             var cardsNumbers = await context.BankCards
                 .Where(c => c.UserId == userId && c.IsDeleted == false)
                 .Select(c => new CardDto
@@ -57,6 +79,17 @@ namespace BedeSlots.Services.Data
 
         public async Task<ICollection<CardDto>> GetUserCardsAllNumbersAsync(string userId)
         {
+            if (userId == null)
+            {
+                throw new ArgumentNullException("userId is null!");
+            }
+            var exists = await this.context.Users.AnyAsync(u => u.Id == userId);
+
+            if (!exists)
+            {
+                throw new ArgumentException($"User with id:{userId} doesn't exist!");
+            }
+
             var cardsNumbers = await context.BankCards
                 .Where(c => c.UserId == userId && c.IsDeleted == false)
                 .Select(c => new CardDto
@@ -101,9 +134,9 @@ namespace BedeSlots.Services.Data
         public async Task<BankCard> GetCardByIdAsync(int id)
         {
             var card = await this.context.BankCards
-                .Where(c => c.IsDeleted == false)
-                .Include(c => c.User)
-                .FirstOrDefaultAsync(c => c.Id == id);
+                                 .Where(c => c.IsDeleted == false)
+                                 .Include(c => c.User)
+                                 .FirstOrDefaultAsync(c => c.Id == id);
 
             if (card == null)
             {
@@ -115,7 +148,7 @@ namespace BedeSlots.Services.Data
 
         public bool CardExists(int bankCardId)
         {
-            return this.context.BankCards.Any(c => c.Id == bankCardId) ? true : false;
+            return this.context.BankCards.Any(c => c.Id == bankCardId);
         }
 
         public async Task<CardDetailsDto> GetCardDetailsByIdAsync(int id)

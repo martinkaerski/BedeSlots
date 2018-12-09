@@ -15,19 +15,22 @@ namespace BedeSlots.Web.Controllers
         private readonly IUserService userService;
         private readonly ITransactionService transactionService;
         private readonly ICardService cardService;
+        private readonly ICurrencyService currencyService;
 
-        public WithdrawController(IUserBalanceService userBalanceService, IUserService userService, ITransactionService transactionService, ICardService cardService)
+        public WithdrawController(IUserBalanceService userBalanceService, IUserService userService, ITransactionService transactionService, ICardService cardService, ICurrencyService currencyService)
         {
             this.userBalanceService = userBalanceService;
             this.userService = userService;
             this.transactionService = transactionService;
             this.cardService = cardService;
+            this.currencyService = currencyService;
         }
 
         [TempData]
         public string StatusMessage { get; set; }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Retrieve(RetrieveViewModel model)
         {
             if (!ModelState.IsValid)
@@ -44,13 +47,13 @@ namespace BedeSlots.Web.Controllers
                 try
                 {
                     // simulate transfer between this application and current user's bank account
-                    await this.userBalanceService.RetrieveMoneyAsync(model.RetrieveAmount, userId);
+                    await this.userBalanceService.ReduceMoneyAsync(model.Amount, userId);
                     var card = await this.cardService.GetCardDetailsByIdAsync(model.BankCardId);
                     var cardLastFourDigits = card.LastFourDigit;
 
-                    var user = await this.userService.GetUserCurrencyByIdAsync(userId);
+                    var userCurrency = await this.currencyService.GetUserCurrency(userId);
 
-                    await this.transactionService.AddTransactionAsync(Data.Models.TransactionType.Withdraw, userId, cardLastFourDigits, model.RetrieveAmount, user);
+                    await this.transactionService.AddTransactionAsync(Data.Models.TransactionType.Withdraw, userId, cardLastFourDigits, model.Amount, userCurrency);
                 }
                 catch (Exception)
                 {

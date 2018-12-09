@@ -4,6 +4,7 @@ using BedeSlots.Data.Models;
 using BedeSlots.Services.Data.Contracts;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace BedeSlots.Services.Data
@@ -37,7 +38,7 @@ namespace BedeSlots.Services.Data
             return user;
         }
 
-        public async Task<User> RetrieveMoneyAsync(decimal amount, string userId)
+        public async Task<User> ReduceMoneyAsync(decimal amount, string userId)
         {
             var user = await this.context.Users.FirstOrDefaultAsync(u => u.Id == userId);
 
@@ -62,9 +63,33 @@ namespace BedeSlots.Services.Data
 
         public async Task<decimal> GetUserBalanceByIdAsync(string userId)
         {
-            var user = await this.context.Users.FirstOrDefaultAsync(u => u.Id == userId);
+            var user = await this.context.Users
+                            .Where(u => u.Id == userId)
+                            .Select(u => new
+                            {
+                                Balance = u.Balance,
+                                Currency = u.Currency
+                            })
+                            .FirstOrDefaultAsync();
 
-            return user.Balance;
+            decimal balance = user.Balance;
+
+            if (user.Currency != CommonConstants.BaseCurrency)
+            {
+                balance = await this.currencyConverterService.ConvertToBaseCurrency(balance, user.Currency);
+            }
+
+            return balance;
+        }
+
+        public async Task<decimal> GetUserBalanceByIdInBaseCurrencyAsync(string userId)
+        {
+            var balance = await this.context.Users
+                            .Where(u => u.Id == userId)
+                            .Select(u => u.Balance)
+                            .FirstOrDefaultAsync();
+
+            return balance;
         }
     }
 }

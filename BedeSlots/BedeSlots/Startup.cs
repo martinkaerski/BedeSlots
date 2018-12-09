@@ -92,7 +92,6 @@ namespace BedeSlots
             services.AddTransient<IUserBalanceService, UserBalanceService>();
             services.AddTransient<ICurrencyConverterService, CurrencyConverterService>();
             services.AddTransient<IExchangeRateApiCallService, ExchangeRateApiCallService>();
-            //TODO: API Singleton?
             services.AddTransient<IExchangeRatesApiCaller, ExchangeRatesApiCaller>();
             services.AddSingleton<IGame, Game>();
         }

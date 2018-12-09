@@ -46,7 +46,7 @@ namespace BedeSlots.Services.Data
             };
 
             var cacheEntryOptions = new MemoryCacheEntryOptions()
-           .SetSlidingExpiration(TimeSpan.FromSeconds(60 * 60 * 24));
+           .SetAbsoluteExpiration(TimeSpan.FromSeconds(60 * 60 * 24));
 
             cache.Set(key, rates, cacheEntryOptions);
 

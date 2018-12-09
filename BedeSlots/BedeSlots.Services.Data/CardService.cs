@@ -122,7 +122,7 @@ namespace BedeSlots.Services.Data
         {
             var card = await this.context.BankCards
                 .Where(c => c.IsDeleted == false)
-                .Include(c => c.User).Select(c=> new CardDetailsDto()
+                .Select(c=> new CardDetailsDto()
                 {
                     Id = c.Id,
                     CardholerName = c.CardholerName,

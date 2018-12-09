@@ -35,20 +35,32 @@ namespace BedeSlots.Web.Controllers
         [TempData]
         public string StatusMessage { get; set; }
 
-        public  IActionResult Index()
+        public IActionResult Index()
         {
             return View();
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Spin(GameStakeViewModel stakeModel)
         {
             if (!ModelState.IsValid)
             {
-                return Json(new { message = "Error! This bet is invalid!." });
+                this.StatusMessage = "Error! The bet is not completed.";
+                return PartialView("_StatusMessage", this.StatusMessage);
             }
 
+            var user = await userManager.GetUserAsync(HttpContext.User);
+            var convertedUserBalance = await this.userBalanceService.GetUserBalanceByIdAsync(user.Id);
+
             decimal stake = stakeModel.Stake;
+            if (stake > convertedUserBalance)
+            {
+                ModelState.AddModelError("Stake", "Error! You don't have enough money to make this bet!");
+                this.StatusMessage = "Error! You don't have enough money to make this bet!";
+                return PartialView("_StatusMessage", this.StatusMessage);
+            }
+
             rows = stakeModel.Rows;
             cols = stakeModel.Cols;
 
@@ -71,62 +83,37 @@ namespace BedeSlots.Web.Controllers
                 return this.RedirectToAction("Index");
             }
 
-            var user = await userManager.GetUserAsync(HttpContext.User);
-            var convertedUserBalance = await this.userService.GetUserBalanceByIdAsync(user.Id);
+            await this.userBalanceService.ReduceMoneyAsync(stake, user.Id);
+            string gameTypeString = gameType.ToString().Substring(1);
 
-            if (convertedUserBalance >= stake)
+            var stakeTransaction = await this.transactionService.AddTransactionAsync(TransactionType.Stake, user.Id, gameTypeString, stake, user.Currency);
+
+            var result = game.Spin(rows, cols, stake);
+
+            var model = new GameSlotViewModel()
             {
-                await this.userBalanceService.RetrieveMoneyAsync(stake, user.Id);
-                string gameTypeString = gameType.ToString().Substring(1);
+                Rows = rows,
+                Cols = cols,
+                Matrix = result.Matrix,
+                Stake = result.Amount,
+                Balance = convertedUserBalance - stake,
+                Currency = user.Currency
+            };
 
-                var stakeTransaction = await this.transactionService.AddTransactionAsync(TransactionType.Stake, user.Id, gameTypeString, stake, user.Currency);
+            if (result.Amount > 0)
+            {
+                var winTransaction = await this.transactionService.AddTransactionAsync(TransactionType.Win, user.Id, gameTypeString, result.Amount, user.Currency);
 
-                var result = game.Spin(rows, cols, stake);
-
-                var model = new GameSlotViewModel()
-                {
-                    Rows = rows,
-                    Cols = cols,
-                    Matrix = result.Matrix,
-                    Stake = result.Money,
-                    Balance = convertedUserBalance - stake,
-                    Currency = user.Currency
-                };
-
-                if (result.Money > 0)
-                {
-                    var winTransaction = await this.transactionService.AddTransactionAsync(TransactionType.Win, user.Id, gameTypeString, result.Money, user.Currency);
-
-                    await userBalanceService.DepositMoneyAsync(result.Money, user.Id);
-                    model.Balance += result.Money;
-                    model.Message = $"You won {Math.Round(result.Money, 2)}";
-                }
-                else
-                {
-                    model.Message = $"Try again!";
-                }
-
-                return this.PartialView("_GameSlotPartial", model);
+                await userBalanceService.DepositMoneyAsync(result.Amount, user.Id);
+                model.Balance += result.Amount;
+                model.Message = $"You won {Math.Round(result.Amount, 2)}";
             }
             else
             {
-                var model = new GameSlotViewModel()
-                {
-                    Rows = rows,
-                    Cols = cols,
-                    Balance = user.Balance,
-                    Message = "Not enough money",
-                    Currency = user.Currency
-                };
-
-                return this.PartialView("_GameSlotPartial", model);
+                model.Message = $"Try again!";
             }
-        }
 
-        [HttpGet]
-        public IActionResult BalanceViewComponent()
-        {
-            return ViewComponent("UserBalance");
+            return this.PartialView("_GameSlotPartial", model);
         }
 
         [AcceptVerbs("Get", "Post")]
@@ -160,7 +147,7 @@ namespace BedeSlots.Web.Controllers
 
             var user = await userManager.GetUserAsync(HttpContext.User);
             var stringMatrix = game.GenerateCharMatrix(rows, cols);
-            var convertedUserBalance = await this.userService.GetUserBalanceByIdAsync(user.Id);
+            var convertedUserBalance = await this.userBalanceService.GetUserBalanceByIdAsync(user.Id);
 
             var model = new GameSlotViewModel()
             {

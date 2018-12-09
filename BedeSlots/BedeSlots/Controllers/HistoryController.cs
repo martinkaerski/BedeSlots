@@ -1,6 +1,7 @@
 ﻿using BedeSlots.Common;
 using BedeSlots.Data.Models;
 using BedeSlots.Services.Data.Contracts;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -9,6 +10,7 @@ using System.Linq;
 
 namespace BedeSlots.Web.Controllers
 {
+    [Authorize]
     public class HistoryController : Controller
     {
         private readonly ITransactionService transactionService;

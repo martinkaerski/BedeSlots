@@ -10,7 +10,7 @@ namespace BedeSlots.Games
             var apple = new Item
             {
                 Name = "a",
-                Coefficient = 0.4d,
+                Coefficient = 0.4m,
                 Probability = 45,
                 Type = ItemType.Normal
             };
@@ -18,7 +18,7 @@ namespace BedeSlots.Games
             var banana = new Item
             {
                 Name = "b",
-                Coefficient = 0.6d,
+                Coefficient = 0.6m,
                 Probability = 35,
                 Type = ItemType.Normal
             };
@@ -26,7 +26,7 @@ namespace BedeSlots.Games
             var pineapple = new Item
             {
                 Name = "p",
-                Coefficient = 0.8d,
+                Coefficient = 0.8m,
                 Probability = 15,
                 Type = ItemType.Normal
             };
@@ -34,7 +34,7 @@ namespace BedeSlots.Games
             var wildcard = new Item
             {
                 Name = "w",
-                Coefficient = 0d,
+                Coefficient = 0m,
                 Probability = 5,
                 Type = ItemType.Wildcard
 

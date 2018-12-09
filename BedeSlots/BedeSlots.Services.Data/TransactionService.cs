@@ -70,7 +70,6 @@ namespace BedeSlots.Services.Data
         {
             var transactions = this.context.Transactions
                .Where(t => t.UserId == id)
-               .Include(t => t.User)
                .Select(t => new TransactionDto
                {
                    Date = t.Date,

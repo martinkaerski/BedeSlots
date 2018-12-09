@@ -13,38 +13,38 @@ namespace BedeSlots.Games
             items = GenerateItems.GetItems();
         }
 
-        public SpinData Spin(int rows, int cols, decimal money)
+        public SpinData Spin(int rows, int cols, decimal amount)
         {
             var matrix = GenerateMatrix(rows, cols, items);
             var coefficient = CalculateCoefficient(matrix);
 
             if (coefficient != 0)
             {
-                money = (decimal)coefficient * money;
+                amount = coefficient * amount;
             }
             else
             {
-                money = 0;
+                amount = 0;
             }
 
             var spinData = new SpinData()
             {
                 Matrix = GetCharMatrix(matrix),
-                Money = money
+                Amount = amount
             };
 
             return spinData;
         }
 
-        private double CalculateCoefficient(Item[,] matrix)
+        private decimal CalculateCoefficient(Item[,] matrix)
         {
-            double finalCoef = 0;
+            decimal finalCoef = 0;
 
             for (int row = 0; row < matrix.GetLength(0); row++)
             {
                 Item previousItem = null;
                 bool isWinning = true;
-                double rowCoef = 0;
+                decimal rowCoef = 0;
 
                 for (int col = 0; col < matrix.GetLength(1); col++)
                 {

@@ -13,5 +13,7 @@ namespace BedeSlots.Web.Models.GameViewModels
         public int Rows { get; set; }
 
         public int Cols { get; set; }
+
+        public string StatusMessage { get; set; }
     }
 }

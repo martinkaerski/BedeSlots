@@ -2,6 +2,7 @@
 using BedeSlots.DTO;
 using BedeSlots.Services.Data.Contracts;
 using BedeSlots.Web.Areas.Admin.Models.Users;
+using BedeSlots.Web.Providers.Contracts;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -19,15 +20,15 @@ namespace BedeSlots.Web.Areas.Admin.Controllers
         private readonly IUserService userService;
         private readonly ITransactionService transactionService;
         private readonly UserManager<User> userManager;
-        private readonly RoleManager<IdentityRole> roleManager;
+        private readonly IPaginationProvider<UserDto> paginationProvider;
 
         public UsersController(IUserService userService, UserManager<User> userManager,
-            ITransactionService transactionService, RoleManager<IdentityRole> roleManager)
+            ITransactionService transactionService, IPaginationProvider<UserDto> paginationProvider)
         {
             this.userService = userService;
             this.transactionService = transactionService;
             this.userManager = userManager;
-            this.roleManager = roleManager;
+            this.paginationProvider = paginationProvider;
         }
 
         [HttpGet]
@@ -145,40 +146,13 @@ namespace BedeSlots.Web.Areas.Admin.Controllers
         {
             try
             {
-                var draw = HttpContext.Request.Form["draw"].FirstOrDefault();
-                // Skiping number of Rows count
-                var start = Request.Form["start"].FirstOrDefault();
-                // Paging Length 10,20
-                var length = Request.Form["length"].FirstOrDefault();
-                // Sort Column Name
-                var sortColumn = Request.Form["columns[" + Request.Form["order[0][column]"].FirstOrDefault() + "][name]"].FirstOrDefault();
-                // Sort Column Direction ( asc ,desc)
-                var sortColumnDirection = Request.Form["order[0][dir]"].FirstOrDefault();
-                // Search Value from (Search box)
-                var searchValue = Request.Form["search[value]"].FirstOrDefault();
+                string draw, sortColumn, sortColumnDirection, searchValue;
+                int pageSize, skip, recordsTotal;
 
-                //Paging Size (10,20,50,100)
-                int pageSize = length != null ? int.Parse(length) : 0;
-                int skip = start != null ? int.Parse(start) : 0;
-                int recordsTotal = 0;
+                this.paginationProvider.GetParameters(out draw, out sortColumn, out sortColumnDirection, out searchValue, out pageSize, out skip, out recordsTotal, HttpContext, Request);
 
                 var users = this.userService.GetAllUsers();
-
-                //Sorting
-                if (!(string.IsNullOrEmpty(sortColumn) && string.IsNullOrEmpty(sortColumnDirection)))
-                {
-                    if (sortColumnDirection == "asc")
-                    {
-                        users = users
-                            .OrderBy(u => u.GetType().GetProperty(sortColumn).GetValue(u));
-                    }
-                    else
-                    {
-                        users = users
-                            .OrderByDescending(u => u.GetType().GetProperty(sortColumn).GetValue(u));
-                    }
-                }
-
+                
                 //Search
                 if (!string.IsNullOrEmpty(searchValue))
                 {
@@ -188,6 +162,9 @@ namespace BedeSlots.Web.Areas.Admin.Controllers
                         || u.Username.Contains(searchValue)
                         || u.Email.Contains(searchValue));
                 }
+
+                //Sorting
+                users = this.paginationProvider.SortData(sortColumn, sortColumnDirection, users);
 
                 //Total number of rows count 
                 recordsTotal = users.Count();
@@ -216,5 +193,7 @@ namespace BedeSlots.Web.Areas.Admin.Controllers
                 return RedirectToAction("Index");
             }
         }
+
+       
     }
 }

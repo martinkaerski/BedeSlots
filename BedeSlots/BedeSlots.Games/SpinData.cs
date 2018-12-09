@@ -4,6 +4,6 @@
     {
         public string[,] Matrix { get; set; }
 
-        public decimal Money { get; set; }
+        public decimal Amount { get; set; }
     }
 }

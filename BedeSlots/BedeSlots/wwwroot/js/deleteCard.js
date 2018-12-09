@@ -1,4 +1,6 @@
-﻿$(function () {
+﻿//TODO: delete it?
+
+$(function () {
     const $deleteCardBtn = $('#delete-card-btn');
 
     $('#delete-card-btn').on('click', function () {

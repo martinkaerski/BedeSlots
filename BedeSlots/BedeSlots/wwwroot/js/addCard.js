@@ -22,6 +22,5 @@
                 $("#select-card-dropdown").html(serverData);
             }
         });
-
     });
 });

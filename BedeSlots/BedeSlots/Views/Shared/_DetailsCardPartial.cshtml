@@ -20,10 +20,11 @@
         <p>@Model.CardType</p>
     </div>
 
-    <div class="col-md-12 text-center">
-        <a id="delete-card-btn" asp-action="Delete" asp-route-id="@Model.Id" asp-route-confirm="true" onclick="return confirm('Do you really want to delete this card?')" class="btn btn-danger delete">Delete Card</a>
-    </div>
-
+    <form id="delete-card-form" asp-controller="Card" asp-action="Delete" asp-route-id="@Model.Id"  method="post" asp-route-confirm="true" class="text-center" onclick="return confirm('Do you really want to delete this card?')">
+        <div class="form-group">
+            <button class="btn btn-danger text-center" type="submit">Delete</button>
+        </div>
+    </form>
 </div>
 
 

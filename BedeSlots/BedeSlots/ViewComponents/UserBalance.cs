@@ -16,14 +16,15 @@ namespace BedeSlots.Web.ViewComponents
         private readonly IUserBalanceService userBalanceService;
         private readonly UserManager<User> userManager;
 
-        public UserBalance(IUserBalanceService userBalanceService, UserManager<User> userManager)
+        public UserBalance(UserManager<User> userManager, IUserBalanceService userBalanceService)
         {
-            this.userBalanceService = userBalanceService;
             this.userManager = userManager;
+            this.userBalanceService = userBalanceService;
         }
 
         public async Task<IViewComponentResult> InvokeAsync()
         {
+            //var id = HttpContext.User.Claims.FirstOrDefault();
             var user = await this.userManager.GetUserAsync(HttpContext.User);
 
             var balance = await this.userBalanceService.GetUserBalanceByIdAsync(user.Id);

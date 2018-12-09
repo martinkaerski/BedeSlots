@@ -22,13 +22,13 @@
             <div class="well form-group text-center">
                 <label asp-for="@Model.DepositAmount" class="control-label text-center"></label>
                 <div>
-                    <input type="number" asp-for="@Model.DepositAmount" placeholder="Amount" />
+                    <input type="number" id="deposit-amount" asp-for="@Model.DepositAmount" placeholder="Amount" />
                     @WebConstants.CurrencySymbols[Model.Currency]
                 </div>
                 <span asp-validation-for="@Model.DepositAmount" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <button class="btn btn-primary form-control" type="submit">Deposit</button>
+                <button id="deposit-btn" class="btn btn-primary form-control" type="submit">Deposit</button>
             </div>
         </form>
     </div>
@@ -90,6 +90,8 @@
 
     <script>
         let MyAppUrlSettings = {
-    CardDetailsUrl : '@Url.Action("Details","Card")'}
+            CardDetailsUrl: '@Url.Action("Details","Card")',
+            UserBalanceComponent: '@Url.Action("BalanceViewComponent", "UserBalance")'
+        }
     </script>
 }

@@ -6,16 +6,16 @@
 <h2 class="text-center">Withdraw</h2>
 <div class="row">
     <div class="col-md-4 col-md-offset-4">
-        <form id="retrieve-form" asp-controller="Withdraw" asp-action="Retrieve" method="post">
+        <form id="retrieve-form" asp-controller="Withdraw" asp-action="Withdraw" method="post">
             <div class="well form-group">
                 <div id="select-card-dropdown">
                     @await Component.InvokeAsync("SelectCard")
                 </div>
             </div>
             <div class="well form-group">
-                <label asp-for="@Model.RetrieveAmount" class="control-label"></label>
-                <input type="text" asp-for="@Model.RetrieveAmount" placeholder="Amount" class="form-control" />
-                <span asp-validation-for="@Model.RetrieveAmount" class="text-danger"></span>
+                <label asp-for="@Model.Amount" class="control-label"></label>
+                <input type="text" asp-for="@Model.Amount" placeholder="Amount" class="form-control" />
+                <span asp-validation-for="@Model.Amount" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <button class="btn btn-primary form-control" type="submit">Retrieve</button>
@@ -26,7 +26,6 @@
 
 @section Scripts {
     @await Html.PartialAsync("_ValidationScriptsPartial")
-
 
     <script src="~/js/retrieve.js"></script>
 }

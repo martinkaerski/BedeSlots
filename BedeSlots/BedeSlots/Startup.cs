@@ -8,6 +8,8 @@ using BedeSlots.Services.Data.Contracts;
 using BedeSlots.Services.External;
 using BedeSlots.Services.External.Contracts;
 using BedeSlots.Web.Extensions;
+using BedeSlots.Web.Providers;
+using BedeSlots.Web.Providers.Contracts;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -92,8 +94,8 @@ namespace BedeSlots
             services.AddTransient<IUserBalanceService, UserBalanceService>();
             services.AddTransient<ICurrencyConverterService, CurrencyConverterService>();
             services.AddTransient<IExchangeRateApiCallService, ExchangeRateApiCallService>();
-            //TODO: API Singleton?
             services.AddTransient<IExchangeRatesApiCaller, ExchangeRatesApiCaller>();
+            services.AddTransient(typeof(IPaginationProvider<>), typeof(PaginationProvider<>));
             services.AddSingleton<IGame, Game>();
         }
 

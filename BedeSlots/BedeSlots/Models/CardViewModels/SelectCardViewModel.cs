@@ -10,7 +10,7 @@ namespace BedeSlots.Web.Models
         {
         }
 
-        [Display(Name = "Cards")]
+        [Display(Name = "Please select a card")]
         public List<SelectListItem> CardsList { get; set; }
 
         [Required(ErrorMessage = "Please add a card before deposit!")]

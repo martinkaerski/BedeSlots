@@ -41,6 +41,7 @@ namespace BedeSlots.Web.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Deposit(DepositViewModel depositViewModel)
         {
             if (!ModelState.IsValid)
@@ -57,18 +58,12 @@ namespace BedeSlots.Web.Controllers
             var transaction = await this.transactionService.AddTransactionAsync(TransactionType.Deposit, user.Id,
                 cardNumberLastFourDigits, depositViewModel.DepositAmount, user.Currency);
 
-            var depositTransaction = await this.userBalanceService.DepositMoneyAsync(depositViewModel.DepositAmount, user.Id);
+            var deposit = await this.userBalanceService.DepositMoneyAsync(depositViewModel.DepositAmount, user.Id);
 
             string currencySymbol = WebConstants.CurrencySymbols[user.Currency];
             this.StatusMessage = $"Successfully deposit {depositViewModel.DepositAmount} {currencySymbol}.";
 
             return PartialView("_StatusMessage", this.StatusMessage);
-        }
-
-        [HttpGet]
-        public IActionResult BalanceViewComponent()
-        {
-            return ViewComponent("UserBalance");
         }
     }
 }

@@ -1,31 +1,29 @@
-﻿using BedeSlots.Data.Models;
+﻿using BedeSlots.Common;
+using BedeSlots.Data.Models;
 using BedeSlots.Services.Data.Contracts;
 using BedeSlots.Web.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using BedeSlots.Common;
 
 namespace BedeSlots.Web.Controllers
 {
+    [Authorize]
     public class CardController : Controller
     {
-        private readonly ICurrencyService currencyService;
         private readonly UserManager<User> userManager;
-        private readonly IUserService userService;
         private readonly ICardService cardService;
 
-        public CardController(ICurrencyService currencyService, UserManager<User> userManager, IUserService userService, ICardService cardService)
+        public CardController(UserManager<User> userManager, ICardService cardService)
         {
-            this.currencyService = currencyService;
             this.userManager = userManager;
-            this.userService = userService;
             this.cardService = cardService;
         }
-        
+
         [HttpGet]
         public IActionResult AddCard()
         {
@@ -54,7 +52,8 @@ namespace BedeSlots.Web.Controllers
             return ViewComponent("SelectCard");
         }
 
-        [HttpGet]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(int id)
         {
             var card = await this.cardService.DeleteCardAsync(id);
@@ -102,7 +101,7 @@ namespace BedeSlots.Web.Controllers
 
         [AcceptVerbs("Get", "Post")]
         public JsonResult IsValidExpiryDate(DateTime expiry)
-        {           
+        {
             if (expiry <= DateTime.Now)
             {
                 return Json($"Invalid expiry date!");

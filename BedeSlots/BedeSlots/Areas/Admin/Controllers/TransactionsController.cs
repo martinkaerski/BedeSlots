@@ -1,7 +1,9 @@
 ﻿using BedeSlots.Common;
 using BedeSlots.Data.Models;
+using BedeSlots.DTO;
 using BedeSlots.Services.Data.Contracts;
 using BedeSlots.Web.Areas.Admin.Models;
+using BedeSlots.Web.Providers.Contracts;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -18,11 +20,13 @@ namespace BedeSlots.Web.Areas.Admin.Controllers
     {
         private readonly ITransactionService transactionService;
         private readonly ICardService cardService;
+        private readonly IPaginationProvider<TransactionDto> paginationProvider;
 
-        public TransactionsController(ITransactionService transactionService, ICardService cardService)
+        public TransactionsController(ITransactionService transactionService, ICardService cardService, IPaginationProvider<TransactionDto> paginationProvider)
         {
             this.transactionService = transactionService;
             this.cardService = cardService;
+            this.paginationProvider = paginationProvider;
         }
 
         public IActionResult Index()
@@ -58,50 +62,25 @@ namespace BedeSlots.Web.Areas.Admin.Controllers
         [HttpPost]
         public IActionResult LoadData()
         {
-            //TODO: move it to service
             try
             {
-                var draw = HttpContext.Request.Form["draw"].FirstOrDefault();
-                // Skiping number of Rows count
-                var start = Request.Form["start"].FirstOrDefault();
-                // Paging Length 10,20
-                var length = Request.Form["length"].FirstOrDefault();
-                // Sort Column Name
-                var sortColumn = Request.Form["columns[" + Request.Form["order[0][column]"].FirstOrDefault() + "][name]"].FirstOrDefault();
-                // Sort Column Direction ( asc ,desc)
-                var sortColumnDirection = Request.Form["order[0][dir]"].FirstOrDefault();
-                // Search Value from (Search box)
-                var searchValue = Request.Form["search[value]"].FirstOrDefault();
+                string draw, sortColumn, sortColumnDirection, searchValue;
+                int pageSize, skip, recordsTotal;
 
-                //Paging Size (10,20,50,100)
-                int pageSize = length != null ? int.Parse(length) : 0;
-                int skip = start != null ? int.Parse(start) : 0;
-                int recordsTotal = 0;
-
+                this.paginationProvider.GetParameters(out draw, out sortColumn, out sortColumnDirection, out searchValue, out pageSize, out skip, out recordsTotal, HttpContext, Request );
+               
                 var transactions = this.transactionService.GetAllTransactions();
 
                 //Search
                 if (!String.IsNullOrEmpty(searchValue.ToLower()))
                 {
                     transactions = transactions
-                        .Where(t => t.User.ToLower().Contains(searchValue)
+                        .Where(t => t.User.Contains(searchValue)
                         || t.Description.Contains(searchValue));
                 }
 
                 //Sorting
-                if (!(String.IsNullOrEmpty(sortColumn) && String.IsNullOrEmpty(sortColumnDirection)))
-                {
-                    if (sortColumnDirection == "asc")
-                    {
-                        transactions = transactions
-                            .OrderBy(t => t.GetType().GetProperty(sortColumn).GetValue(t));
-                    }
-                    else
-                    {
-                        transactions = transactions
-                            .OrderByDescending(t => t.GetType().GetProperty(sortColumn).GetValue(t));
-                    }
-                }
+                transactions = this.paginationProvider.SortData(sortColumn, sortColumnDirection, transactions);
 
                 //Total number of rows count 
                 recordsTotal = transactions.Count();
@@ -142,6 +121,5 @@ namespace BedeSlots.Web.Areas.Admin.Controllers
                 return $"{type.ToString()} on game ";
             }
         }
-
     }
 }

@@ -9,7 +9,7 @@
             <tr>
                 @for (int col = 0; col < @Model.Cols; col++)
                 {
-                    <td><img id="p@(row.ToString() + col.ToString())"  class="gameimg img-responsive" src="~/images/fruits/@(Model.Rows + Model.Matrix[row,col] + ".png")" ></td>
+                    <td><img id="p@(row.ToString() + col.ToString())" class="gameimg img-responsive" src="~/images/fruits/@(Model.Rows + Model.Matrix[row,col] + ".png")" ></td>
                 }
             </tr>
         }
@@ -42,7 +42,7 @@
             else
             {
                 <strong>
-                    Earning: + @Model.Stake @WebConstants.CurrencySymbols[Model.Currency]
+                    Earning: +@Model.Stake @WebConstants.CurrencySymbols[Model.Currency]
                 </strong>
             }
         </div>

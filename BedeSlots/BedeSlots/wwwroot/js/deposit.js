@@ -1,20 +1,18 @@
 ﻿$(function () {
-    const dform = $('#depositform');
+    const $dform = $('#depositform');
+    $dform.append("__RequestVerificationToken", "@HtmlHelper.GetAntiForgeryToken()");
 
-    dform.on('submit', function (e) {
+    $dform.on('submit', function (e) {
         e.preventDefault();
         debugger;
         var f = $(this);
-        $.post(f.attr('action'), f.serialize(), function (res) {      
-                //dform.find('input').val('0');
-                //$('#balance-dropdown').empty();
-            //$('#balance-dropdown').html(res);      
-            if (typeof (res) === 'string') {
+        $.post(f.attr('action'), f.serialize(), function (res) {        
             $('#status-msg').html(res); 
-            }
+
+            $('#deposit-amount').val('0');
 
             let container = $("#component-balance");
-            $.get("/Deposit/BalanceViewComponent", function (data) { container.html(data); });
+            $.get(MyAppUrlSettings.UserBalanceComponent, function (data) { container.html(data); });
         });
     });
 });

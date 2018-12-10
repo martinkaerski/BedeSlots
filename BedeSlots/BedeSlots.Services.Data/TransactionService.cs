@@ -2,6 +2,7 @@
 using BedeSlots.Data.Models;
 using BedeSlots.DTO.TransactionDto;
 using BedeSlots.Services.Data.Contracts;
+using BedeSlots.Services.Data.Exceptions;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
@@ -16,8 +17,8 @@ namespace BedeSlots.Services.Data
 
         public TransactionService(BedeSlotsDbContext context, ICurrencyConverterService currencyConverterService)
         {
-            this.context = context ?? throw new ArgumentNullException(nameof(context));
-            this.currencyConverterService = currencyConverterService;
+            this.context = context ?? throw new ServiceException(nameof(context));
+            this.currencyConverterService = currencyConverterService ?? throw new ServiceException(nameof(currencyConverterService));
         }
 
         public IQueryable<TransactionManageDto> GetAllTransactions()
@@ -38,6 +39,10 @@ namespace BedeSlots.Services.Data
 
         public async Task<Transaction> GetTransactionByIdAsync(int id)
         {
+            if (!await this.context.Transactions.AnyAsync(t => t.Id == id))
+            {
+                throw new ServiceException($"Transaction with Id:{id} not exist!");
+            }
             var transaction = await this.context.Transactions
                 .Include(t => t.User)
                 .ThenInclude(u => u.Cards)
@@ -48,6 +53,15 @@ namespace BedeSlots.Services.Data
 
         public async Task<Transaction> AddTransactionAsync(TransactionType type, string userId, string description, decimal amount, Currency currency)
         {
+            if (userId == null)
+            {
+                throw new ServiceException("UserId can not be null!");
+            }
+            if (amount < 0)
+            {
+                throw new ServiceException("Amount must be positive number!");
+            }
+
             var convertedAmount = await this.currencyConverterService.ConvertToBaseCurrency(amount, currency);
 
             var transaction = new Transaction()

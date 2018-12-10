@@ -8,7 +8,7 @@ namespace BedeSlots.Services.Tests.UserBalance
     [TestClass]
    public class Constructor_Should
     {
-        [TestMethod]
-        public void 
+        //[TestMethod]
+        //public void 
     }
 }

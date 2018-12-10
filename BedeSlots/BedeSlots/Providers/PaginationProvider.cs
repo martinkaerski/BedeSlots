@@ -18,7 +18,7 @@ namespace BedeSlots.Web.Providers
             // Sort Column Direction ( asc ,desc)
             sortColumnDirection = httpRequest.Form["order[0][dir]"].FirstOrDefault();
             // Search Value from (Search box)
-            searchValue = httpRequest.Form["search[value]"].FirstOrDefault();
+            searchValue = httpRequest.Form["search[value]"].FirstOrDefault().ToLower();
 
             //Paging Size (10,20,50,100)
             pageSize = length != null ? int.Parse(length) : 0;

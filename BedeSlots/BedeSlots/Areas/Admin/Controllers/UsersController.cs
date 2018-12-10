@@ -157,10 +157,10 @@ namespace BedeSlots.Web.Areas.Admin.Controllers
                 if (!string.IsNullOrEmpty(searchValue))
                 {
                     users = users
-                        .Where(u => u.Firstname.Contains(searchValue)
-                        || u.Lastname.Contains(searchValue)
-                        || u.Username.Contains(searchValue)
-                        || u.Email.Contains(searchValue));
+                        .Where(u => u.Firstname.ToLower().Contains(searchValue)
+                        || u.Lastname.ToLower().Contains(searchValue)
+                        || u.Username.ToLower().Contains(searchValue)
+                        || u.Email.ToLower().Contains(searchValue));
                 }
 
                 //Sorting

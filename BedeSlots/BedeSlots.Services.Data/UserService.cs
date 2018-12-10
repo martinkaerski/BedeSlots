@@ -3,7 +3,6 @@ using BedeSlots.Data.Models;
 using BedeSlots.DTO;
 using BedeSlots.Services.Data.Contracts;
 using BedeSlots.Services.Data.Exceptions;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
@@ -15,7 +14,6 @@ namespace BedeSlots.Services.Data
     public class UserService : IUserService
     {
         private readonly BedeSlotsDbContext context;
-        private readonly ITransactionService transactionService;
         private readonly UserManager<User> userManager;
 
         public UserService(BedeSlotsDbContext bedeSlotsDbContext, UserManager<User> userManager)

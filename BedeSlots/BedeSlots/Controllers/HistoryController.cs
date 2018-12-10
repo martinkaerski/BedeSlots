@@ -1,5 +1,6 @@
 ﻿using BedeSlots.Data.Models;
 using BedeSlots.DTO;
+using BedeSlots.DTO.TransactionDto;
 using BedeSlots.Services.Data.Contracts;
 using BedeSlots.Web.Providers.Contracts;
 using Microsoft.AspNetCore.Authorization;
@@ -16,11 +17,11 @@ namespace BedeSlots.Web.Controllers
     public class HistoryController : Controller
     {
         private readonly ITransactionService transactionService;
-        private readonly IPaginationProvider<TransactionDto> paginationProvider;
+        private readonly IPaginationProvider<TransactionHistoryDto> paginationProvider;
         private readonly UserManager<User> userManager;
         private readonly ICurrencyConverterService currencyConverterService;
 
-        public HistoryController(ITransactionService transactionService, IPaginationProvider<TransactionDto> paginationProvider, UserManager<User> userManager, ICurrencyConverterService currencyConverterService)
+        public HistoryController(ITransactionService transactionService, IPaginationProvider<TransactionHistoryDto> paginationProvider, UserManager<User> userManager, ICurrencyConverterService currencyConverterService)
         {
             this.transactionService = transactionService;
             this.paginationProvider = paginationProvider;
@@ -45,14 +46,14 @@ namespace BedeSlots.Web.Controllers
 
                 this.paginationProvider.GetParameters(out draw, out sortColumn, out sortColumnDirection, out searchValue, out pageSize, out skip, out recordsTotal, HttpContext, Request);
 
-                var transactions = this.transactionService.GetUserTransactionsAsync(HttpContext.User.Claims.FirstOrDefault().Value);
+                var transactions = this.transactionService.GetUserTransactionsAsync(user.Id);
 
                 //Search
                 if (!string.IsNullOrEmpty(searchValue))
                 {
                     transactions = transactions
-                        .Where(t => t.User.Contains(searchValue)
-                        || t.Description.Contains(searchValue));
+                        .Where(t => t.Type.ToString().ToLower().Contains(searchValue)
+                        || (t.Description.ToLower().Contains(searchValue)));
                 }
 
                 //Sorting
@@ -70,9 +71,7 @@ namespace BedeSlots.Web.Controllers
                         Date = t.Date.ToString("G", CultureInfo.InvariantCulture),
                         Type = t.Type.ToString(),
                         Amount = Math.Round(this.currencyConverterService.ConvertFromBaseToOther(t.Amount, user.Currency).Result, 2) + WebConstants.CurrencySymbols[user.Currency],
-                        Description = t.Type == TransactionType.Deposit
-                        ? $"Deposit with card **** **** **** {t.Description}"
-                        : $"{t.Type.ToString()} on game {t.Description}",
+                        Description = GetDescriptionByTransactionType(t.Type) + t.Description
                     })
                     .ToList();
 
@@ -83,6 +82,13 @@ namespace BedeSlots.Web.Controllers
             {
                 throw;
             }
+        }
+
+        private string GetDescriptionByTransactionType(TransactionType type)
+        {
+            return type == TransactionType.Deposit || type == TransactionType.Withdraw
+                ? $"{type.ToString()} with card **** **** **** "
+                : $"{type.ToString()} on game ";
         }
     }
 }

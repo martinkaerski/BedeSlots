@@ -1,6 +1,7 @@
 ﻿using BedeSlots.Common;
 using BedeSlots.Data.Models;
 using BedeSlots.DTO;
+using BedeSlots.DTO.TransactionDto;
 using BedeSlots.Services.Data.Contracts;
 using BedeSlots.Web.Areas.Admin.Models;
 using BedeSlots.Web.Providers.Contracts;
@@ -20,9 +21,9 @@ namespace BedeSlots.Web.Areas.Admin.Controllers
     {
         private readonly ITransactionService transactionService;
         private readonly ICardService cardService;
-        private readonly IPaginationProvider<TransactionDto> paginationProvider;
+        private readonly IPaginationProvider<TransactionManageDto> paginationProvider;
 
-        public TransactionsController(ITransactionService transactionService, ICardService cardService, IPaginationProvider<TransactionDto> paginationProvider)
+        public TransactionsController(ITransactionService transactionService, ICardService cardService, IPaginationProvider<TransactionManageDto> paginationProvider)
         {
             this.transactionService = transactionService;
             this.cardService = cardService;
@@ -75,8 +76,8 @@ namespace BedeSlots.Web.Areas.Admin.Controllers
                 if (!String.IsNullOrEmpty(searchValue.ToLower()))
                 {
                     transactions = transactions
-                        .Where(t => t.User.Contains(searchValue)
-                        || t.Description.Contains(searchValue));
+                        .Where(t => t.User.ToLower().Contains(searchValue)
+                        || t.Description.ToLower().Contains(searchValue));
                 }
 
                 //Sorting
@@ -110,6 +111,7 @@ namespace BedeSlots.Web.Areas.Admin.Controllers
                 throw;
             }
         }
+
         private string GetDescriptionByTransactionType(TransactionType type)
         {
             if (type == TransactionType.Deposit || type == TransactionType.Withdraw)

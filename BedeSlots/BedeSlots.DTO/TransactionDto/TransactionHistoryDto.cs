@@ -1,9 +1,9 @@
 ﻿using BedeSlots.Data.Models;
 using System;
 
-namespace BedeSlots.DTO
+namespace BedeSlots.DTO.TransactionDto
 {
-   public class TransactionDto
+    public class TransactionHistoryDto
     {
         public DateTime Date { get; set; }
 
@@ -12,7 +12,5 @@ namespace BedeSlots.DTO
         public decimal Amount { get; set; }
 
         public string Description { get; set; }
-
-        public string User { get; set; }
     }
 }

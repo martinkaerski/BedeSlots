@@ -11,9 +11,9 @@ namespace BedeSlots.Services.Data.Contracts
     {
         Task<ICollection<CardDetailsDto>> GetUserCardsAsync(string userId);
 
-        Task<ICollection<CardDto>> GetUserCardsLastNumbersAsync(string userId);
+        Task<ICollection<CardNumberDto>> GetUserCardsLastNumbersAsync(string userId);
 
-        Task<ICollection<CardDto>> GetUserCardsAllNumbersAsync(string userId);
+        Task<ICollection<CardNumberDto>> GetUserCardsAllNumbersAsync(string userId);
 
         Task<BankCard> AddCardAsync(string cardNumber, string cardholerName, string cvv, DateTime expiryDate, CardType cardType, string userId);
 

@@ -53,7 +53,7 @@ namespace BedeSlots.Services.Data
             return cards;
         }
 
-        public async Task<ICollection<CardDto>> GetUserCardsLastNumbersAsync(string userId)
+        public async Task<ICollection<CardNumberDto>> GetUserCardsLastNumbersAsync(string userId)
         {
             if (userId == null)
             {
@@ -68,7 +68,7 @@ namespace BedeSlots.Services.Data
 
             var cardsNumbers = await context.BankCards
                 .Where(c => c.UserId == userId && c.IsDeleted == false)
-                .Select(c => new CardDto
+                .Select(c => new CardNumberDto
                 {
                     Id = c.Id,
                     Number = c.Number.Substring(12)
@@ -78,7 +78,7 @@ namespace BedeSlots.Services.Data
             return cardsNumbers;
         }
 
-        public async Task<ICollection<CardDto>> GetUserCardsAllNumbersAsync(string userId)
+        public async Task<ICollection<CardNumberDto>> GetUserCardsAllNumbersAsync(string userId)
         {
             if (userId == null)
             {
@@ -93,7 +93,7 @@ namespace BedeSlots.Services.Data
 
             var cardsNumbers = await context.BankCards
                 .Where(c => c.UserId == userId && c.IsDeleted == false)
-                .Select(c => new CardDto
+                .Select(c => new CardNumberDto
                 {
                     Id = c.Id,
                     Number = c.Number

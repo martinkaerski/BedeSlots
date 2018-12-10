@@ -1,7 +1,12 @@
-﻿@model RetrieveViewModel
+﻿@model WithdrawViewModel
 @{
     ViewData["Title"] = "Withdraw";
 }
+
+<div id="status-msg">
+    <partial name="_StatusMessage" model="@Model.StatusMessage" />
+</div>
+
 
 <h2 class="text-center">Withdraw</h2>
 <div class="row">
@@ -12,9 +17,12 @@
                     @await Component.InvokeAsync("SelectCard")
                 </div>
             </div>
-            <div class="well form-group">
+            <div class="well form-group text-center">
                 <label asp-for="@Model.Amount" class="control-label"></label>
-                <input type="text" asp-for="@Model.Amount" placeholder="Amount" class="form-control" />
+                <div>
+                    <input type="number" id="withdraw-amount" asp-for="@Model.Amount" placeholder="Amount" />
+                    <span class="text-info">@WebConstants.CurrencySymbols[Model.Currency]</span>
+                </div>
                 <span asp-validation-for="@Model.Amount" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -26,6 +34,11 @@
 
 @section Scripts {
     @await Html.PartialAsync("_ValidationScriptsPartial")
+    <script src="~/js/withdraw.js"></script>
 
-    <script src="~/js/retrieve.js"></script>
+    <script>
+        let MyAppUrlSettings = {
+            UserBalanceComponent: '@Url.Action("BalanceViewComponent", "UserBalance")'
+        }
+    </script>
 }

@@ -21,5 +21,7 @@ namespace BedeSlots.Web
             { Currency.GBP, "£" },
             { Currency.BGN, "lv" }
         };
+
+        public const double MaxAmount = 1000000000d;
     }
 }

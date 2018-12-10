@@ -61,18 +61,18 @@ function Spin (event) {
 
                 $("#partial").empty();
                 $("#partial").html(partialViewResult);
-                $stake = $('#stake-earning').val();
 
-                debugger;
-                if ($stake > 0) {
-                    document.getElementById('win-audio').play();
-                }
+                //$stake = $('#stake-earning').val();
+
+                //debugger;
+                //if ($stake > 0) {
+                //    document.getElementById('win-audio').play();
+                //}
                 let container = $("#component-balance");
                 $.get(MyAppUrlSettings.UserBalanceComponent, function (data) { container.html(data); });
             },
             error: function (res) {
                 debugger;
-
                 $("#status-msg").empty();                
                 $("#status-msg").html(res);                
             }

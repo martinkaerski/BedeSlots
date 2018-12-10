@@ -28,6 +28,7 @@ namespace BedeSlots.Web.Models
 
         [Required]
         [StringLength(4, MinimumLength = 3, ErrorMessage = "The CVV should be 3 or 4 digits.")]
+        [RegularExpression("^[0-9]+$", ErrorMessage = "The CVV should contains only digits.")]
         [Display(Name = "CVV")]
         public string Cvv { get; set; }
 

@@ -22,8 +22,8 @@
             <div class="well form-group text-center">
                 <label asp-for="@Model.DepositAmount" class="control-label text-center"></label>
                 <div>
-                    <input type="number" id="deposit-amount" asp-for="@Model.DepositAmount" placeholder="Amount" />
-                    @WebConstants.CurrencySymbols[Model.Currency]
+                    <input type="number" id="deposit-amount" asp-for="@Model.DepositAmount" placeholder="Amount" />                    
+                    <span class="text-info">@WebConstants.CurrencySymbols[Model.Currency]</span>
                 </div>
                 <span asp-validation-for="@Model.DepositAmount" class="text-danger"></span>
             </div>

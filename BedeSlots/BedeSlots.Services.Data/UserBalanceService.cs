@@ -14,17 +14,25 @@ namespace BedeSlots.Services.Data
     {
         private readonly BedeSlotsDbContext context;
         private readonly ICurrencyConverterService currencyConverterService;
-        private readonly ITransactionService transactionService;
 
-        public UserBalanceService(BedeSlotsDbContext context, ICurrencyConverterService currencyConverterService, ITransactionService transactionService)
+        public UserBalanceService(BedeSlotsDbContext context, ICurrencyConverterService currencyConverterService)
         {
             this.context = context ?? throw new ServiceException(nameof(context));
             this.currencyConverterService = currencyConverterService ?? throw new ServiceException(nameof(currencyConverterService));
-            this.transactionService = transactionService ?? throw new ServiceException(nameof(transactionService));
         }
 
         public async Task<decimal> DepositMoneyAsync(decimal amount, string userId)
         {
+            if (userId == null)
+            {
+                throw new ServiceException("UserId can not be null!");
+            }
+
+            if (amount <= 0)
+            {
+                throw new ServiceException("Amount must be posititive!");
+            }
+
             var user = await this.context.Users.FirstOrDefaultAsync(u => u.Id == userId);
 
             if (user.Currency != CommonConstants.BaseCurrency)
@@ -36,11 +44,22 @@ namespace BedeSlots.Services.Data
 
             this.context.Update(user);
             await this.context.SaveChangesAsync();
+
             return amount;
         }
 
         public async Task<decimal> ReduceMoneyAsync(decimal amount, string userId)
         {
+            if (userId == null)
+            {
+                throw new ServiceException("UserId can not be null!");
+            }
+
+            if (amount <= 0)
+            {
+                throw new ServiceException("Amount must be posititive!");
+            }
+
             var user = await this.context.Users.FirstOrDefaultAsync(u => u.Id == userId);
 
             if (user.Currency != CommonConstants.BaseCurrency)
@@ -54,7 +73,7 @@ namespace BedeSlots.Services.Data
             }
             else
             {
-                throw new InvalidOperationException("Not enough money!");
+                throw new ServiceException("Not enough money!");
             }
 
             this.context.Update(user);
@@ -64,14 +83,26 @@ namespace BedeSlots.Services.Data
 
         public async Task<decimal> GetUserBalanceByIdAsync(string userId)
         {
+            if (userId == null)
+            {
+                throw new ServiceException("UserId can not be null!");
+            }
+
+
             var user = await this.context.Users
                             .Where(u => u.Id == userId)
                             .Select(u => new
                             {
-                                Balance = u.Balance,
-                                Currency = u.Currency
+                                u.Balance,
+                                u.Currency
                             })
                             .FirstOrDefaultAsync();
+
+            if (user == null)
+            {
+                throw new ServiceException($"User with Id:{userId} not exist!");
+            }
+
 
             decimal balance = user.Balance;
 
@@ -85,6 +116,15 @@ namespace BedeSlots.Services.Data
 
         public async Task<decimal> GetUserBalanceByIdInBaseCurrencyAsync(string userId)
         {
+            if (userId == null)
+            {
+                throw new ServiceException("UserId can not be null!");
+            }
+            if (!await context.Users.AnyAsync(u => u.Id == userId))
+            {
+                throw new ServiceException($"User with Id:{userId} not exist!");
+            }
+
             var balance = await this.context.Users
                             .Where(u => u.Id == userId)
                             .Select(u => u.Balance)

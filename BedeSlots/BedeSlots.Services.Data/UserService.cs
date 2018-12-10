@@ -15,7 +15,6 @@ namespace BedeSlots.Services.Data
     public class UserService : IUserService
     {
         private readonly BedeSlotsDbContext context;
-        private readonly ITransactionService transactionService;
         private readonly UserManager<User> userManager;
 
         public UserService(BedeSlotsDbContext bedeSlotsDbContext, UserManager<User> userManager)

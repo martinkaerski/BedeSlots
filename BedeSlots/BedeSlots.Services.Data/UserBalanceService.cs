@@ -2,6 +2,7 @@
 using BedeSlots.Data;
 using BedeSlots.Data.Models;
 using BedeSlots.Services.Data.Contracts;
+using BedeSlots.Services.Data.Exceptions;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
@@ -17,9 +18,9 @@ namespace BedeSlots.Services.Data
 
         public UserBalanceService(BedeSlotsDbContext context, ICurrencyConverterService currencyConverterService, ITransactionService transactionService)
         {
-            this.context = context;
-            this.currencyConverterService = currencyConverterService;
-            this.transactionService = transactionService;
+            this.context = context ?? throw new ServiceException(nameof(context));
+            this.currencyConverterService = currencyConverterService ?? throw new ServiceException(nameof(currencyConverterService));
+            this.transactionService = transactionService ?? throw new ServiceException(nameof(transactionService));
         }
 
         public async Task<decimal> DepositMoneyAsync(decimal amount, string userId)

@@ -4,6 +4,7 @@ using BedeSlots.DTO;
 using BedeSlots.DTO.BankCardDto;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System;
@@ -17,6 +18,8 @@ namespace BedeSlots.Services.Tests.CardService
     [TestClass]
     public class GetUserCardsLastNumbersAsync_Should
     {
+        private ServiceProvider serviceProvider = new ServiceCollection().AddEntityFrameworkInMemoryDatabase().BuildServiceProvider();
+
         [TestMethod]
         public async Task ThrowArgumentNullException_WhenUserIdIsNull()
         {
@@ -26,7 +29,8 @@ namespace BedeSlots.Services.Tests.CardService
             Data.CardService cardService;
 
             var contexOptions = new DbContextOptionsBuilder<BedeSlotsDbContext>()
-     .UseInMemoryDatabase(databaseName: "ThrowArgumentNullException_WhenUserIdIsNull").Options;
+     .UseInMemoryDatabase(databaseName: "ThrowArgumentNullException_WhenUserIdIsNull").UseInternalServiceProvider(serviceProvider)
+     .Options;
 
             using (var bedeSlotsContext = new BedeSlotsDbContext(contexOptions))
             {
@@ -44,7 +48,8 @@ namespace BedeSlots.Services.Tests.CardService
             Data.CardService cardService;
 
             var contexOptions = new DbContextOptionsBuilder<BedeSlotsDbContext>()
-     .UseInMemoryDatabase(databaseName: "ThrowArgumentException_WhenNotExistingUserIdIsPassed").Options;
+     .UseInMemoryDatabase(databaseName: "ThrowArgumentException_WhenNotExistingUserIdIsPassed").UseInternalServiceProvider(serviceProvider)
+     .Options;
 
             using (var bedeSlotsContext = new BedeSlotsDbContext(contexOptions))
             {
@@ -72,7 +77,8 @@ namespace BedeSlots.Services.Tests.CardService
             };
 
             var contexOptions = new DbContextOptionsBuilder<BedeSlotsDbContext>()
-     .UseInMemoryDatabase(databaseName: "ReturnCollectionOfCardNumbersLastFourDigitsInDatabase_WhenValidUserIdIsPassed").Options;
+     .UseInMemoryDatabase(databaseName: "ReturnCollectionOfCardNumbersLastFourDigitsInDatabase_WhenValidUserIdIsPassed").UseInternalServiceProvider(serviceProvider)
+     .Options;
 
             using (var bedeSlotsContext = new BedeSlotsDbContext(contexOptions))
             {

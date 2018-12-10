@@ -28,13 +28,14 @@ namespace BedeSlots.Services.Data
         {
             if (userId == null)
             {
-                throw new ArgumentNullException("userId is null!");
+                throw new ServiceException("userId is null!");
             }
-            var exists = await this.context.Users.AnyAsync(u => u.Id == userId);
+
+            var exists = await this.context.Users.AnyAsync(u => u.Id == userId && u.IsDeleted == false);
 
             if (!exists)
             {
-                throw new ArgumentException($"User with id:{userId} doesn't exist!");
+                throw new ServiceException($"User with id:{userId} doesn't exist!");
             }
 
             var cards = await context.BankCards

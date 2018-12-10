@@ -15,7 +15,7 @@ namespace BedeSlots.Web.Models
         [Required]
         [Range(1, double.MaxValue, ErrorMessage = "The minimum bet amount is 1!")]
         //[Remote(action: "EnoughMoney", controller: "Game", areaName: "")]
-        public decimal Stake { get; set; }
+        public decimal Amount { get; set; }
 
         public decimal Balance { get; set; }
 

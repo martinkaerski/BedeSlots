@@ -1,6 +1,8 @@
-﻿using BedeSlots.Services.Data.Contracts;
+﻿using BedeSlots.Data.Models;
+using BedeSlots.Services.Data.Contracts;
 using BedeSlots.Web.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Linq;
@@ -12,18 +14,18 @@ namespace BedeSlots.Web.Controllers
     public class WithdrawController : Controller
     {
         private readonly IUserBalanceService userBalanceService;
-        private readonly IUserService userService;
         private readonly ITransactionService transactionService;
         private readonly ICardService cardService;
         private readonly ICurrencyService currencyService;
+        private readonly UserManager<User> userManager;
 
-        public WithdrawController(IUserBalanceService userBalanceService, IUserService userService, ITransactionService transactionService, ICardService cardService, ICurrencyService currencyService)
+        public WithdrawController(IUserBalanceService userBalanceService, ITransactionService transactionService, ICardService cardService, ICurrencyService currencyService, UserManager<User> userManager)
         {
             this.userBalanceService = userBalanceService;
-            this.userService = userService;
             this.transactionService = transactionService;
             this.cardService = cardService;
             this.currencyService = currencyService;
+            this.userManager = userManager;
         }
 
         [TempData]
@@ -31,7 +33,7 @@ namespace BedeSlots.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Withdraw(RetrieveViewModel model)
+        public async Task<IActionResult> Withdraw(WithdrawViewModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -39,41 +41,40 @@ namespace BedeSlots.Web.Controllers
                 return PartialView("_StatusMessage", this.StatusMessage);
             }
 
-            var userId = HttpContext.User.Claims.FirstOrDefault().Value;
+            var user = await this.userManager.GetUserAsync(HttpContext.User);
+            var userBalance = await this.userBalanceService.GetUserBalanceByIdAsync(user.Id);
 
-            // simulate transfer between this application and current user's bank account
-            await this.userBalanceService.ReduceMoneyAsync(model.Amount, userId);
+            if (userBalance < model.Amount)
+            {
+                this.StatusMessage = "Error! The withdraw is not completed.";
+                return PartialView("_StatusMessage", this.StatusMessage);
+            }
+
+            await this.userBalanceService.ReduceMoneyAsync(model.Amount, user.Id);
 
             var card = await this.cardService.GetCardDetailsByIdAsync(model.BankCardId);
-            var userCurrency = await this.currencyService.GetUserCurrencyAsync(userId);
+            var userCurrency = await this.currencyService.GetUserCurrencyAsync(user.Id);
 
             await this.transactionService.AddTransactionAsync(Data.Models.TransactionType.Withdraw,
-                userId, card.LastFourDigit, model.Amount, userCurrency);
+                user.Id, card.LastFourDigit, model.Amount, userCurrency);
 
-            return ViewComponent("UserBalance");
+            string currencySymbol = WebConstants.CurrencySymbols[user.Currency];
+            this.StatusMessage = $"Successfully withdrawed {model.Amount} {currencySymbol}.";
+
+            return PartialView("_StatusMessage", this.StatusMessage);
         }
 
         [HttpGet]
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var retrieveViewModel = new RetrieveViewModel();
+            var user = await this.userManager.GetUserAsync(HttpContext.User);
+
+            var retrieveViewModel = new WithdrawViewModel()
+            {
+                Currency = user.Currency
+            };
 
             return View(retrieveViewModel);
-        }
-
-        [AcceptVerbs("Get", "Post")]
-        public async Task<JsonResult> HasEnoughMoneyAsync(decimal retrieveAmount)
-        {
-            var userBalance = await this.userBalanceService.GetUserBalanceByIdAsync(this.User.Claims.FirstOrDefault().Value);
-
-            if (userBalance >= retrieveAmount)
-            {
-                return Json(true);
-            }
-            else
-            {
-                return Json("Can't withdraw this amount of money!");
-            }
         }
     }
 }

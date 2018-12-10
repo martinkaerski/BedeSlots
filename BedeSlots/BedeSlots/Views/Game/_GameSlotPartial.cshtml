@@ -9,11 +9,10 @@
             <tr>
                 @for (int col = 0; col < @Model.Cols; col++)
                 {
-                    <td><img id="p@(row.ToString() + col.ToString())" class="gameimg img-responsive" src="~/images/fruits/@(Model.Rows + Model.Matrix[row,col] + ".png")" ></td>
+                    <td id="game-table-col"><img id="p@(row.ToString() + col.ToString())" class="gameimg img-responsive" src="~/images/fruits/@(Model.Rows + Model.Matrix[row,col] + ".png")" ></td>
                 }
             </tr>
         }
-
     </table>
 
     <div class="center-block text-center">
@@ -31,22 +30,7 @@
                 </strong>
             }
         </div>
-        <div class="inline text text-success">
-
-            @if (Model.Currency != Currency.BGN)
-            {
-                <strong>
-                    Earning: +@WebConstants.CurrencySymbols[Model.Currency]@Model.Stake
-                </strong>
-            }
-            else
-            {
-                <strong>
-                    Earning: +@Model.Stake @WebConstants.CurrencySymbols[Model.Currency]
-                </strong>
-            }
-        </div>
         <div class="inline text text-info"><strong> @Model.Message</strong></div>
-        <input asp-for="@Model.Stake" id="stake-earning" hidden />
+        <input asp-for="@Model.Amount" id="stake-earning" hidden />
     </div>
 </section>

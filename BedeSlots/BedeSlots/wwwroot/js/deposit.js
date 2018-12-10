@@ -6,8 +6,8 @@
         e.preventDefault();
         debugger;
         var f = $(this);
-        $.post(f.attr('action'), f.serialize(), function (res) {        
-            $('#status-msg').html(res); 
+        $.post(f.attr('action'), f.serialize(), function (serverData) {        
+            $('#status-msg').html(serverData); 
 
             $('#deposit-amount').val('0');
 

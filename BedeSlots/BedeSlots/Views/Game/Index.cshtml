@@ -6,7 +6,9 @@
 <div class="row">
 
     <form asp-controller="Game" asp-action="SlotMachine" method="get">
-        <button type="submit" class="btn btn-primary" name="size" value="4x3">Small</button>
+        <button type="submit" class="btn btn-primary" name="size" value="4x3">
+            <img class="smallgame-poster" src="~/images/img-history-fruit-big.jpg" alt="Resposive Image" />
+        </button>
         <button type="submit" class="btn btn-primary" name="size" value="5x5">Middle</button>
         <button type="submit" class="btn btn-primary " name="size" value="8x5">Big</button>
     </form>

@@ -6,9 +6,10 @@ namespace BedeSlots.Web.Models.GameViewModels
     public class GameStakeViewModel
     {
         [Required]
-        [Range(1, double.MaxValue, ErrorMessage = "The minimum bet amount is 1!")]
-        [Remote(action: "EnoughMoney", controller: "Game", areaName: "")]
-        public decimal Stake { get; set; }
+        [Range(1, WebConstants.MaxAmount, ErrorMessage = "The minimum bet amount is 1!")]
+        [Remote(action: "HasEnoughMoneyAsync", controller: "UserBalance", areaName: "")]
+        [RegularExpression("^[0-9]+$", ErrorMessage = "The bet amount should be a positive number.")]
+        public decimal Amount { get; set; }
 
         public int Rows { get; set; }
 

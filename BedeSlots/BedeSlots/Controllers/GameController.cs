@@ -21,15 +21,13 @@ namespace BedeSlots.Web.Controllers
         private readonly UserManager<User> userManager;
         private readonly ITransactionService transactionService;
         private readonly IUserBalanceService userBalanceService;
-        private readonly IUserService userService;
 
-        public GameController(IGame game, ITransactionService transactionService, UserManager<User> userManager, IUserBalanceService userBalanceService, IUserService userService)
+        public GameController(IGame game, ITransactionService transactionService, UserManager<User> userManager, IUserBalanceService userBalanceService)
         {
             this.game = game;
             this.transactionService = transactionService;
             this.userManager = userManager;
             this.userBalanceService = userBalanceService;
-            this.userService = userService;
         }
 
         [TempData]
@@ -53,10 +51,11 @@ namespace BedeSlots.Web.Controllers
             var user = await userManager.GetUserAsync(HttpContext.User);
             var convertedUserBalance = await this.userBalanceService.GetUserBalanceByIdAsync(user.Id);
 
-            decimal stake = stakeModel.Stake;
+            decimal stake = stakeModel.Amount;
             if (stake > convertedUserBalance)
             {
-                ModelState.AddModelError("Stake", "Error! You don't have enough money to make this bet!");
+                Response.StatusCode = 400;
+                //ModelState.AddModelError("Stake", "Error! You don't have enough money to make this bet!");
                 this.StatusMessage = "Error! You don't have enough money to make this bet!";
                 return PartialView("_StatusMessage", this.StatusMessage);
             }
@@ -95,7 +94,7 @@ namespace BedeSlots.Web.Controllers
                 Rows = rows,
                 Cols = cols,
                 Matrix = result.Matrix,
-                Stake = result.Amount,
+                Amount = result.Amount,
                 Balance = Math.Round((convertedUserBalance - stake),2),
                 Currency = user.Currency
             };
@@ -116,14 +115,7 @@ namespace BedeSlots.Web.Controllers
             return this.PartialView("_GameSlotPartial", model);
         }
 
-        [AcceptVerbs("Get", "Post")]
-        public async Task<JsonResult> EnoughMoney(decimal stake)
-        {
-            var user = await userManager.GetUserAsync(HttpContext.User);
-            var userBalance = await this.userBalanceService.GetUserBalanceByIdAsync(user.Id);
 
-            return stake <= userBalance ? Json(true) : Json($"You don't have enough money! Please reduce your bet or make a deposit.");
-        }
 
         [HttpGet]
         public async Task<IActionResult> SlotMachine(string size)

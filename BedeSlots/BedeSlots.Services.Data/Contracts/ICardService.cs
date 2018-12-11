@@ -1,6 +1,7 @@
 ﻿using BedeSlots.Data.Models;
 using BedeSlots.DTO;
 using BedeSlots.DTO.BankCardDto;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -10,16 +11,16 @@ namespace BedeSlots.Services.Data.Contracts
     {
         Task<ICollection<CardDetailsDto>> GetUserCardsAsync(string userId);
 
-        Task<ICollection<CardDto>> GetUserCardsLastNumbersAsync(string userId);
+        Task<ICollection<CardNumberDto>> GetUserCardsLastNumbersAsync(string userId);
 
-        Task<ICollection<CardDto>> GetUserCardsAllNumbersAsync(string userId);
+        Task<ICollection<CardNumberDto>> GetUserCardsAllNumbersAsync(string userId);
 
-        Task<BankCard> AddCardAsync(BankCard bankCard);
-
-        Task<BankCard> GetCardByIdAsync(int id);
+        Task<BankCard> AddCardAsync(string cardNumber, string cardholerName, string cvv, DateTime expiryDate, CardType cardType, string userId);
 
         bool CardExists(int bankCardId);
 
         Task<BankCard> DeleteCardAsync(int cardId);
+
+        Task<CardDetailsDto> GetCardDetailsByIdAsync(int id);
     }
 }

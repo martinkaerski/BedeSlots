@@ -1,0 +1,51 @@
+﻿@{
+    ViewData["Title"] = "Contact";
+}
+<h2>@ViewData["Title"]</h2>
+
+<div class="container">
+    <div class="col-sm-6 text-info" >
+        <p>Do you want to play more in real slot machines? Visit our new casino.</p>
+        <h4>Address</h4>
+        <address>
+            Between 2nd & 3rd Interchange, Exit 45 Sheikh Zayed Road<br />
+            Dubai,UAE PO<br />
+        </address>
+
+        <h4>Contact us</h4>
+        <p>
+            <ul>
+                <li><abbr title="Phone">+359/ 899 999 999</abbr></li>
+                <li><abbr title="Phone">+359/ 888 888 888</abbr></li>
+                <li>Email:<a href="mailto:wheelerdealers@wheelerdealerrs.com">wheelerdealers@wheelerdealers.com</a></li>
+            </ul>
+        </p>
+
+        <h4>Working time</h4>
+        <p>
+            <ul>
+                <li>Monday - Sunday: 00:00 - 24:00</li>
+            </ul>
+        </p>
+    </div>
+
+    <div class="col-sm-6">
+        <div id="mapDiv" style="width: 90%; height: 400px"></div>
+    </div>
+</div>
+
+<script>
+    var lat = 42.6509;
+    var lon = 23.3795;
+
+    map = L.map('mapDiv').setView([lat, lon], 20);
+    // set map tiles source
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors',
+        maxZoom: 18,
+    }).addTo(map);
+    // add marker to the map
+    marker = L.marker([lat, lon]).addTo(map);
+    // add popup to the marker
+    marker.bindPopup("<b>Wheeler Dealers CO.</b><br />Alexander Malinov 31<br />Sofia").openPopup();
+</script>

@@ -1,4 +1,5 @@
 ﻿using BedeSlots.Data.Models;
+using BedeSlots.DTO.TransactionDto;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -6,7 +7,9 @@ namespace BedeSlots.Services.Data.Contracts
 {
     public interface ITransactionService
     {
-        IQueryable<Transaction> GetAllTransactions();
+        IQueryable<TransactionManageDto> GetAllTransactions();
+
+        IQueryable<TransactionHistoryDto> GetUserTransactionsAsync(string id);
 
         Task<Transaction> GetTransactionByIdAsync(int id);
 

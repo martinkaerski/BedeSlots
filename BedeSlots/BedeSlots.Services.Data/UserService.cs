@@ -3,7 +3,6 @@ using BedeSlots.Data.Models;
 using BedeSlots.DTO;
 using BedeSlots.Services.Data.Contracts;
 using BedeSlots.Services.Data.Exceptions;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
@@ -12,32 +11,24 @@ using System.Threading.Tasks;
 
 namespace BedeSlots.Services.Data
 {
-    //TODO: refactoring
     public class UserService : IUserService
     {
         private readonly BedeSlotsDbContext context;
-        private readonly ITransactionService transactionService;
-        private readonly RoleManager<IdentityRole> roleManager;
         private readonly UserManager<User> userManager;
 
-        public UserService(BedeSlotsDbContext bedeSlotsDbContext, ITransactionService transactionService,
-            RoleManager<IdentityRole> roleManager, UserManager<User> userManager)
+        public UserService(BedeSlotsDbContext bedeSlotsDbContext, UserManager<User> userManager)
         {
-            this.context = bedeSlotsDbContext;
-            this.transactionService = transactionService;
-            this.roleManager = roleManager;
-            this.userManager = userManager;
-        }
-        // TODO must be removed after successfully integrate in UserBalanceService
-        public async Task<decimal> GetUserBalanceByIdAsync(string userId)
-        {
-            var user = await this.context.Users.FirstOrDefaultAsync(u => u.Id == userId);
-
-            return user.Balance;
+            this.context = bedeSlotsDbContext ?? throw new ServiceException("bedeSlotsDbContext can not be null!");
+            this.userManager = userManager ?? throw new ServiceException("userManager can not be null!");
         }
 
         public async Task<User> GetUserByIdAsync(string id)
         {
+            if (id == null)
+            {
+                throw new ServiceException("Id can not be null!");
+            }
+
             var user = await this.context.Users
                 .Where(u => u.IsDeleted == false)
                 .FirstOrDefaultAsync(x => x.Id == id);
@@ -84,6 +75,10 @@ namespace BedeSlots.Services.Data
 
         public async Task<string> GetUserRoleIdAsync(string userId)
         {
+            if (userId == null)
+            {
+                throw new ServiceException("UserId can not be null!");
+            }
             var role = await this.context.UserRoles.FirstOrDefaultAsync(u => u.UserId == userId);
             var roleId = role.RoleId;
 
@@ -92,6 +87,10 @@ namespace BedeSlots.Services.Data
 
         public async Task<IdentityUserRole<string>> GetUserRoleAsync(string userId)
         {
+            if (userId == null)
+            {
+                throw new ServiceException("UserId can not be null!");
+            }
             var role = await this.context.UserRoles.FirstOrDefaultAsync(u => u.UserId == userId);
 
             return role;
@@ -99,18 +98,15 @@ namespace BedeSlots.Services.Data
 
         public async Task<string> GetUserRoleNameAsync(string userId)
         {
+            if (userId == null)
+            {
+                throw new ServiceException("UserId can not be null!");
+            }
             var role = await this.context.UserRoles.FirstOrDefaultAsync(u => u.UserId == userId);
             var roleId = role.RoleId;
             var roleName = this.context.Roles.SingleOrDefault(r => r.Id == roleId).Name;
 
             return roleName;
-        }
-
-        public async Task<IEnumerable<Transaction>> GetUserTransactionsAsync(string id)
-        {
-            var transactions = await this.context.Transactions.Where(t => t.UserId == id).ToListAsync();
-
-            return transactions;
         }
 
         public async Task<ICollection<IdentityRole>> GetAllRolesAsync()
@@ -133,18 +129,37 @@ namespace BedeSlots.Services.Data
                 //TODO: do smth
             }
 
-            await this.userManager.AddToRoleAsync(user, newRole.Name);
+            //await this.userManager.AddToRoleAsync(user, newRole.Name);
+
+            var newIdentityRole = new IdentityUserRole<string>() { RoleId = newRole.Id, UserId = user.Id };
+
+            await context.UserRoles.AddAsync(newIdentityRole);
+            await this.context.SaveChangesAsync();
 
             return newRole;
         }
 
         public async Task<User> DeleteUserAsync(string userId)
         {
-            var user = await GetUserByIdAsync(userId);
+            if (userId == null)
+            {
+                throw new ServiceException("UserId can not be null!");
+            }
+            var user = await this.GetUserByIdAsync(userId);
             user.IsDeleted = true;
             await this.context.SaveChangesAsync();
 
             return user;
+        }
+
+        public async Task<Currency> GetUserCurrencyByIdAsync(string userId)
+        {
+            if (userId == null)
+            {
+                throw new ServiceException("UserId can not be null!");
+            }
+            var user = await this.context.Users.FirstOrDefaultAsync(u => u.Id == userId);
+            return user.Currency;
         }
     }
 }

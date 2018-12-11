@@ -1,6 +1,6 @@
 ﻿using BedeSlots.Data.Models;
+using BedeSlots.DTO.ExchangeRatesDto;
 using BedeSlots.Services.Data.Contracts;
-using BedeSlots.Services.Data.ExchangeRatesApiService.Dto;
 using BedeSlots.Services.External.Contracts;
 using Microsoft.Extensions.Caching.Memory;
 using Newtonsoft.Json;
@@ -15,6 +15,7 @@ namespace BedeSlots.Services.Data
     {
         private readonly IExchangeRatesApiCaller exchangeRateApiCaller;
         private readonly IMemoryCache cache;
+        private readonly string key = "RatesKey";
 
         public ExchangeRateApiCallService(IExchangeRatesApiCaller exchangeRateApiCaller, IMemoryCache cache)
         {
@@ -22,9 +23,6 @@ namespace BedeSlots.Services.Data
             this.cache = cache;
         }
 
-        readonly string key = "RatesKey";
-
-        //TODO: Deserialise async?
         public async Task<IDictionary<Currency, decimal>> GetAllRatesAsync()
         {
             if (cache.TryGetValue(key, out IDictionary<Currency, decimal> rates))
@@ -32,7 +30,7 @@ namespace BedeSlots.Services.Data
                 return rates;
             }
 
-            var stringResultRates = await this.exchangeRateApiCaller.GetCurrenciesRatesAsync();
+            var stringResultRates = await this.exchangeRateApiCaller.GetCurrenciesRatesAsync(ServicesConstants.ApiBaseAddress, ServicesConstants.ApiParameters);
             var deserializedRates = JsonConvert.DeserializeObject<CurrencyDto>(stringResultRates);
 
             var currencies = Enum.GetValues(typeof(Currency)).Cast<Currency>().ToList();
@@ -46,7 +44,7 @@ namespace BedeSlots.Services.Data
             };
 
             var cacheEntryOptions = new MemoryCacheEntryOptions()
-           .SetSlidingExpiration(TimeSpan.FromSeconds(60 * 60 * 24));
+           .SetAbsoluteExpiration(TimeSpan.FromSeconds(60 * 60 * 24));
 
             cache.Set(key, rates, cacheEntryOptions);
 

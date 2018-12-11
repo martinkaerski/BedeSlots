@@ -3,7 +3,6 @@ using BedeSlots.Data.Models;
 using BedeSlots.DTO;
 using BedeSlots.Services.Data.Contracts;
 using BedeSlots.Services.Data.Exceptions;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;

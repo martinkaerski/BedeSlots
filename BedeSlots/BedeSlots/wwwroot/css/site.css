@@ -302,7 +302,7 @@ optgroup {
     font-weight: bold;
 }
 
-table {
+/*table {
     border-collapse: collapse;
     border-spacing: 0;
 }
@@ -310,7 +310,7 @@ table {
 td,
 th {
     padding: 0;
-}
+}*/
 /*! Source: https://github.com/h5bp/html5-boilerplate/blob/master/src/css/main.css */
 @media print {
     *,
@@ -5588,7 +5588,7 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
 
     .navbar-right {
         float: right !important;
-        margin-right: -15px;
+        margin-right: 5px;
     }
 
         .navbar-right ~ .navbar-right {
@@ -8466,3 +8466,27 @@ label {
 .pager .disabled > a {
     border-color: #dddddd;
 }
+
+/*#my-navbar{
+    height:60px;
+    text-align:center;
+}
+
+.navbar-nav li a {
+    line-height: 30px;
+    font-size: 1.1em !important;
+}
+
+.navbar-nav li button {
+    line-height: 30px;
+    font-size: 1.1em !important;
+}
+
+#nav-logo {
+    line-height: 30px;
+    font-size: 1.5em !important;
+}
+
+#mapDiv {
+    width: 90%;
+}*/

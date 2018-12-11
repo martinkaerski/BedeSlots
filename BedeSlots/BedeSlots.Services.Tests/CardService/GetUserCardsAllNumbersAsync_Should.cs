@@ -1,6 +1,6 @@
 ﻿using BedeSlots.Data;
 using BedeSlots.Data.Models;
-using BedeSlots.DTO;
+using BedeSlots.DTO.BankCardDto;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -9,7 +9,6 @@ using Moq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace BedeSlots.Services.Tests.CardService
@@ -64,7 +63,7 @@ namespace BedeSlots.Services.Tests.CardService
             var userStoreMock = new Mock<IUserStore<User>>();
             var userManager = new UserManager<User>(userStoreMock.Object, null, null, null, null, null, null, null, null);
 
-            ICollection<CardDto> cards;
+            ICollection<CardNumberDto> cards;
             Data.CardService cardService;
 
             var user = new User();
@@ -92,7 +91,7 @@ namespace BedeSlots.Services.Tests.CardService
             using (var bedeSlotsContext = new BedeSlotsDbContext(contexOptions))
             {
                 Assert.IsTrue(cards.Count == 1);
-                Assert.IsInstanceOfType(cards, typeof(ICollection<CardDto>));
+                Assert.IsInstanceOfType(cards, typeof(ICollection<CardNumberDto>));
                 Assert.IsTrue(cards.First().Number == card.Number);
             }
         }

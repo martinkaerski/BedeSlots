@@ -1,6 +1,5 @@
 ﻿$(function () {
     const $rform = $('#retrieve-form');
-    $rform.append("__RequestVerificationToken", "@HtmlHelper.GetAntiForgeryToken()");
 
     $rform.on('submit', function (e) {
         e.preventDefault();

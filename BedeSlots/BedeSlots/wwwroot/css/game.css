@@ -1,10 +1,14 @@
-﻿.gameimg {
-    width: 50px;
-    height: 50px;
+﻿.game-img {
+    width: 60%;
+    height: auto;
+}   
+
+tr{
+    background-color:white;
 }
 
-.smallgame-poster {
-    width: 60%;
+.game-poster {
+    width: 350px;
     border: 1px solid;
     border-color: black;
 }
@@ -13,14 +17,26 @@
     text-align: center;
 }
 
-.mediumgame-poster {
-    width: 80%;
-    border: 1px solid;
-    border-color: black;
-}   
+#gimmick {
+    display: block;
+    pointer-events: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
 
-.biggame-poster {
-    width: 100%;
-    border: 1px solid;
-    border-color: black;
+#slot-machine-table{
+    column-width:200px;
+}
+    
+.hover01 figure img {
+    -webkit-transform: scale(1);
+    transform: scale(1);
+    -webkit-transition: .3s ease-in-out;
+    transition: .3s ease-in-out;
+}
+
+.hover01 figure:hover img {
+    -webkit-transform: scale(1.3);
+    transform: scale(1.3);
 }

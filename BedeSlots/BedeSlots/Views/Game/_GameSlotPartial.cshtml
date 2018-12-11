@@ -6,10 +6,10 @@
     <table id="slot-machine-table" cellpadding="0" cellspacing="0" align="center" class="slot">
         @for (int row = 0; row < @Model.Rows; row++)
         {
-            <tr>
+            <tr id= "row-@row">
                 @for (int col = 0; col < @Model.Cols; col++)
                 {
-                    <td id="game-table-col"><img id="p@(row.ToString() + col.ToString())" class="gameimg img-responsive" src="~/images/fruits/@(Model.Rows + Model.Matrix[row,col] + ".png")" ></td>
+                    <td id="game-table-col"><img id="p@(row.ToString() + col.ToString())" class="game-img img-responsive" src="~/images/fruits/@(Model.Rows + Model.Matrix[row,col] + ".png")"></td>
                 }
             </tr>
         }
@@ -31,6 +31,10 @@
             }
         </div>
         <div class="inline text text-info"><strong> @Model.Message</strong></div>
+
         <input asp-for="@Model.Amount" id="stake-earning" hidden />
+        <input asp-for="@Model.Balance" id="user-balance" hidden />
+        <input asp-for="@Model.Coefficient" id="res-coef" hidden />
+        <input asp-for="@Model.WinningRows" id="winning-rows" hidden />
     </div>
 </section>

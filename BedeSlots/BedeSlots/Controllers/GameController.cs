@@ -44,6 +44,7 @@ namespace BedeSlots.Web.Controllers
         {
             if (!ModelState.IsValid)
             {
+                Response.StatusCode = 299;
                 this.StatusMessage = "Error! The bet is not completed.";
                 return PartialView("_StatusMessage", this.StatusMessage);
             }
@@ -54,8 +55,8 @@ namespace BedeSlots.Web.Controllers
             decimal stake = stakeModel.Amount;
             if (stake > convertedUserBalance)
             {
-                Response.StatusCode = 400;
-                //ModelState.AddModelError("Stake", "Error! You don't have enough money to make this bet!");
+                Response.StatusCode = 299;
+                ModelState.AddModelError("Stake", "Error! You don't have enough money to make this bet!");
                 this.StatusMessage = "Error! You don't have enough money to make this bet!";
                 return PartialView("_StatusMessage", this.StatusMessage);
             }
@@ -95,8 +96,10 @@ namespace BedeSlots.Web.Controllers
                 Cols = cols,
                 Matrix = result.Matrix,
                 Amount = result.Amount,
-                Balance = Math.Round((convertedUserBalance - stake),2),
-                Currency = user.Currency
+                Balance = Math.Round((convertedUserBalance - stake), 2),
+                Currency = user.Currency,
+                WinningRows = String.Join("", result.WinningRows),
+                Coefficient = result.Coefficient
             };
 
             if (result.Amount > 0)
@@ -114,8 +117,6 @@ namespace BedeSlots.Web.Controllers
 
             return this.PartialView("_GameSlotPartial", model);
         }
-
-
 
         [HttpGet]
         public async Task<IActionResult> SlotMachine(string size)

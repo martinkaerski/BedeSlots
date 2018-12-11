@@ -6,11 +6,13 @@ namespace BedeSlots.Games
 {
     public class Game : IGame
     {
-        private IDictionary<int, Item> items;
+        private readonly List<int> winningRows;
+        private readonly IDictionary<int, Item> items;
 
         public Game()
         {
             items = GenerateItems.GetItems();
+            winningRows = new List<int>();
         }
 
         public SpinData Spin(int rows, int cols, decimal amount)
@@ -30,7 +32,9 @@ namespace BedeSlots.Games
             var spinData = new SpinData()
             {
                 Matrix = GetCharMatrix(matrix),
-                Amount = amount
+                Amount = amount,
+                WinningRows = winningRows,
+                Coefficient = (double)coefficient
             };
 
             return spinData;
@@ -39,6 +43,7 @@ namespace BedeSlots.Games
         private decimal CalculateCoefficient(Item[,] matrix)
         {
             decimal finalCoef = 0;
+            winningRows.Clear();
 
             for (int row = 0; row < matrix.GetLength(0); row++)
             {
@@ -79,6 +84,7 @@ namespace BedeSlots.Games
                 if (isWinning)
                 {
                     finalCoef += rowCoef;
+                    winningRows.Add(row);
                 }
             }
 

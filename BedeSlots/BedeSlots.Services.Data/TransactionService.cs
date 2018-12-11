@@ -1,11 +1,10 @@
 ﻿using BedeSlots.Data;
 using BedeSlots.Data.Models;
-using BedeSlots.DTO;
+using BedeSlots.DTO.TransactionDto;
 using BedeSlots.Services.Data.Contracts;
 using BedeSlots.Services.Data.Exceptions;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -22,32 +21,32 @@ namespace BedeSlots.Services.Data
             this.currencyConverterService = currencyConverterService ?? throw new ServiceException(nameof(currencyConverterService));
         }
 
-        public IQueryable<TransactionDto> GetAllTransactions()
+        public IQueryable<TransactionManageDto> GetAllTransactions()
         {
             var transactions = this.context.Transactions
-                                           .Select(t => new TransactionDto
-                                           {
-                                               Date = t.Date,
-                                               Amount = t.Amount,
-                                               Description = t.Description,
-                                               Type = t.Type,
-                                               User = t.User.Email
-                                           })
-                                           .AsQueryable();
+                .Select(t => new TransactionManageDto
+                {
+                    Date = t.Date,
+                    Amount = t.Amount,
+                    Description = t.Description,
+                    Type = t.Type,
+                    User = t.User.Email
+                })
+                .AsQueryable();
 
             return transactions;
         }
 
-        public async Task<Transaction> GetTransactionByIdAsync(int transactionId)
+        public async Task<Transaction> GetTransactionByIdAsync(int id)
         {
-            if (!await this.context.Transactions.AnyAsync(t => t.Id == transactionId))
+            if (!await this.context.Transactions.AnyAsync(t => t.Id == id))
             {
-                throw new ServiceException($"Transaction with Id:{transactionId} not exist!");
+                throw new ServiceException($"Transaction with Id:{id} not exist!");
             }
             var transaction = await this.context.Transactions
                 .Include(t => t.User)
                 .ThenInclude(u => u.Cards)
-                .SingleOrDefaultAsync(t => t.Id == transactionId);
+                .SingleOrDefaultAsync(t => t.Id == id);
 
             return transaction;
         }
@@ -63,7 +62,7 @@ namespace BedeSlots.Services.Data
                 throw new ServiceException("Amount must be positive number!");
             }
 
-            var convertedAmount = await this.currencyConverterService.ConvertToBaseCurrencyAsync(amount, currency);
+            var convertedAmount = await this.currencyConverterService.ConvertToBaseCurrency(amount, currency);
 
             var transaction = new Transaction()
             {
@@ -80,17 +79,16 @@ namespace BedeSlots.Services.Data
             return transaction;
         }
 
-        public IQueryable<TransactionDto> GetUserTransactions(string userId)
+        public IQueryable<TransactionHistoryDto> GetUserTransactionsAsync(string userId)
         {
             var transactions = this.context.Transactions
                .Where(t => t.UserId == userId)
-               .Select(t => new TransactionDto
+               .Select(t => new TransactionHistoryDto
                {
                    Date = t.Date,
                    Amount = t.Amount,
                    Description = t.Description,
-                   Type = t.Type,
-                   User = t.User.Email
+                   Type = t.Type
                })
                .AsQueryable();
 

@@ -15,7 +15,6 @@
                 <div id="select-card-dropdown">
                     @await Component.InvokeAsync("SelectCard")
                 </div>
-
                 <button type="button" id="details-btn" class="btn btn-primary" data-toggle="modal" data-target="#card-details">Card Details</button>
                 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#AddCardModal">Add New Card</button>
             </div>
@@ -82,7 +81,7 @@
 @section Scripts {
     @await Html.PartialAsync("_ValidationScriptsPartial")
 
-    <script src="~/js/addCard.js"></script>
+    <script src="~/js/Card/addCard.js"></script>
     <script src="~/lib/jquery/dist/jquery.card.js"></script>
     <script src="~/js/Card/cardDetails.js"></script>
     <script src="~/js/Card/cardWrapper.js"></script>

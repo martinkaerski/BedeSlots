@@ -56,6 +56,11 @@ namespace BedeSlots.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(int id)
         {
+            if (!ModelState.IsValid)
+            {
+                return Json(new { message = $"Invalid parameters!" });
+            }
+
             var card = await this.cardService.DeleteCardAsync(id);
             return RedirectToAction("Index", "Deposit");
         }

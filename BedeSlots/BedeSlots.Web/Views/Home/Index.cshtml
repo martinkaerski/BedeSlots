@@ -11,12 +11,12 @@
     <div id="content">
         <div id="leftPan">
             <div id="welcome">
-                <h2>Welcome to our site</h2>
+                <h2 class="text-capitalize">We know everything abou luck!</h2>
                 <p>
                     <span class="headline">Nam justo augue, dictum a, hendrerit!</span><br />
-                    Fusce interdum. Maecenas eu elit sed nulla dignissim interdum. 
-                    Sed laoreet. Aenean pede. Phasellus porta. Ut dictum nonummy diam. 
-                    Cras Lorem ipsum dolor sit amet, consectetuer adipiscing elit. 
+                    Fusce interdum. Maecenas eu elit sed nulla dignissim interdum.
+                    Sed laoreet. Aenean pede. Phasellus porta. Ut dictum nonummy diam.
+                    Cras Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
                     Nam eu nulla. Donec lobortis purus vel urna. Nunc laoreet lacinia nunc.
                 </p>
                 <div class="clear"></div>
@@ -72,3 +72,26 @@
         <div class="clear" id="end"></div>
     </div>
 </div>
+
+<button class=" btn open-button" onclick="openForm()">Chat</button>
+
+<div class="chat-popup" id="myForm">
+    <form class="form-container">
+        <div>
+            <iframe id="bot-iframe" height="400" width="280" src='https://webchat.botframework.com/embed/BedeSlotsBot?s=9auPtlIpveo.cwA.dgY.K2U1OVCynAWVcHZLw16J5sTfxRi1dbdQ5SHOCmIq7Bc' ;'></iframe>
+        </div>
+        <button type="button" class="btn cancel" onclick="closeForm()">Close</button>
+    </form>
+</div>
+
+<script src="https://cdn.botframework.com/botframework-webchat/latest/webchat.js"></script>
+
+<script>
+    function openForm() {
+        document.getElementById("myForm").style.display = "block";
+    }
+
+    function closeForm() {
+        document.getElementById("myForm").style.display = "none";
+    }
+</script>

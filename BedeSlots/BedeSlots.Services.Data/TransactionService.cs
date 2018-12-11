@@ -62,7 +62,7 @@ namespace BedeSlots.Services.Data
                 throw new ServiceException("Amount must be positive number!");
             }
 
-            var convertedAmount = await this.currencyConverterService.ConvertToBaseCurrency(amount, currency);
+            var convertedAmount = await this.currencyConverterService.ConvertToBaseCurrencyAsync(amount, currency);
 
             var transaction = new Transaction()
             {

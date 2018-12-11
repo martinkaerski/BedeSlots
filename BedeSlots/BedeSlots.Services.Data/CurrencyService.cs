@@ -1,6 +1,7 @@
 ﻿using BedeSlots.Data;
 using BedeSlots.Data.Models;
 using BedeSlots.Services.Data.Contracts;
+using BedeSlots.Services.Data.Exceptions;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -15,11 +16,16 @@ namespace BedeSlots.Services.Data
 
         public CurrencyService(BedeSlotsDbContext context)
         {
-            this.context = context;
+            this.context = context ?? throw new ServiceException(nameof(context));
         }
 
         public async Task<Currency> GetUserCurrencyAsync(string userId)
         {
+            if (userId == null)
+            {
+                throw new ServiceException("UserId can not be null!");
+            }
+
             var currency = await this.context.Users
                 .Where(u => u.Id == userId)
                 .Select(u => u.Currency)
@@ -28,7 +34,7 @@ namespace BedeSlots.Services.Data
             return currency;
         }
 
-        public ICollection<Currency> GetAllCurrenciesNames()
+        public ICollection<Currency> GetAllCurrencies()
         {
            return Enum.GetValues(typeof(Currency)).Cast<Currency>().ToList();
         }

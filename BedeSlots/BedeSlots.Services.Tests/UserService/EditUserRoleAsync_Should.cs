@@ -15,16 +15,16 @@ namespace BedeSlots.Services.Tests.UserService
     public class EditUserRoleAsync_Should
     {
         private ServiceProvider serviceProvider = new ServiceCollection().AddEntityFrameworkInMemoryDatabase().BuildServiceProvider();
-        [Ignore]
+       
         [TestMethod]
-        public async Task ReturnRoleAfterChangeUsersCurrentRole_WhenValidParametersArePassed()
+        public async Task SuccessfullyChangeUserCurrentRole_WhenValidParametersArePassed()
         {
 
             var userStoreMock = new Mock<IUserStore<User>>();
             var userManager = new UserManager<User>(userStoreMock.Object, null, null, null, null, null, null, null, null);
 
             var contexOptions = new DbContextOptionsBuilder<BedeSlotsDbContext>()
-     .UseInMemoryDatabase(databaseName: "ReturnRoleAfterChangeUsersCurrentRole_WhenValidParametersArePassed")
+     .UseInMemoryDatabase(databaseName: "SuccessfullyChangeUserCurrentRole_WhenValidParametersArePassed")
      .UseInternalServiceProvider(serviceProvider).Options;
 
             var transactionServiceMock = new Mock<ITransactionService>();

@@ -37,7 +37,7 @@ namespace BedeSlots.Services.Data
 
             if (user.Currency != CommonConstants.BaseCurrency)
             {
-                amount = await this.currencyConverterService.ConvertToBaseCurrency(amount, user.Currency);
+                amount = await this.currencyConverterService.ConvertToBaseCurrencyAsync(amount, user.Currency);
             }
 
             user.Balance += amount;
@@ -64,7 +64,7 @@ namespace BedeSlots.Services.Data
 
             if (user.Currency != CommonConstants.BaseCurrency)
             {
-                amount = await this.currencyConverterService.ConvertToBaseCurrency(amount, user.Currency);
+                amount = await this.currencyConverterService.ConvertToBaseCurrencyAsync(amount, user.Currency);
             }
 
             if (user.Balance >= amount)
@@ -108,7 +108,7 @@ namespace BedeSlots.Services.Data
 
             if (user.Currency != CommonConstants.BaseCurrency)
             {
-                balance = await this.currencyConverterService.ConvertFromBaseToOther(balance, user.Currency);
+                balance = await this.currencyConverterService.ConvertFromBaseToOtherAsync(balance, user.Currency);
             }
 
             return balance;

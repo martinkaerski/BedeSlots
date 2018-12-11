@@ -129,7 +129,12 @@ namespace BedeSlots.Services.Data
                 //TODO: do smth
             }
 
-            await this.userManager.AddToRoleAsync(user, newRole.Name);
+            //await this.userManager.AddToRoleAsync(user, newRole.Name);
+
+            var newIdentityRole = new IdentityUserRole<string>() { RoleId = newRole.Id, UserId = user.Id };
+
+            await context.UserRoles.AddAsync(newIdentityRole);
+            await this.context.SaveChangesAsync();
 
             return newRole;
         }

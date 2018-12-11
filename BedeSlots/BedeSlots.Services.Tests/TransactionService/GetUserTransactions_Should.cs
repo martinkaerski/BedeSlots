@@ -61,7 +61,7 @@ namespace BedeSlots.Services.Tests.TransactionService
             {
                 var currencyConverterMock = new Mock<ICurrencyConverterService>();
                 var sut = new Data.TransactionService(bedeSlotsContext, currencyConverterMock.Object);
-                var result = sut.GetUserTransactions(user.Id);
+                var result = sut.GetUserTransactionsAsync(user.Id);
 
                 Assert.IsTrue(await result.CountAsync() == 2);
             }

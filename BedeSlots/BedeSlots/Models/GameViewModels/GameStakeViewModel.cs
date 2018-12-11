@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace BedeSlots.Web.Models.GameViewModels
 {
@@ -7,7 +6,6 @@ namespace BedeSlots.Web.Models.GameViewModels
     {
         [Required]
         [Range(1, WebConstants.MaxAmount, ErrorMessage = "The minimum bet amount is 1!")]
-        [Remote(action: "HasEnoughMoneyAsync", controller: "UserBalance", areaName: "")]
         [RegularExpression("^[0-9]+$", ErrorMessage = "The bet amount should be a positive number.")]
         public decimal Amount { get; set; }
 

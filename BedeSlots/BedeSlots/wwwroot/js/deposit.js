@@ -1,6 +1,5 @@
 ﻿$(function () {
     const $dform = $('#depositform');
-    $dform.append("__RequestVerificationToken", "@HtmlHelper.GetAntiForgeryToken()");
 
     $dform.on('submit', function (e) {
         e.preventDefault();

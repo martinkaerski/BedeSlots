@@ -61,6 +61,7 @@
 
         const $spinForm = $("#spin-form");
         const dataToSend = $spinForm.serialize();
+
         document.getElementById('spin-audio').play();
 
         slot(function () {
@@ -127,6 +128,8 @@
 
             if (isStopped) {
                 document.getElementById('spin-audio').pause();
+                document.getElementById('spin-audio').currentTime = 0;
+
                 requestFunction();
                 isStopped = false;
                 clearInterval(Random);

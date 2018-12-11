@@ -1,12 +1,9 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using BedeSlots.Services.Data;
-using Moq;
-using Microsoft.AspNetCore.Identity;
+﻿using BedeSlots.Data;
 using BedeSlots.Data.Models;
-using BedeSlots.Data;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
+using System;
 
 namespace BedeSlots.Services.Tests.CardService
 {

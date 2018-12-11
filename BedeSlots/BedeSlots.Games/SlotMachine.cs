@@ -1,15 +1,16 @@
 ﻿using BedeSlots.Games.Contracts;
+using BedeSlots.Games.Models;
 using System;
 using System.Collections.Generic;
 
 namespace BedeSlots.Games
 {
-    public class Game : IGame
+    public class SlotMachine : ISlotMachine
     {
         private readonly List<int> winningRows;
         private readonly IDictionary<int, Item> items;
 
-        public Game()
+        public SlotMachine()
         {
             items = GenerateItems.GetItems();
             winningRows = new List<int>();
@@ -17,27 +18,35 @@ namespace BedeSlots.Games
 
         public SpinData Spin(int rows, int cols, decimal amount)
         {
-            var matrix = GenerateMatrix(rows, cols, items);
+            var matrix = GenerateItemMatrix(rows, cols, items);
             var coefficient = CalculateCoefficient(matrix);
 
-            if (coefficient != 0)
-            {
-                amount = coefficient * amount;
-            }
-            else
-            {
-                amount = 0;
-            }
+            amount = coefficient != 0 ? coefficient * amount : 0;
 
             var spinData = new SpinData()
             {
-                Matrix = GetCharMatrix(matrix),
+                Matrix = GetNamesOfItems(matrix),
                 Amount = amount,
                 WinningRows = winningRows,
-                Coefficient = (double)coefficient
+                Coefficient = coefficient
             };
 
             return spinData;
+        }
+
+        public string[,] GenerateMatrixWithItemNames(int rows, int cols)
+        {
+            string[,] stringMatrix = new string[rows, cols];
+
+            for (int row = 0; row < rows; row++)
+            {
+                for (int col = 0; col < cols; col++)
+                {
+                    stringMatrix[row, col] = GetRandomItem(items).Name;
+                }
+            }
+
+            return stringMatrix;
         }
 
         private decimal CalculateCoefficient(Item[,] matrix)
@@ -53,9 +62,7 @@ namespace BedeSlots.Games
 
                 for (int col = 0; col < matrix.GetLength(1); col++)
                 {
-                    //can be optimised - element = GenerateItem()
                     var element = matrix[row, col];
-
                     if (element.Type == ItemType.Wildcard)
                     {
                         continue;
@@ -91,7 +98,7 @@ namespace BedeSlots.Games
             return finalCoef;
         }
 
-        public Item[,] GenerateMatrix(int rows, int cols, IDictionary<int, Item> items)
+        private Item[,] GenerateItemMatrix(int rows, int cols, IDictionary<int, Item> items)
         {
             var matrix = new Item[rows, cols];
             for (int row = 0; row < rows; row++)
@@ -105,7 +112,7 @@ namespace BedeSlots.Games
             return matrix;
         }
 
-        public string[,] GetCharMatrix(Item[,] matrix)
+        private string[,] GetNamesOfItems(Item[,] matrix)
         {
             int rows = matrix.GetLength(0);
             int cols = matrix.GetLength(1);
@@ -121,26 +128,10 @@ namespace BedeSlots.Games
 
             return stringMatrix;
         }
-
-        public string[,] GenerateCharMatrix(int rows, int cols)
-        {
-            string[,] stringMatrix = new string[rows, cols];
-
-            for (int row = 0; row < rows; row++)
-            {
-                for (int col = 0; col < cols; col++)
-                {
-                    stringMatrix[row, col] = GetRandomItem(items).Name;
-                }
-            }
-
-            return stringMatrix;
-        }
-
         // key - cumulative probability
         private Item GetRandomItem(IDictionary<int, Item> items)
         {
-            var random = new Random();
+            var random = new Random(Guid.NewGuid().GetHashCode());
             var randomNumber = random.Next(1, 101); //the maxValue is exclusive
 
             Item selectedItem = null;
@@ -153,7 +144,6 @@ namespace BedeSlots.Games
                     break;
                 }
             }
-
             return selectedItem;
         }
     }

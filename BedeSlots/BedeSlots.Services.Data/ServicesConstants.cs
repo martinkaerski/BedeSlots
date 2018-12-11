@@ -1,4 +1,4 @@
-﻿namespace BedeSlots.Services.External
+﻿namespace BedeSlots.Services.Data
 {
     public static class ServicesConstants
     {

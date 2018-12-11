@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace BedeSlots.Games
+namespace BedeSlots.Games.Models
 {
     public class SpinData
     {
@@ -10,6 +10,6 @@ namespace BedeSlots.Games
 
         public List<int> WinningRows { get; set; }
 
-        public double Coefficient { get; set; }
+        public decimal Coefficient { get; set; }
     }
 }

@@ -17,12 +17,12 @@ namespace BedeSlots.Web.Controllers
         private int rows = 4;
         private int cols = 3;
 
-        private readonly IGame game;
+        private readonly ISlotMachine game;
         private readonly UserManager<User> userManager;
         private readonly ITransactionService transactionService;
         private readonly IUserBalanceService userBalanceService;
 
-        public GameController(IGame game, ITransactionService transactionService, UserManager<User> userManager, IUserBalanceService userBalanceService)
+        public GameController(ISlotMachine game, ITransactionService transactionService, UserManager<User> userManager, IUserBalanceService userBalanceService)
         {
             this.game = game;
             this.transactionService = transactionService;
@@ -33,6 +33,7 @@ namespace BedeSlots.Web.Controllers
         [TempData]
         public string StatusMessage { get; set; }
 
+        [HttpGet]
         public IActionResult Index()
         {
             return View();
@@ -112,7 +113,7 @@ namespace BedeSlots.Web.Controllers
             }
             else
             {
-                model.Message = $"Try again!";
+                model.Message = $"Bad luck. Try again!";
             }
 
             return this.PartialView("_GameSlotPartial", model);
@@ -140,7 +141,7 @@ namespace BedeSlots.Web.Controllers
             }
 
             var user = await userManager.GetUserAsync(HttpContext.User);
-            var stringMatrix = game.GenerateCharMatrix(rows, cols);
+            var stringMatrix = game.GenerateMatrixWithItemNames(rows, cols);
             var convertedUserBalance = await this.userBalanceService.GetUserBalanceByIdAsync(user.Id);
 
             var model = new GameSlotViewModel()

@@ -1,4 +1,4 @@
-﻿namespace BedeSlots.Games
+﻿namespace BedeSlots.Games.Models
 {
     public enum ItemType
     {

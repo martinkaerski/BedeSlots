@@ -31,7 +31,7 @@ namespace BedeSlots.Controllers
                 decimal userBalance;
                 if (user.Currency != Currency.USD)
                 {
-                    userBalance = await this.currencyConverterService.ConvertFromBaseToOther(user.Balance, user.Currency);
+                    userBalance = await this.currencyConverterService.ConvertFromBaseToOtherAsync(user.Balance, user.Currency);
                 }
                 else
                 {

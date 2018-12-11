@@ -38,16 +38,16 @@ namespace BedeSlots.Services.Data
             return transactions;
         }
 
-        public async Task<Transaction> GetTransactionByIdAsync(int id)
+        public async Task<Transaction> GetTransactionByIdAsync(int transactionId)
         {
-            if (!await this.context.Transactions.AnyAsync(t => t.Id == id))
+            if (!await this.context.Transactions.AnyAsync(t => t.Id == transactionId))
             {
-                throw new ServiceException($"Transaction with Id:{id} not exist!");
+                throw new ServiceException($"Transaction with Id:{transactionId} not exist!");
             }
             var transaction = await this.context.Transactions
                 .Include(t => t.User)
                 .ThenInclude(u => u.Cards)
-                .SingleOrDefaultAsync(t => t.Id == id);
+                .SingleOrDefaultAsync(t => t.Id == transactionId);
 
             return transaction;
         }
@@ -63,7 +63,7 @@ namespace BedeSlots.Services.Data
                 throw new ServiceException("Amount must be positive number!");
             }
 
-            var convertedAmount = await this.currencyConverterService.ConvertToBaseCurrency(amount, currency);
+            var convertedAmount = await this.currencyConverterService.ConvertToBaseCurrencyAsync(amount, currency);
 
             var transaction = new Transaction()
             {
@@ -80,10 +80,10 @@ namespace BedeSlots.Services.Data
             return transaction;
         }
 
-        public IQueryable<TransactionDto> GetUserTransactionsAsync(string id)
+        public IQueryable<TransactionDto> GetUserTransactions(string userId)
         {
             var transactions = this.context.Transactions
-               .Where(t => t.UserId == id)
+               .Where(t => t.UserId == userId)
                .Select(t => new TransactionDto
                {
                    Date = t.Date,

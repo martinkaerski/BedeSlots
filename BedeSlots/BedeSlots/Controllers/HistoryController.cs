@@ -45,7 +45,7 @@ namespace BedeSlots.Web.Controllers
 
                 this.paginationProvider.GetParameters(out draw, out sortColumn, out sortColumnDirection, out searchValue, out pageSize, out skip, out recordsTotal, HttpContext, Request);
 
-                var transactions = this.transactionService.GetUserTransactionsAsync(HttpContext.User.Claims.FirstOrDefault().Value);
+                var transactions = this.transactionService.GetUserTransactions(HttpContext.User.Claims.FirstOrDefault().Value);
 
                 //Search
                 if (!string.IsNullOrEmpty(searchValue))
@@ -69,7 +69,7 @@ namespace BedeSlots.Web.Controllers
                     {
                         Date = t.Date.ToString("G", CultureInfo.InvariantCulture),
                         Type = t.Type.ToString(),
-                        Amount = Math.Round(this.currencyConverterService.ConvertFromBaseToOther(t.Amount, user.Currency).Result, 2) + WebConstants.CurrencySymbols[user.Currency],
+                        Amount = Math.Round(this.currencyConverterService.ConvertFromBaseToOtherAsync(t.Amount, user.Currency).Result, 2) + WebConstants.CurrencySymbols[user.Currency],
                         Description = t.Type == TransactionType.Deposit
                         ? $"Deposit with card **** **** **** {t.Description}"
                         : $"{t.Type.ToString()} on game {t.Description}",

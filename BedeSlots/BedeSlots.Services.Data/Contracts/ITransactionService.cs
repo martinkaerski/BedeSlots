@@ -10,7 +10,7 @@ namespace BedeSlots.Services.Data.Contracts
     {
         IQueryable<TransactionDto> GetAllTransactions();
 
-        IQueryable<TransactionDto> GetUserTransactionsAsync(string id);
+        IQueryable<TransactionDto> GetUserTransactions(string id);
 
         Task<Transaction> GetTransactionByIdAsync(int id);
 

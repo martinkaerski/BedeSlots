@@ -34,7 +34,7 @@ namespace BedeSlots.Services.Tests.TransactionService
             {
                 var currencyConverterMock = new Mock<ICurrencyConverterService>();
                 var sut = new Data.TransactionService(bedeSlotsContext, currencyConverterMock.Object);
-                currencyConverterMock.Setup((x) => x.ConvertToBaseCurrency(10, Currency.USD)).ReturnsAsync(10);
+                currencyConverterMock.Setup((x) => x.ConvertToBaseCurrencyAsync(10, Currency.USD)).ReturnsAsync(10);
 
                 result = await sut.AddTransactionAsync(validTransactionType, user.Id, description, validAmount, baseCurrency);
             }

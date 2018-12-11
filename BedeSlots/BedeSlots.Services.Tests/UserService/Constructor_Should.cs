@@ -6,9 +6,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace BedeSlots.Services.Tests.UserService
 {
@@ -58,6 +55,7 @@ namespace BedeSlots.Services.Tests.UserService
             {
                 var sut = new Data.UserService(bedeSlotsContext,
                     userManager);
+                Assert.IsInstanceOfType(sut, typeof(Data.UserService));
             }
         }
     }

@@ -507,7 +507,7 @@ namespace BedeSlots.Controllers
 
         private  IEnumerable<SelectListItem> GetCurrencies()
         {
-            var currencies = this.currencyService.GetAllCurrenciesNames();
+            var currencies = this.currencyService.GetAllCurrencies();
             var currenciesListItems = currencies
                 .Select(c => new SelectListItem
                 {

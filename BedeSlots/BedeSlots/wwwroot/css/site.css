@@ -3,7 +3,14 @@
     padding-bottom: 20px;
     margin: 0;
     background-image: url("/images/slider-background-casino-security-white.jpg");
-    background-repeat:no-repeat;
+    background-repeat: no-repeat;
+}
+
+#navbar-brand {
+    font-size: 20px;
+}
+.navbar .glyphicon {
+
 }
 
 #slot-machine-table tbody {
@@ -1714,7 +1721,7 @@ h6,
 
 p {
     margin: 0 0 9px;
-    color:darkslategray;
+    color: darkslategray;
 }
 
 .lead {

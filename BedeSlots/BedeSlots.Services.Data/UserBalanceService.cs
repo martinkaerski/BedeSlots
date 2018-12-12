@@ -30,10 +30,10 @@ namespace BedeSlots.Services.Data
 
             if (amount <= 0)
             {
-                throw new ServiceException("Amount must be posititive!");
+                throw new ServiceException("Amount must be posititive number!");
             }
 
-            var user = await this.context.Users.FirstOrDefaultAsync(u => u.Id == userId);
+            var user = await this.context.Users.FirstOrDefaultAsync(u => u.Id == userId) ?? throw new ServiceException("User not exist in database!");
 
             if (user.Currency != CommonConstants.BaseCurrency)
             {
@@ -60,7 +60,7 @@ namespace BedeSlots.Services.Data
                 throw new ServiceException("Amount must be posititive!");
             }
 
-            var user = await this.context.Users.FirstOrDefaultAsync(u => u.Id == userId);
+            var user = await this.context.Users.FirstOrDefaultAsync(u => u.Id == userId) ?? throw new ServiceException("User not exist!");
 
             if (user.Currency != CommonConstants.BaseCurrency)
             {

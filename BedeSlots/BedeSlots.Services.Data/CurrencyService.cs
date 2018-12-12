@@ -25,18 +25,27 @@ namespace BedeSlots.Services.Data
             {
                 throw new ServiceException("UserId can not be null!");
             }
+            if (!await this.context.Users.AnyAsync(u => u.Id == userId))
+            {
+                throw new ServiceException("User not exist in database!");
+            }
 
             var currency = await this.context.Users
                 .Where(u => u.Id == userId)
                 .Select(u => u.Currency)
                 .FirstOrDefaultAsync();
 
+            if (currency == 0)
+            {
+                throw new ServiceException("User currency not set!");
+            }
+
             return currency;
         }
 
         public ICollection<Currency> GetAllCurrencies()
         {
-           return Enum.GetValues(typeof(Currency)).Cast<Currency>().ToList();
+            return Enum.GetValues(typeof(Currency)).Cast<Currency>().ToList();
         }
     }
 }

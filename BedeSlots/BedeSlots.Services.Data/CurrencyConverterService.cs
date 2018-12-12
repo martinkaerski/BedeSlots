@@ -20,7 +20,7 @@ namespace BedeSlots.Services.Data
             {
                 throw new ServiceException("Amount must be a positive number!");
             }
-
+            
             var rateToBaseCurrency = await this.exchangeRateApiCallService.GetRateAsync(currencyName);
 
             return amount * (1 / rateToBaseCurrency);

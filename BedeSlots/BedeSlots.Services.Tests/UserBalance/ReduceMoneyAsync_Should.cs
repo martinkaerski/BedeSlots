@@ -43,6 +43,24 @@ namespace BedeSlots.Services.Tests.UserBalance
                 Assert.IsTrue(result == tenDollars);
             }
         }
+
+        [TestMethod]
+        public async Task ThrowServiceException_WhenUserNotExistInDatabase()
+        {
+            var contexOptions = new DbContextOptionsBuilder<BedeSlotsDbContext>()
+     .UseInMemoryDatabase(databaseName: "ThrowServiceException_WhenUserNotExistInDatabase")
+     .UseInternalServiceProvider(serviceProvider).Options;
+            var tenDollars = 10;
+            var user = new User() { Balance = tenDollars + tenDollars, Currency = Currency.USD };
+
+            using (var bedeSlotsContext = new BedeSlotsDbContext(contexOptions))
+            {
+                var currencyConverterMock = new Mock<ICurrencyConverterService>();
+
+                var sut = new Data.UserBalanceService(bedeSlotsContext, currencyConverterMock.Object);
+                await Assert.ThrowsExceptionAsync<ServiceException>(async () => await sut.ReduceMoneyAsync(tenDollars, user.Id));
+            }
+        }
         [TestMethod]
         public async Task ThrowServiceException_WhenAmountParameterIsBiggerThanUserBalance()
         {

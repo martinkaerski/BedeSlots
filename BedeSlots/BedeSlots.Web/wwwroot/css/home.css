@@ -1,0 +1,238 @@
+/* CSS Document */
+body {
+    padding: 0px;
+    margin: 0px;
+    ;
+}
+
+div, p, ul, h2, h3, h4, img {
+    padding: 0px;
+    margin: 0px;
+}
+
+.clear {
+    clear: both;
+    margin: 0px;
+    height: 0
+}
+
+.headline {
+    font: 12px/14px "Trebuchet MS", Arial, Helvetica, sans-serif;
+    color: black;
+    font-weight: bold
+}
+
+#container {
+    width: 775px;
+    position: relative;
+    margin: 0 auto;
+}
+
+/* SLOGAN */
+
+#slogan-img {
+    width: 775px;
+    height: 318px;
+    margin: 10px;
+    position: relative;
+    background: url(../images/home/b_header.jpg) 0 0 no-repeat
+}
+
+    #slogan-img img#logo {
+        position: absolute;
+        top: 99px;
+        left: 553px
+    }
+
+    #slogan-img img#slogan {
+        position: absolute;
+        top: 132px;
+        left: 315px
+    }
+
+/* CONTENT */
+
+#content {
+    width: 775px;
+    position: relative;
+    clear: both;
+}
+
+#leftPan {
+    width: 445px;
+    float: left;
+    margin: 4px 34px 0 42px;
+    display: inline;
+}
+
+#rightPan {
+    width: 207px;
+    float: left;
+    margin: 4px 0 0 0;
+}
+
+#welcome {
+    margin-bottom: 10px
+}
+
+    #welcome img {
+        float: left;
+    }
+
+    #welcome p {
+        float: left;
+        width: 320px;
+        padding-top: 5px
+    }
+
+.popularItem {
+    width: 205px;
+    float: left
+}
+
+    .popularItem img {
+        float: left;
+        margin-right: 11px;
+    }
+
+    .popularItem p {
+        float: left;
+        width: 135px;
+        padding-top: 3px
+    }
+
+    .popularItem#l1, .popularItem#l2 {
+        margin: 0 18px 22px 5px
+    }
+
+#how img {
+    margin: 0 0 15px 1px
+}
+
+#how p {
+    margin: 0 0 10px 7px
+}
+
+#how ul {
+    margin-left: 13px;
+    clear: both;
+}
+
+    #how ul li {
+        font: 10px/14px Tahoma, Geneva, sans-serif;
+        background: url(../images/home/bullet1.gif) 0 5px no-repeat;
+        padding-left: 20px;
+        height: 24px;
+    }
+
+        #how ul li a {
+            color: #fffdb9;
+            text-decoration: underline;
+        }
+
+            #how ul li a:hover {
+                color: #fff;
+                text-decoration: none;
+            }
+
+.clear#end {
+    height: 15px
+}
+
+/* FOOTER */
+
+#footer {
+    width: 775px;
+    height: 59px;
+    clear: both;
+    background: url(../images/b_footer.gif) 0 0 repeat-x
+}
+
+    #footer p {
+        padding: 15px 0 0 0;
+        font: 11px/16px Tahoma, sans-serif;
+        font-weight: normal;
+        text-align: center;
+        color: #fffdb9;
+    }
+
+        #footer p a {
+            font: 11px/16px Tahoma, sans-serif;
+            font-weight: normal;
+            color: #fffdb9;
+            text-decoration: none;
+            padding: 0 3px
+        }
+
+            #footer p a:hover {
+                text-decoration: underline;
+                color: #fff
+            }
+
+* {
+    box-sizing: border-box;
+}
+
+.open-button {
+    background-color: green;
+    color: white;
+    padding: 16px 20px;
+    border: none;
+    cursor: pointer;
+    opacity: 0.8;
+    position: fixed;
+    bottom: 23px;
+    right: 28px;
+    width: 280px;
+}
+
+/* The popup chat - hidden by default */
+.chat-popup {
+    display: none;
+    position: fixed;
+    bottom: 0;
+    right: 15px;
+    border: 3px solid #f1f1f1;
+    z-index: 9;
+}
+
+/* Add styles to the form container */
+.form-container {
+    max-width: 300px;
+    padding: 10px;
+    background-color: white;
+}
+
+    /* Full-width textarea */
+    .form-container textarea {
+        width: 100%;
+        padding: 15px;
+        margin: 5px 0 22px 0;
+        border: none;
+        background: #f1f1f1;
+        resize: none;
+        min-height: 200px;
+    }
+
+        /* When the textarea gets focus, do something */
+        .form-container textarea:focus {
+            background-color: #ddd;
+            outline: none;
+        }
+
+    /* Add a red background color to the cancel button */
+    .form-container .cancel {
+        background-color: #ce0000;
+        color: white;
+        padding: 16px 20px;
+        border: none;
+        cursor: pointer;
+        width: 100%;
+        margin-bottom: 10px;
+        opacity: 0.8;
+    }
+
+    /* Add some hover effects to buttons */
+    .form-container .btn:hover, .open-button:hover {
+        opacity: 1;
+    }

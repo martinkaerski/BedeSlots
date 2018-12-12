@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using BedeSlots.Games.Models;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace BedeSlots.Games
@@ -50,14 +51,9 @@ namespace BedeSlots.Games
 
             var sortedItems = items.OrderBy(i => i.Probability).ToList();
 
-            int previousCumulativeProb = 0;
-            for (int i = 0; i < sortedItems.Count; i++)
-            {
-                var currentCumulativeProb = sortedItems[i].Probability + previousCumulativeProb;
-                sortedItems[i].CumulativeProbability = currentCumulativeProb;
-                previousCumulativeProb = currentCumulativeProb;
-            }
+            CalculateCumulativeProbability(sortedItems);
 
+            //Sorted dictionary by cumulative probability
             var sortedItemsDict = new SortedDictionary<int, Item>
             {
                 { apple.CumulativeProbability, apple },
@@ -67,6 +63,17 @@ namespace BedeSlots.Games
             };
 
             return sortedItemsDict;
+        }
+
+        private static void CalculateCumulativeProbability(List<Item> sortedItems)
+        {
+            int previousCumulativeProb = 0;
+            for (int i = 0; i < sortedItems.Count; i++)
+            {
+                var currentCumulativeProb = sortedItems[i].Probability + previousCumulativeProb;
+                sortedItems[i].CumulativeProbability = currentCumulativeProb;
+                previousCumulativeProb = currentCumulativeProb;
+            }
         }
     }
 }

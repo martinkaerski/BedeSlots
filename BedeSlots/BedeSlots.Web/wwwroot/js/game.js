@@ -60,8 +60,9 @@
         $spinBtn.text('Stop');
         $spinBtn.addClass('btn-danger');
         $("tr").css('background', '#1c1c1c');
+        $('#result-message').text('Good luck!');
         $('#result-message').css('color', 'white');
-        
+                
         const $spinForm = $("#spin-form");
         const dataToSend = $spinForm.serialize();
 

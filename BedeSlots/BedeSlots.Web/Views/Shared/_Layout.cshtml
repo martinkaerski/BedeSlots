@@ -61,18 +61,15 @@
     <div class="container body-content">
         @RenderBody()
 
-        @if (User.IsInRole(WebConstants.UserRole))
-        {
-            <button class=" btn open-button" onclick="openForm()">Chat</button>
-            <div class="chat-popup" id="myForm">
-                <form class="form-chat">
-                    <div>
-                        <iframe id="bot-iframe" height="400" width="280" src='https://webchat.botframework.com/embed/BedeSlotsBot?s=9auPtlIpveo.cwA.dgY.K2U1OVCynAWVcHZLw16J5sTfxRi1dbdQ5SHOCmIq7Bc' ;'></iframe>
-                    </div>
-                    <button type="button" class="btn cancel" onclick="closeForm()">Close</button>
-                </form>
-            </div>
-        }
+        <button class=" btn open-button" onclick="openForm()">Chat</button>
+        <div class="chat-popup" id="myForm">
+            <form class="form-chat">
+                <div>
+                    <iframe id="bot-iframe" height="400" width="280" src='https://webchat.botframework.com/embed/BedeSlotsBot?s=9auPtlIpveo.cwA.dgY.K2U1OVCynAWVcHZLw16J5sTfxRi1dbdQ5SHOCmIq7Bc' ;'></iframe>
+                </div>
+                <button type="button" class="btn cancel" onclick="closeForm()">Close</button>
+            </form>
+        </div>
 
         <hr />
         <footer>

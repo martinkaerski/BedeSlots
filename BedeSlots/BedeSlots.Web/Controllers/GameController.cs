@@ -110,7 +110,7 @@ namespace BedeSlots.Web.Controllers
 
                 await userBalanceService.DepositMoneyAsync(result.Amount, user.Id);
                 model.Balance += result.Amount;
-                model.Message = $"You won {Math.Round(result.Amount, 2)}";
+                model.Message = $"You won {Math.Round(result.Amount, 2)} {WebConstants.CurrencySymbols[user.Currency]}.";
             }
             else
             {

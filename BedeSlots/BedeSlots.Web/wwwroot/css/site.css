@@ -8483,10 +8483,11 @@ label {
     line-height: 30px;  
     font-size: 1.5em !important;
 }
-
+*/
 #mapDiv {
     width: 90%;
-}*/
+    z-index: -1;
+}
 
 .open-button {
     background-color: green;
@@ -8498,7 +8499,7 @@ label {
     position: fixed;
     bottom: 23px;
     right: 28px;
-    width: 280px;
+    width: 100px;
 }
 
 /* The popup chat - hidden by default */

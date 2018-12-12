@@ -23,7 +23,7 @@ namespace BedeSlots.Services.Tests.CardService
             var userStoreMock = new Mock<IUserStore<User>>();
             var userManager = new UserManager<User>(userStoreMock.Object, null, null, null, null, null, null, null, null);
 
-            var contexOptions = new DbContextOptionsBuilder<BedeSlotsDbContext>()
+            var contextOptions = new DbContextOptionsBuilder<BedeSlotsDbContext>()
      .UseInMemoryDatabase(databaseName: "SetCardsIsDeletedPropertyToTrue_WhenValidIsPassed")
      .UseInternalServiceProvider(serviceProvider)
      .Options;
@@ -47,7 +47,7 @@ namespace BedeSlots.Services.Tests.CardService
                 CreatedOn = DateTime.Now
             };
 
-            using (var bedeSlotsContext = new BedeSlotsDbContext(contexOptions))
+            using (var bedeSlotsContext = new BedeSlotsDbContext(contextOptions))
             {
                 await bedeSlotsContext.BankCards.AddAsync(firstCard);
                 await bedeSlotsContext.SaveChangesAsync();
@@ -56,7 +56,7 @@ namespace BedeSlots.Services.Tests.CardService
                 // HEEELP !
                 await sut.DeleteCardAsync(firstCard.Id);
             }
-            using (var bedeSlotsContext = new BedeSlotsDbContext(contexOptions))
+            using (var bedeSlotsContext = new BedeSlotsDbContext(contextOptions))
             {
                 Assert.IsTrue(await bedeSlotsContext.BankCards.AnyAsync(x => x.IsDeleted == true));
             }

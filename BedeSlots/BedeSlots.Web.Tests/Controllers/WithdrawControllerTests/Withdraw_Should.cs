@@ -54,13 +54,13 @@ namespace BedeSlots.Web.Tests.Controllers.WithdrawControllerTests
                 .Setup(ub => ub.GetUserBalanceByIdAsync(It.IsAny<string>()))
                 .ReturnsAsync(userBalance);
 
-            var card = new CardDetailsDto()
+            var card = new CardNumberDto()
             {
                 Id = 1,
-                LastFourDigit = "1234"
+                Number = "1234"
             };
             cardServiceMock
-                .Setup(c => c.GetCardDetailsByIdAsync(It.IsAny<int>()))
+                .Setup(c => c.GetCardNumberByIdAsync(It.IsAny<int>()))
                 .ReturnsAsync(card);
 
             currencyServiceMock
@@ -107,13 +107,13 @@ namespace BedeSlots.Web.Tests.Controllers.WithdrawControllerTests
                 .Setup(ub => ub.GetUserBalanceByIdAsync(It.IsAny<string>()))
                 .ReturnsAsync(userBalance);
 
-            var card = new CardDetailsDto()
+            var card = new CardNumberDto()
             {
                 Id = 1,
-                LastFourDigit = "1234"
+                Number = "1234"
             };
             cardServiceMock
-                .Setup(c => c.GetCardDetailsByIdAsync(It.IsAny<int>()))
+                .Setup(c => c.GetCardNumberByIdAsync(It.IsAny<int>()))
                 .ReturnsAsync(card);
 
             currencyServiceMock

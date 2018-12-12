@@ -63,12 +63,11 @@ namespace BedeSlots.Web.Controllers
 
             await this.userBalanceService.ReduceMoneyAsync(model.Amount, user.Id);
 
-            //TODO: change to another DTO
-            var card = await this.cardService.GetCardDetailsByIdAsync(model.BankCardId);
+            var card = await this.cardService.GetCardNumberByIdAsync(model.BankCardId);
             var userCurrency = await this.currencyService.GetUserCurrencyAsync(user.Id);
 
             await this.transactionService.AddTransactionAsync(TransactionType.Withdraw,
-                user.Id, card.LastFourDigit, model.Amount, userCurrency);
+                user.Id, card.Number, model.Amount, userCurrency);
 
             string currencySymbol = WebConstants.CurrencySymbols[user.Currency];
             this.StatusMessage = $"Successfully withdrawed {model.Amount} {currencySymbol}.";

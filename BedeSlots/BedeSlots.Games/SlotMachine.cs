@@ -51,13 +51,13 @@ namespace BedeSlots.Games
 
         private decimal CalculateCoefficient(Item[,] matrix)
         {
-            decimal finalCoef = 0;
+            decimal totalCoef = 0;
             winningRows.Clear();
 
             for (int row = 0; row < matrix.GetLength(0); row++)
             {
                 Item previousItem = null;
-                bool isWinning = true;
+                bool isWinningRow = true;
                 decimal rowCoef = 0;
 
                 for (int col = 0; col < matrix.GetLength(1); col++)
@@ -68,34 +68,24 @@ namespace BedeSlots.Games
                         continue;
                     }
 
-                    if (previousItem != null)
+                    if (previousItem != null && element != previousItem)
                     {
-                        if (element != previousItem)
-                        {
-                            isWinning = false;
-                            break;
-                        }
-                        else
-                        {
-                            rowCoef += element.Coefficient;
-                            previousItem = element;
-                        }
+                        isWinningRow = false;
+                        break;
                     }
-                    else
-                    {
-                        rowCoef += element.Coefficient;
-                        previousItem = element;
-                    }
+
+                    rowCoef += element.Coefficient;
+                    previousItem = element;
                 }
 
-                if (isWinning)
+                if (isWinningRow)
                 {
-                    finalCoef += rowCoef;
+                    totalCoef += rowCoef;
                     winningRows.Add(row);
                 }
             }
 
-            return finalCoef;
+            return totalCoef;
         }
 
         private Item[,] GenerateItemMatrix(int rows, int cols, IDictionary<int, Item> items)

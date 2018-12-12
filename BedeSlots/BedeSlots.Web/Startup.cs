@@ -1,4 +1,6 @@
-﻿using BedeSlots.Data;
+﻿using BedeSlots.Common.Providers;
+using BedeSlots.Common.Providers.Contracts;
+using BedeSlots.Data;
 using BedeSlots.Data.Models;
 using BedeSlots.Games;
 using BedeSlots.Games.Contracts;
@@ -97,6 +99,7 @@ namespace BedeSlots
             services.AddTransient<IExchangeRatesApiCaller, ExchangeRatesApiCaller>();
             services.AddTransient(typeof(IPaginationProvider<>), typeof(PaginationProvider<>));
             services.AddSingleton<ISlotMachine, SlotMachine>();
+            services.AddTransient<IDateTimeProvider, DateTimeProvider>();
         }
 
         private void RegisterAuthentication(IServiceCollection services)

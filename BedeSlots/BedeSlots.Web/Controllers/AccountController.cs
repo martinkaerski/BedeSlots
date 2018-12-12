@@ -66,6 +66,22 @@ namespace BedeSlots.Controllers
                 // This doesn't count login failures towards account lockout
                 // To enable password failures to trigger account lockout, set lockoutOnFailure: true
                 var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, lockoutOnFailure: false);
+
+                //try
+                //{
+                //    var user = await this._userManager.FindByEmailAsync(model.Email);
+                //    if (user.IsDeleted == true)
+                //    {
+                //        _logger.LogWarning("User account is deleted. For more information please contact us.");
+                //        return RedirectToAction(nameof(Deleted));
+                //    }
+                //}
+                //catch (Exception)
+                //{
+                //    ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                //    return View(model);
+                //}
+
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User logged in.");
@@ -204,6 +220,13 @@ namespace BedeSlots.Controllers
         [HttpGet]
         [AllowAnonymous]
         public IActionResult Lockout()
+        {
+            return View();
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult Deleted()
         {
             return View();
         }

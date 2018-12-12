@@ -145,6 +145,7 @@ namespace BedeSlots.Services.Data
             {
                 throw new ServiceException("UserId can not be null!");
             }
+
             var user = await this.GetUserByIdAsync(userId);
             user.IsDeleted = true;
             await this.context.SaveChangesAsync();

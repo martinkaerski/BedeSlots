@@ -35,13 +35,13 @@ namespace BedeSlots.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> LoadData()
+        public async Task<IActionResult> LoadData(string draw, string sortColumn, string sortColumnDirection, string searchValue)
         {
             try
             {
                 var user = await this.userManager.GetUserAsync(HttpContext.User);
 
-                string draw, sortColumn, sortColumnDirection, searchValue;
+                //string draw, sortColumn, sortColumnDirection, searchValue;
                 int pageSize, skip, recordsTotal;
 
                 this.paginationProvider.GetParameters(out draw, out sortColumn, out sortColumnDirection, out searchValue, out pageSize, out skip, out recordsTotal, HttpContext, Request);

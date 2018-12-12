@@ -15,8 +15,11 @@ namespace BedeSlots.Web.Models
         [RegularExpression("^[0-9]+$", ErrorMessage = "The withdraw amount should be a positive number.")]
         public int Amount { get; set; }
 
+        [Required]
+        [Range(1,100)]
         public int BankCardId { get; set; }
 
+        [Required]
         public Currency Currency { get; set; }
 
         public string StatusMessage { get; set; }

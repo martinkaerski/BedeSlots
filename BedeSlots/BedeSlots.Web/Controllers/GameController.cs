@@ -1,4 +1,5 @@
-﻿using BedeSlots.Data.Models;
+﻿
+using BedeSlots.Data.Models;
 using BedeSlots.Games.Contracts;
 using BedeSlots.Services.Data.Contracts;
 using BedeSlots.Web.Models;

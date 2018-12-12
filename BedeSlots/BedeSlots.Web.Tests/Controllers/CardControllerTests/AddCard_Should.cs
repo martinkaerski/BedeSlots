@@ -1,4 +1,5 @@
-﻿using BedeSlots.Data.Models;
+﻿using BedeSlots.Common.Providers.Contracts;
+using BedeSlots.Data.Models;
 using BedeSlots.Services.Data.Contracts;
 using BedeSlots.Web.Controllers;
 using BedeSlots.Web.Models;
@@ -22,7 +23,8 @@ namespace BedeSlots.Web.Tests.Controllers.CardControllerTests
         {
             // Arrange
             var cardServiceMock = new Mock<ICardService>();
-            var controller = SetupController(cardServiceMock);
+            var dateTimeProvMock = new Mock<IDateTimeProvider>();
+            var controller = SetupController(cardServiceMock, dateTimeProvMock);
 
             // Act
             var result = controller.AddCard() as ViewResult;
@@ -36,7 +38,9 @@ namespace BedeSlots.Web.Tests.Controllers.CardControllerTests
         {
             // Arrange
             var cardServiceMock = new Mock<ICardService>();
-            var controller = SetupController(cardServiceMock);
+            var dateTimeProvMock = new Mock<IDateTimeProvider>();
+            var controller = SetupController(cardServiceMock, dateTimeProvMock);
+
             var viewModel = new AddCardViewModel() { CardNumber = "1111111111111111" };
 
             // Act
@@ -51,11 +55,11 @@ namespace BedeSlots.Web.Tests.Controllers.CardControllerTests
                 ), Times.Once);
         }
 
-        private CardController SetupController(Mock<ICardService> cardServiceMock)
+        private CardController SetupController(Mock<ICardService> cardServiceMock, Mock<IDateTimeProvider> dateTimeMock)
         {
             var userManagerMock = SetupUserManagerMock();
 
-            var controller = new CardController(userManagerMock.Object, cardServiceMock.Object)
+            var controller = new CardController(userManagerMock.Object, cardServiceMock.Object, dateTimeMock.Object)
             {
                 ControllerContext = new ControllerContext()
                 {

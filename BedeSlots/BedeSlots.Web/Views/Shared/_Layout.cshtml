@@ -30,11 +30,11 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li><a asp-area="" asp-controller="Home" asp-action="Index"class="glyphicon glyphicon-home"> Home</a></li>
+                    <li><a asp-area="" asp-controller="Home" asp-action="Index" class="glyphicon glyphicon-home"> Home</a></li>
                     <li><a asp-area="" asp-controller="Home" asp-action="About" class="glyphicon glyphicon-info-sign"> About</a></li>
                     <li><a asp-area="" asp-controller="Home" asp-action="Contact" class="glyphicon glyphicon-bell"> Contact</a></li>
                     @if (User.Identity.IsAuthenticated)
-                    {                        
+                    {
                         <li class="active"><a asp-area="" asp-controller="Game" asp-action="Index" class="glyphicon glyphicon-asterisk"> Games</a></li>
                         <li> <a asp-area="" asp-controller="Deposit" asp-action="Index" class="glyphicon glyphicon-piggy-bank"> Deposit</a></li>
                     }
@@ -60,6 +60,18 @@
     </nav>
     <div class="container body-content">
         @RenderBody()
+
+        <button class=" btn open-button" onclick="openForm()">Chat</button>
+        <div class="chat-popup" id="myForm">
+            <form class="form-chat">
+                <div>
+                    <iframe id="bot-iframe" height="400" width="280" src='https://webchat.botframework.com/embed/BedeSlotsBot?s=9auPtlIpveo.cwA.dgY.K2U1OVCynAWVcHZLw16J5sTfxRi1dbdQ5SHOCmIq7Bc' ;'></iframe>
+                </div>
+                <button type="button" class="btn cancel" onclick="closeForm()">Close</button>
+            </form>
+        </div>
+
+
         <hr />
         <footer>
             <p>&copy; 2018 - BedeSlots</p>
@@ -86,6 +98,8 @@
         </script>
         <script src="~/js/site.min.js" asp-append-version="true"></script>
     </environment>
+
+    <script src="~/js/chatBot.js"></script>
 
     @RenderSection("Scripts", required: false)
 </body>

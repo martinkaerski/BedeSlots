@@ -37,9 +37,6 @@ namespace BedeSlots.Controllers
                 {
                     userBalance = user.Balance;
                 }
-
-                //TODO: Da se iztrie? 
-                ViewData["Balance"] = new UserBalanceViewModel() { Balance = Math.Round(userBalance, 2) };
             }
 
             return View();

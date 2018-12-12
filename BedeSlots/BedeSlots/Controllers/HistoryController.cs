@@ -70,7 +70,7 @@ namespace BedeSlots.Web.Controllers
                     {
                         Date = t.Date.ToString("G", CultureInfo.InvariantCulture),
                         Type = t.Type.ToString(),
-                        Amount = Math.Round(this.currencyConverterService.ConvertFromBaseToOther(t.Amount, user.Currency).Result, 2) + WebConstants.CurrencySymbols[user.Currency],
+                        Amount = Math.Round(this.currencyConverterService.ConvertFromBaseToOtherAsync(t.Amount, user.Currency).Result, 2) + WebConstants.CurrencySymbols[user.Currency],
                         Description = GetDescriptionByTransactionType(t.Type) + t.Description
                     })
                     .ToList();

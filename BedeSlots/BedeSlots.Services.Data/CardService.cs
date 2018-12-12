@@ -20,8 +20,8 @@ namespace BedeSlots.Services.Data
 
         public CardService(BedeSlotsDbContext context, UserManager<User> userManager)
         {
-            this.context = context ?? throw new ArgumentNullException(nameof(context));
-            this.userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
+            this.context = context ?? throw new ServiceException(nameof(context));
+            this.userManager = userManager ?? throw new ServiceException(nameof(userManager));
         }
 
         public async Task<ICollection<CardDetailsDto>> GetUserCardsAsync(string userId)

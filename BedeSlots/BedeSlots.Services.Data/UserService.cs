@@ -118,21 +118,27 @@ namespace BedeSlots.Services.Data
 
         public async Task<IdentityRole> EditUserRoleAsync(string userId, string newRoleId)
         {
-            var userRole = this.context.UserRoles.FirstOrDefault(ur => ur.UserId == userId);
-            this.context.UserRoles.Remove(userRole);
-
-            var newRole = await this.context.Roles.FirstOrDefaultAsync(r => r.Id == newRoleId);
-            var user = await GetUserByIdAsync(userId);
-
-            if (newRole == null || user == null)
+            if (userId == null)
             {
-                //TODO: do smth
+                throw new ServiceException("UserId can not be null!");
             }
+
+            if (newRoleId == null)
+            {
+                throw new ServiceException("User role id can not be null!");
+            }
+
+            var userRole = this.context.UserRoles.FirstOrDefault(ur => ur.UserId == userId) ?? throw new ServiceException("UserRole not exist!");
+
+            var newRole = await this.context.Roles.FirstOrDefaultAsync(r => r.Id == newRoleId) ?? throw new ServiceException("Role not exist!");
+
+            var user = await GetUserByIdAsync(userId);
 
             //await this.userManager.AddToRoleAsync(user, newRole.Name);
 
             var newIdentityRole = new IdentityUserRole<string>() { RoleId = newRole.Id, UserId = user.Id };
 
+            this.context.UserRoles.Remove(userRole);
             await context.UserRoles.AddAsync(newIdentityRole);
             await this.context.SaveChangesAsync();
 

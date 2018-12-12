@@ -1,4 +1,5 @@
-﻿using BedeSlots.Data.Models;
+﻿using BedeSlots.Common.Providers.Contracts;
+using BedeSlots.Data.Models;
 using BedeSlots.Models.AccountViewModels;
 using BedeSlots.Services;
 using BedeSlots.Services.Data.Contracts;
@@ -26,19 +27,22 @@ namespace BedeSlots.Controllers
         private readonly IEmailSender _emailSender;
         private readonly ILogger _logger;
         private readonly ICurrencyService currencyService;
+        private readonly IDateTimeProvider dateTimeProvider;
 
         public AccountController(
             UserManager<User> userManager,
             SignInManager<User> signInManager,
             IEmailSender emailSender,
             ILogger<AccountController> logger,
-            ICurrencyService currencyService)
+            ICurrencyService currencyService,
+            IDateTimeProvider dateTimeProvider)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _emailSender = emailSender;
             _logger = logger;
             this.currencyService = currencyService;
+            this.dateTimeProvider = dateTimeProvider;
         }
 
         [TempData]
@@ -67,23 +71,16 @@ namespace BedeSlots.Controllers
                 // To enable password failures to trigger account lockout, set lockoutOnFailure: true
                 var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, lockoutOnFailure: false);
 
-                //try
-                //{
-                //    var user = await this._userManager.FindByEmailAsync(model.Email);
-                //    if (user.IsDeleted == true)
-                //    {
-                //        _logger.LogWarning("User account is deleted. For more information please contact us.");
-                //        return RedirectToAction(nameof(Deleted));
-                //    }
-                //}
-                //catch (Exception)
-                //{
-                //    ModelState.AddModelError(string.Empty, "Invalid login attempt.");
-                //    return View(model);
-                //}
-
                 if (result.Succeeded)
                 {
+                    var user = await this._userManager.FindByEmailAsync(model.Email);
+                    if (user.IsDeleted == true)
+                    {
+                        _logger.LogWarning("User account is deleted. For more information please contact us.");
+                        await _signInManager.SignOutAsync();
+                        return RedirectToAction(nameof(Deleted));
+                    }
+
                     _logger.LogInformation("User logged in.");
                     return RedirectToLocal(returnUrl);
                 }
@@ -484,18 +481,17 @@ namespace BedeSlots.Controllers
             return View();
         }
 
-        //TODO: wrap datetime
         [AcceptVerbs("Get", "Post")]
         [AllowAnonymous]
         public JsonResult AgeValidation(DateTime birthdate)
         {
-            DateTime today = DateTime.Today;
+            DateTime today = dateTimeProvider.Now;
             int age = today.Year - birthdate.Year;
             if (birthdate > today.AddYears(-age))
             {
                 age--;
             }
-        
+
             if (age < 18)
             {
                 return Json($"Invalid birthdate! You should be over 18 years old.");
@@ -528,7 +524,7 @@ namespace BedeSlots.Controllers
             }
         }
 
-        private  IEnumerable<SelectListItem> GetCurrencies()
+        private IEnumerable<SelectListItem> GetCurrencies()
         {
             var currencies = this.currencyService.GetAllCurrencies();
             var currenciesListItems = currencies

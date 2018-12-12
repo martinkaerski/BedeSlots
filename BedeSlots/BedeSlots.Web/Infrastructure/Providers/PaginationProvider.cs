@@ -1,8 +1,8 @@
-﻿using BedeSlots.Web.Providers.Contracts;
+﻿using BedeSlots.Web.Infrastructure.Providers.Contracts;
 using Microsoft.AspNetCore.Http;
 using System.Linq;
 
-namespace BedeSlots.Web.Providers
+namespace BedeSlots.Web.Infrastructure.Providers
 {
     public class PaginationProvider<T> : IPaginationProvider<T>
     {
@@ -26,7 +26,7 @@ namespace BedeSlots.Web.Providers
             recordsTotal = 0;
         }
 
-        public  IQueryable<T> SortData(string sortColumn, string sortColumnDirection, IQueryable<T> collection)
+        public IQueryable<T> SortData(string sortColumn, string sortColumnDirection, IQueryable<T> collection)
         {
             //Sorting
             if (!(string.IsNullOrEmpty(sortColumn) && string.IsNullOrEmpty(sortColumnDirection)))

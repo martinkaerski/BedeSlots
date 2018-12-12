@@ -2,7 +2,7 @@
 using BedeSlots.DTO;
 using BedeSlots.Services.Data.Contracts;
 using BedeSlots.Web.Areas.Admin.Models.Users;
-using BedeSlots.Web.Providers.Contracts;
+using BedeSlots.Web.Infrastructure.Providers.Contracts;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -152,7 +152,7 @@ namespace BedeSlots.Web.Areas.Admin.Controllers
                 this.paginationProvider.GetParameters(out draw, out sortColumn, out sortColumnDirection, out searchValue, out pageSize, out skip, out recordsTotal, HttpContext, Request);
 
                 var users = this.userService.GetAllUsers();
-                
+
                 //Search
                 if (!string.IsNullOrEmpty(searchValue))
                 {
@@ -194,6 +194,6 @@ namespace BedeSlots.Web.Areas.Admin.Controllers
             }
         }
 
-       
+
     }
 }

@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using System.Linq;
 
-namespace BedeSlots.Web.Providers.Contracts
+namespace BedeSlots.Web.Infrastructure.Providers.Contracts
 {
     public interface IPaginationProvider<T>
     {

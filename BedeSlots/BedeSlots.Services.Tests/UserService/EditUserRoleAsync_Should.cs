@@ -45,7 +45,6 @@ namespace BedeSlots.Services.Tests.UserService
 
                 var sut = new Data.UserService(bedeSlotsContext,
                                                userManager);
-                // TODO need help from trainers !! .AddToRoleAsync throws NotSupportedException!
                 var result = await sut.EditUserRoleAsync(user.Id, newRole.Id);
 
                 Assert.IsTrue(result.Name == newRole.Name);

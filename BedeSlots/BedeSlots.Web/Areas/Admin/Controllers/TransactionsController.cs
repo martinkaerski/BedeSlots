@@ -1,13 +1,11 @@
 ﻿using BedeSlots.Common;
 using BedeSlots.Data.Models;
-using BedeSlots.DTO;
 using BedeSlots.DTO.TransactionDto;
 using BedeSlots.Services.Data.Contracts;
 using BedeSlots.Web.Areas.Admin.Models;
-using BedeSlots.Web.Providers.Contracts;
+using BedeSlots.Web.Infrastructure.Providers.Contracts;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using System;
 using System.Globalization;
 using System.Linq;
@@ -68,8 +66,8 @@ namespace BedeSlots.Web.Areas.Admin.Controllers
                 string draw, sortColumn, sortColumnDirection, searchValue;
                 int pageSize, skip, recordsTotal;
 
-                this.paginationProvider.GetParameters(out draw, out sortColumn, out sortColumnDirection, out searchValue, out pageSize, out skip, out recordsTotal, HttpContext, Request );
-               
+                this.paginationProvider.GetParameters(out draw, out sortColumn, out sortColumnDirection, out searchValue, out pageSize, out skip, out recordsTotal, HttpContext, Request);
+
                 var transactions = this.transactionService.GetAllTransactions();
 
                 //Search
@@ -118,7 +116,7 @@ namespace BedeSlots.Web.Areas.Admin.Controllers
             {
                 return $"{type.ToString()} with card **** **** **** ";
             }
-            else 
+            else
             {
                 return $"{type.ToString()} on game ";
             }

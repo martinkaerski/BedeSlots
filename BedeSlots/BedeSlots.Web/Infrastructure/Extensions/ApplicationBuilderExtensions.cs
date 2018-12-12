@@ -1,5 +1,4 @@
-﻿using BedeSlots.Common;
-using BedeSlots.Data;
+﻿using BedeSlots.Data;
 using BedeSlots.Data.Models;
 using BedeSlots.Services.Data;
 using Microsoft.AspNetCore.Builder;
@@ -9,7 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Threading.Tasks;
 
-namespace BedeSlots.Web.Extensions
+namespace BedeSlots.Web.Infrastructure.Extensions
 {
     public static class ApplicationBuilderExtensions
     {

@@ -1,8 +1,7 @@
 ﻿using BedeSlots.Data.Models;
-using BedeSlots.DTO;
 using BedeSlots.DTO.TransactionDto;
 using BedeSlots.Services.Data.Contracts;
-using BedeSlots.Web.Providers.Contracts;
+using BedeSlots.Web.Infrastructure.Providers.Contracts;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -61,7 +60,7 @@ namespace BedeSlots.Web.Controllers
 
                 //Total number of rows count 
                 recordsTotal = transactions.Count();
-            
+
                 //Paging 
                 var data = transactions
                     .Skip(skip)

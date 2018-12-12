@@ -8551,3 +8551,9 @@ label {
     .form-chat .btn:hover, .open-button:hover {
         opacity: 1;
     }
+
+@media only screen and (max-width: 1200px) {
+    .open-button {
+        display: none;
+    }
+}

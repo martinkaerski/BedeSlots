@@ -1,10 +1,14 @@
 ﻿.game-img {
     width: 60%;
     height: auto;
-}   
+}
 
-tr{
-    background-color:white;
+tr {
+    background-color: #1c1c1c;
+}
+
+.text{
+    color:white;
 }
 
 .game-poster {
@@ -27,6 +31,7 @@ tr{
 
 #slot-machine-table{
     column-width:200px;
+    background-image:
 }
     
 .hover01 figure img {
@@ -50,3 +55,112 @@ tr{
     background-color: blue;
     color: white;
 }*/
+
+
+.neon {
+    font-family: 'Poppins';
+    color: #FB4264;
+}
+
+.flux {
+    font-family: 'Poppins';
+    color: #426DFB;
+}
+
+.corner-ribbon {
+    font-family: 'Poppins', sans-serif;
+    width: 200px;
+    background: #e43;
+    position: absolute;
+    text-align: center;
+    line-height: 40px;
+    letter-spacing: 1px;
+    color: #f0f0f0;
+    font-size: 20px;
+    top: 70px;
+    right: -50px;
+    left: auto;
+    transform: rotate(45deg);
+    -webkit-transform: rotate(45deg);
+}
+
+    .corner-ribbon.sticky {
+        position: fixed;
+    }
+
+    .corner-ribbon.shadow {
+        box-shadow: 0 0 3px rgba(0, 0, 0, .3);
+    }
+
+    .corner-ribbon.black {
+        background: #333;
+    }
+
+
+.neon {
+    animation: neon 1s ease infinite;
+    -moz-animation: neon 1s ease infinite;
+    -webkit-animation: neon 1s ease infinite;
+}
+
+@keyframes neon {
+
+    0%, 100% {
+        text-shadow: 0 0 1vw #FA1C16, 0 0 3vw #FA1C16, 0 0 10vw #FA1C16, 0 0 10vw #FA1C16, 0 0 .4vw #FED128, .5vw .5vw .1vw #806914;
+        color: #FED128;
+    }
+
+    50% {
+        text-shadow: 0 0 .5vw #800E0B, 0 0 1.5vw #800E0B, 0 0 5vw #800E0B, 0 0 5vw #800E0B, 0 0 .2vw #800E0B, .5vw .5vw .1vw #40340A;
+        color: #806914;
+    }
+}
+
+
+@keyframes flux {
+
+    0%, 100% {
+        text-shadow: 0 0 1vw #1041FF, 0 0 3vw #1041FF, 0 0 10vw #1041FF, 0 0 10vw #1041FF, 0 0 .4vw #8BFDFE, .5vw .5vw .1vw #147280;
+        color: #28D7FE;
+    }
+
+    50% {
+        text-shadow: 0 0 .5vw #082180, 0 0 1.5vw #082180, 0 0 5vw #082180, 0 0 5vw #082180, 0 0 .2vw #082180, .5vw .5vw .1vw #0A3940;
+        color: #146C80;
+    }
+}
+
+.flux {
+    animation: flux 2s linear infinite;
+    -moz-animation: flux 2s linear infinite;
+    -webkit-animation: flux 2s linear infinite;
+    -o-animation: flux 2s linear infinite;
+}
+
+@media only screen and (max-width: 1260px) {
+    #label-corner {
+        display: none;
+    }
+}
+
+#games-images{
+    padding-top:30px;
+}
+
+.game-name {
+    font-family: Cambria, cursive;
+    font-size: 50px;
+    color: #bf0000;
+    padding-bottom: 5px;
+    padding-top: 35px;
+    text-shadow: 2px 3px 1px black;
+}
+
+#game-div {
+    background-image: url("../images/slot-back2.jpg");
+    height: 550px; 
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    position: relative;
+}

@@ -8464,26 +8464,6 @@ label {
     border-color: #dddddd;
 }
 
-/*#my-navbar{
-    height:60px;
-    text-align:center;
-}
-
-.navbar-nav li a {
-    line-height: 30px;
-    font-size: 1.1em !important;
-}
-
-.navbar-nav li button {
-    line-height: 30px;
-    font-size: 1.1em !important;
-}
-
-#nav-logo {
-    line-height: 30px;  
-    font-size: 1.5em !important;
-}
-*/
 #mapDiv {
     width: 90%;
     z-index: -1;

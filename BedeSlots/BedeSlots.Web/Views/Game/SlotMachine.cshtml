@@ -1,12 +1,9 @@
-﻿@model GameSlotViewModel
+﻿
+@model GameSlotViewModel
 
 @{
     ViewData["Title"] = "SmallSlotMachine";
 }
-
-<div id="label-corner" class="corner-ribbon sticky black shadow text-center">
-    <span class="neon">Bede</span> <span class="flux">Slots</span>
-</div>
 
 <div id="status-msg">
     <partial name="_StatusMessage" model="@Model.StatusMessage" />
@@ -26,13 +23,13 @@
                     <label asp-for="@Model.Amount" class="control-label text"></label>
                     <input asp-for="@Model.Amount" id="stake-amount" type="number" min="1" class="inline" />
                     <span class="text">@WebConstants.CurrencySymbols[Model.Currency]</span>
-                    <button type="button" id="spin-button" class="btn btn-success form-control" inline">Spin</button>
+                    <button type="button" id="spin-button" class="btn btn-success form-control inline" >Spin</button>
 
                     <input asp-for="@Model.Rows" id="rows" hidden />
                     <input asp-for="@Model.Cols" id="cols" hidden />
                     <input asp-for="@Model.GameName" id="game-name" hidden />
                 </div>
-                    <span asp-validation-for="@Model.Amount" class="text-danger"></span>
+                <span asp-validation-for="@Model.Amount" class="text-danger"></span>
             </form>
         </div>
     </div>
@@ -41,6 +38,7 @@
 <audio id="spin-audio" src="/audio/snip.mp3"></audio>
 <audio id="win-audio" src="~/audio/win.mp3"></audio>
 <audio id="big-win-audio" src="~/audio/big-win.mp3"></audio>
+<audio id="mario-audio" src="~/audio/mario.mp3"></audio>
 
 @section Scripts{
     @await Html.PartialAsync("_ValidationScriptsPartial")s

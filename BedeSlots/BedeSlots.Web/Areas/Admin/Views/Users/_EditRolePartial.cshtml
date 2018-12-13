@@ -10,8 +10,9 @@
     <form id="editRole">
         <input asp-for="UserId" id="userId" type="text" hidden />
         @Html.DropDownListFor(model => model.RoleId, Model.Roles, new { @class = "form-control" })
-    <br />
+        @Html.AntiForgeryToken()
     </form>
+    <br />
 
     <div class="text-center">
         <button id="btnSubmit" type="submit" class="btn btn-success">Edit</button>
@@ -38,14 +39,14 @@
                     }
                     else {
                         alert("Something went wrong!");
-                    }  
+                    }
                 }
             })
         })
 
         $("#btnReject").click(function (event) {
             event.preventDefault();
-            $("#myModal1").modal("hide");            
+            $("#myModal1").modal("hide");
         })
     })
 </script>

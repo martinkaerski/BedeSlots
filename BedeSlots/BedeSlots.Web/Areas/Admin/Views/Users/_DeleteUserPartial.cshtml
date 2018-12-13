@@ -6,9 +6,9 @@
 
 <h2>Are you sure you want to delete @Model.UserName?</h2>
 
-
 <div>
     <form id="deleteUser">
+        @Html.AntiForgeryToken()
         <input asp-for="Id" type="text" hidden />
     </form>
 

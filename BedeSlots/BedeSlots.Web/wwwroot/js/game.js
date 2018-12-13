@@ -31,6 +31,8 @@
         arr[3] = directory + "8p.png";
     }
 
+    document.getElementById('mario-audio').play();
+
     var isStopped = false;
     const $spinBtn = $('#spin-button');
     const $spinForm = $('#spin-form');

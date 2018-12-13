@@ -48,6 +48,7 @@ namespace BedeSlots.Web.Controllers
             {
                 return Json(new { message = $"Invalid parameters!" });
             }
+
             DateTime expiryDate = model.Expiry;
 
             var card = await this.cardService.AddCardAsync(model.CardNumber, model.CardholderName, model.Cvv, expiryDate, model.CardType, userId);

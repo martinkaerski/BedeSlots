@@ -136,6 +136,7 @@ namespace BedeSlots.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(DeleteUserViewModel model)
         {
             await this.userService.DeleteUserAsync(model.Id);

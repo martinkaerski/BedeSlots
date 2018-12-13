@@ -67,7 +67,6 @@ namespace BedeSlots.Web.Infrastructure.Extensions
                     })
                     .Wait();
             }
-
             return app;
         }
     }

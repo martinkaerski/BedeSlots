@@ -9,7 +9,7 @@ using BedeSlots.Services.Data;
 using BedeSlots.Services.Data.Contracts;
 using BedeSlots.Services.External;
 using BedeSlots.Services.External.Contracts;
-using BedeSlots.Web.Infrastructure.Extensions;
+//using BedeSlots.Web.Infrastructure.Extensions;
 using BedeSlots.Web.Infrastructure.Providers;
 using BedeSlots.Web.Infrastructure.Providers.Contracts;
 using Microsoft.AspNetCore.Builder;
@@ -48,7 +48,7 @@ namespace BedeSlots
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IServiceProvider serviceProvider)
         {
-            app.UseDatabaseMigration();
+            //app.UseDatabaseMigration();
 
             if (this.Environment.IsDevelopment())
             {

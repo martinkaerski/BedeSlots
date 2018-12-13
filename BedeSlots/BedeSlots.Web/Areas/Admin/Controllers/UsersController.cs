@@ -40,9 +40,24 @@ namespace BedeSlots.Web.Areas.Admin.Controllers
         [HttpGet]
         public async Task<IActionResult> EditRole(string userid)
         {
-            var user = await this.userManager.FindByIdAsync(userid);
-            var userRoles = await this.userManager.GetRolesAsync(user);
+            if (userid == null)
+            {
+                Response.StatusCode = 404;
+                return View("NotFound");
+            }
 
+            User user;
+            try
+            {
+                user = await this.userManager.FindByIdAsync(userid);
+            }
+            catch (Exception)
+            {
+                Response.StatusCode = 404;
+                return View("NotFound");
+            }
+
+            var userRoles = await this.userManager.GetRolesAsync(user);
             var currentUserId = userManager.GetUserId(HttpContext.User);
 
             if (user.Id == currentUserId)
@@ -56,7 +71,6 @@ namespace BedeSlots.Web.Areas.Admin.Controllers
             }
 
             var roleId = await userService.GetUserRoleIdAsync(userid);
-
             var roles = await userService.GetAllRolesAsync();
             roles = roles.Where(x => x.Name != WebConstants.MasterAdminRole).ToList();
 
@@ -76,6 +90,11 @@ namespace BedeSlots.Web.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> EditRole(EditRoleViewModel model)
         {
+            if (!ModelState.IsValid)
+            {
+                return RedirectToAction("EditRole");
+            }
+
             var role = model.RoleId;
             var user = await this.userManager.FindByIdAsync(model.UserId);
             var userRoles = await this.userManager.GetRolesAsync(user);
@@ -90,37 +109,26 @@ namespace BedeSlots.Web.Areas.Admin.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetRole(string userid)
-        {
-            var user = await this.userManager.FindByIdAsync(userid);
-            var userRoles = await this.userManager.GetRolesAsync(user);
-
-            if (userRoles.Contains(WebConstants.MasterAdminRole))
-            {
-                return RedirectToAction("Index");
-            }
-
-            var roleId = await userService.GetUserRoleIdAsync(userid);
-
-            var roles = await userService.GetAllRolesAsync();
-            var rolesSelectList = roles.Select(r => new SelectListItem { Value = r.Id, Text = r.Name }).ToList();
-            var model = new EditRoleViewModel()
-            {
-                UserId = userid,
-                RoleId = roleId,
-                UserName = user.FirstName + " " + user.LastName,
-                Roles = rolesSelectList
-            };
-
-            return PartialView("_EditRolePartial", model);
-        }
-
-        [HttpGet]
         public async Task<IActionResult> Delete(string userid)
         {
-            var user = await this.userManager.FindByIdAsync(userid);
-            var userRoles = await this.userManager.GetRolesAsync(user);
+            if (userid == null)
+            {
+                Response.StatusCode = 404;
+                return View("NotFound");
+            }
 
+            User user;
+            try
+            {
+                user = await this.userManager.FindByIdAsync(userid);
+            }
+            catch (Exception)
+            {
+                Response.StatusCode = 404;
+                return View("NotFound");
+            }
+
+            var userRoles = await this.userManager.GetRolesAsync(user);
             if (userRoles.Contains(WebConstants.MasterAdminRole))
             {
                 return PartialView("_MasterAdminEdit");
@@ -139,6 +147,11 @@ namespace BedeSlots.Web.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(DeleteUserViewModel model)
         {
+            if (!ModelState.IsValid)
+            {
+                return RedirectToAction("Delete");
+            }
+
             await this.userService.DeleteUserAsync(model.Id);
             return RedirectToAction("Index");
         }
@@ -193,7 +206,7 @@ namespace BedeSlots.Web.Areas.Admin.Controllers
             }
             catch (Exception)
             {
-                return RedirectToAction("Index");
+                return RedirectToAction(controllerName: "Home", actionName: "Index");
             }
         }
     }

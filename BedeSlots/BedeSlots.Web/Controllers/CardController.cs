@@ -72,6 +72,7 @@ namespace BedeSlots.Web.Controllers
         [HttpGet]
         public async Task<IActionResult> Details(int cardId)
         {
+            //TODO: try catch and return not found view or error view?
             var card = await this.cardService.GetCardDetailsByIdAsync(cardId);
 
             var model = new CardInfoViewModel()

@@ -84,8 +84,7 @@ namespace BedeSlots.Web.Controllers
             }
             catch (Exception)
             {
-                throw;
-               //TODO: 
+                return RedirectToAction(controllerName: "Home", actionName: "Index");
             }
         }
 

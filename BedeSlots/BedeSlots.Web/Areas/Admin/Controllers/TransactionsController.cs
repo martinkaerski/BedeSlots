@@ -109,7 +109,7 @@ namespace BedeSlots.Web.Areas.Admin.Controllers
             }
             catch (Exception)
             {
-                throw;
+                return RedirectToAction(controllerName: "Home", actionName: "Index");
             }
         }
 

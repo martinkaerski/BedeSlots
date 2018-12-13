@@ -95,7 +95,7 @@ namespace BedeSlots
             services.AddTransient<ITransactionService, TransactionService>();
             services.AddTransient<IUserBalanceService, UserBalanceService>();
             services.AddTransient<ICurrencyConverterService, CurrencyConverterService>();
-            services.AddTransient<IExchangeRateApiCallService, ExchangeRateApiCallService>();
+            services.AddTransient<IExchangeRateApiService, ExchangeRateApiService>();
             services.AddTransient<IExchangeRatesApiCaller, ExchangeRatesApiCaller>();
             services.AddTransient(typeof(IPaginationProvider<>), typeof(PaginationProvider<>));
             services.AddSingleton<ISlotMachine, SlotMachine>();
@@ -133,10 +133,7 @@ namespace BedeSlots
 
             services.AddMemoryCache();
 
-            services.AddMvc(options =>
-            {
-                //options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
-            })
+            services.AddMvc()
             .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
     }

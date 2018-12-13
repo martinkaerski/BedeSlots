@@ -28,11 +28,13 @@ namespace BedeSlots.Web.Areas.Admin.Controllers
             this.paginationProvider = paginationProvider;
         }
 
+        [HttpGet]
         public IActionResult Index()
         {
             return View();
         }
 
+        //TODO: delete it? It is not used
         public async Task<IActionResult> Details(int id)
         {
             var transaction = await transactionService.GetTransactionByIdAsync(id);
@@ -59,6 +61,7 @@ namespace BedeSlots.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult LoadData()
         {
             try

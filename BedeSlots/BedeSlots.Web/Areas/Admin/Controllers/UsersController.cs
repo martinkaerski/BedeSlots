@@ -73,6 +73,7 @@ namespace BedeSlots.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> EditRole(EditRoleViewModel model)
         {
             var role = model.RoleId;
@@ -142,6 +143,7 @@ namespace BedeSlots.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult LoadData()
         {
             try
@@ -193,7 +195,5 @@ namespace BedeSlots.Web.Areas.Admin.Controllers
                 return RedirectToAction("Index");
             }
         }
-
-
     }
 }

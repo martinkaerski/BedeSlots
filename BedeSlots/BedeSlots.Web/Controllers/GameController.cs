@@ -130,7 +130,7 @@ namespace BedeSlots.Web.Controllers
                 case "4x3":
                     rows = 4;
                     cols = 3;
-                    gameName = "Fruits Go Wild";
+                    gameName = "Fruits Gone Wild";
                     break;
                 case "5x5":
                     rows = 5;

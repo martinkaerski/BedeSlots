@@ -134,8 +134,6 @@ namespace BedeSlots.Services.Data
 
             var user = await GetUserByIdAsync(userId);
 
-            //await this.userManager.AddToRoleAsync(user, newRole.Name);
-
             var newIdentityRole = new IdentityUserRole<string>() { RoleId = newRole.Id, UserId = user.Id };
 
             this.context.UserRoles.Remove(userRole);

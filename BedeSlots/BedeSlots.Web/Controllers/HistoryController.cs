@@ -28,12 +28,14 @@ namespace BedeSlots.Web.Controllers
             this.currencyConverterService = currencyConverterService;
         }
 
+        [HttpGet]
         public IActionResult Index()
         {
             return View();
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> LoadData(string draw, string sortColumn, string sortColumnDirection, string searchValue)
         {
             try
@@ -62,9 +64,12 @@ namespace BedeSlots.Web.Controllers
                 recordsTotal = transactions.Count();
 
                 //Paging 
-                var data = transactions
+                var dataFiltered = transactions
                     .Skip(skip)
                     .Take(pageSize)
+                    .ToList();
+
+                var data = dataFiltered
                     .Select(t => new
                     {
                         Date = t.Date.ToString("G", CultureInfo.InvariantCulture),
@@ -80,6 +85,7 @@ namespace BedeSlots.Web.Controllers
             catch (Exception)
             {
                 throw;
+               //TODO: 
             }
         }
 

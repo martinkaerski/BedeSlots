@@ -26,27 +26,34 @@
                 <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
                     <span class="sr-only">Toggle navigation</span>
                 </button>
-                <a asp-area="" asp-controller="Home" asp-action="Index" id="nav-logo" class="glyphicon glyphicon-fire navbar-brand">BedeSlots</a>
+                <a asp-area="" asp-controller="Home" asp-action="Index" id="nav-logo" class="navbar-left"><img src="~/images/logo.png"></a>
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li><a asp-area="" asp-controller="Home" asp-action="Index" class="glyphicon glyphicon-home"> Home</a></li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="About" class="glyphicon glyphicon-info-sign"> About</a></li>
                     <li><a asp-area="" asp-controller="Home" asp-action="Contact" class="glyphicon glyphicon-bell"> Contact</a></li>
                     @if (User.Identity.IsAuthenticated)
                     {
-                        <li class="active"><a asp-area="" asp-controller="Game" asp-action="Index" class="glyphicon glyphicon-asterisk"> Games</a></li>
                         <li> <a asp-area="" asp-controller="Deposit" asp-action="Index" class="glyphicon glyphicon-piggy-bank"> Deposit</a></li>
+                        <li class="active"><a asp-area="" asp-controller="Game" asp-action="Index" class="glyphicon glyphicon-asterisk"> Games</a></li>
                     }
                     @if (User.Identity.IsAuthenticated)
                     {
                         @if (User.IsInRole(WebConstants.MasterAdminRole) || User.IsInRole(WebConstants.AdminRole))
                         {
-                            <li><a asp-area="Admin" asp-controller="Transactions" asp-action="Index" class="glyphicon glyphicon-list"> Transactions</a></li>
-                            <li><a asp-area="Admin" asp-controller="Users" asp-action="Index" class="glyphicon glyphicon-user"> Users</a></li>
+
+                            <li>
+                                <a class="dropdown-toggle glyphicon glyphicon-align-justify" role="button" data-toggle="dropdown" id="admin-panel"> Admin</a>
+
+                                <ul class="dropdown-menu">
+                                    <li><a asp-area="Admin" asp-controller="Transactions" asp-action="Index" class="glyphicon glyphicon-list"> Transactions</a></li>
+                                    <li><a asp-area="Admin" asp-controller="Users" asp-action="Index" class="glyphicon glyphicon-user"> Users</a></li>
+                                </ul>
+                            </li>
                         }
                     }
                 </ul>
+
                 @await Html.PartialAsync("_LoginPartial")
 
                 <div id="component-balance">

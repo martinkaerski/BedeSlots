@@ -5599,7 +5599,7 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
 }
 
     .navbar-default .navbar-brand {
-        color: #777777;
+        color: #4a4a4a;
     }
 
         .navbar-default .navbar-brand:hover,
@@ -5613,7 +5613,7 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
     }
 
     .navbar-default .navbar-nav > li > a {
-        color: #808080;
+        color: #4a4a4a;
         font-size: 15px;
         font-weight: bold;
     }
@@ -5690,7 +5690,7 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
 }
 
 .navbar-default .navbar-link {
-    color: #777777;
+    color: #4a4a4a;
 }
 
     .navbar-default .navbar-link:hover {
@@ -8557,4 +8557,31 @@ label {
     .open-button {
         display: none;
     }
+}
+
+.navbar-nav {
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.navbar-right li a {
+    padding-top: 13px;
+}
+
+
+#nav-logo {
+    padding-top: 3px;
+    padding-bottom: 2px;
+}
+
+body {
+    padding-top: 80px;
+}
+
+#logout-btn {
+    padding-top: 10px
+}
+
+#admin-panel {
+    word-spacing: 0px;
 }

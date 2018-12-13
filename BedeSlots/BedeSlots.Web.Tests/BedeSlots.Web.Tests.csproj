@@ -17,4 +17,8 @@
     <ProjectReference Include="..\BedeSlots.Web\BedeSlots.Web.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Controllers\HomeControllerTests\" />
+  </ItemGroup>
+
 </Project>

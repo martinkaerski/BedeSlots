@@ -22,6 +22,7 @@ namespace BedeSlots.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            //TODO: model configurations
             //modelBuilder.ApplyConfiguration(new UserConfiguration());
                         
             modelBuilder

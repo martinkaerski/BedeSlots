@@ -7,6 +7,10 @@
         "ajax": {
             "url": "/History/LoadData",
             "type": "POST",
+            "headers": {
+                RequestVerificationToken:
+                    $('input:hidden[name="__RequestVerificationToken"]').val()
+            },
             "datatype": "json"
         },
         "initComplete": function () {

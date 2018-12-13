@@ -11,13 +11,13 @@ using System.Threading.Tasks;
 
 namespace BedeSlots.Services.Data
 {
-    public class ExchangeRateApiCallService : IExchangeRateApiCallService
+    public class ExchangeRateApiService : IExchangeRateApiService
     {
         private readonly IExchangeRatesApiCaller exchangeRateApiCaller;
         private readonly IMemoryCache cache;
         private readonly string key = "RatesKey";
 
-        public ExchangeRateApiCallService(IExchangeRatesApiCaller exchangeRateApiCaller, IMemoryCache cache)
+        public ExchangeRateApiService(IExchangeRatesApiCaller exchangeRateApiCaller, IMemoryCache cache)
         {
             this.exchangeRateApiCaller = exchangeRateApiCaller;
             this.cache = cache;

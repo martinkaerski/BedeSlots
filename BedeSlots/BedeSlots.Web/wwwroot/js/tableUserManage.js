@@ -8,6 +8,10 @@
         "ajax": {
             "url": "/Admin/Users/LoadData",
             "type": "POST",
+            "headers": {
+                RequestVerificationToken:
+                    $('input:hidden[name="__RequestVerificationToken"]').val()
+            },
             "datatype": "json"
         },
         "initComplete": function () {

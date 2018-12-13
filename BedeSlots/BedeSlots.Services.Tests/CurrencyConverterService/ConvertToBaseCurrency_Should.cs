@@ -24,7 +24,7 @@ namespace BedeSlots.Services.Tests.CurrencyConverterService
             decimal returnVal = 5;
             decimal expectedVal = inputVal * (1 / returnVal);
 
-            var eracsMock = new Mock<IExchangeRateApiCallService>();
+            var eracsMock = new Mock<IExchangeRateApiService>();
             eracsMock.Setup(e => e.GetRateAsync(It.IsAny<Currency>())).ReturnsAsync(returnVal);
 
             var sut = new Data.CurrencyConverterService(eracsMock.Object);
@@ -40,7 +40,7 @@ namespace BedeSlots.Services.Tests.CurrencyConverterService
         {
             decimal negativeNumber = -44;
 
-            var eracsMock = new Mock<IExchangeRateApiCallService>();
+            var eracsMock = new Mock<IExchangeRateApiService>();
 
             var sut = new Data.CurrencyConverterService(eracsMock.Object);
 

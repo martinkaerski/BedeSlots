@@ -44,20 +44,40 @@ namespace BedeSlots.Services.Tests.CurrencyService
             }
         }
         [TestMethod]
-        public async Task ReturnZero_WhenThereAreNoUsersInDatabase()
+        public async Task ThrowServiceException_WhenUserCurrencyIsNull()
         {
             var contexOptions = new DbContextOptionsBuilder<BedeSlotsDbContext>()
-                .UseInMemoryDatabase(databaseName: "ReturnZero_WhenThereAreNoUsersInDatabase")
+                .UseInMemoryDatabase(databaseName: "ThrowServiceException_WhenUserCurrencyIsNull")
+                .UseInternalServiceProvider(serviceProvider).Options;
+
+            var user = new User();
+
+            using (var bedeSlotsContext = new BedeSlotsDbContext(contexOptions))
+            {
+                await bedeSlotsContext.Users.AddAsync(user);
+                await bedeSlotsContext.SaveChangesAsync();
+
+            }
+            using (var bedeSlotsContext = new BedeSlotsDbContext(contexOptions))
+            {
+                var sut = new Data.CurrencyService(bedeSlotsContext);
+                await Assert.ThrowsExceptionAsync<ServiceException>(async () => await sut.GetUserCurrencyAsync(user.Id));
+            }
+        }
+        [TestMethod]
+        public async Task ThrowServiceException_WhenThereAreNoUsersInDatabase()
+        {
+            var contexOptions = new DbContextOptionsBuilder<BedeSlotsDbContext>()
+                .UseInMemoryDatabase(databaseName: "ThrowServiceException_WhenThereAreNoUsersInDatabase")
                 .UseInternalServiceProvider(serviceProvider).Options;
 
 
             using (var bedeSlotsContext = new BedeSlotsDbContext(contexOptions))
             {
                 var sut = new Data.CurrencyService(bedeSlotsContext);
-                var result = await sut.GetUserCurrencyAsync("test");
+                await Assert.ThrowsExceptionAsync<ServiceException>(async () => await sut.GetUserCurrencyAsync("test"));
             }
         }
-
         [TestMethod]
         public void ThrowServiceException_WhenNullUserIdIsPassed()
         {

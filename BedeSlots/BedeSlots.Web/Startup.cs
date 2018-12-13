@@ -1,4 +1,6 @@
-﻿using BedeSlots.Data;
+﻿using BedeSlots.Common.Providers;
+using BedeSlots.Common.Providers.Contracts;
+using BedeSlots.Data;
 using BedeSlots.Data.Models;
 using BedeSlots.Games;
 using BedeSlots.Games.Contracts;
@@ -7,9 +9,9 @@ using BedeSlots.Services.Data;
 using BedeSlots.Services.Data.Contracts;
 using BedeSlots.Services.External;
 using BedeSlots.Services.External.Contracts;
-using BedeSlots.Web.Extensions;
-using BedeSlots.Web.Providers;
-using BedeSlots.Web.Providers.Contracts;
+//using BedeSlots.Web.Infrastructure.Extensions;
+using BedeSlots.Web.Infrastructure.Providers;
+using BedeSlots.Web.Infrastructure.Providers.Contracts;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -46,7 +48,7 @@ namespace BedeSlots
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IServiceProvider serviceProvider)
         {
-            app.UseDatabaseMigration();
+            //app.UseDatabaseMigration();
 
             if (this.Environment.IsDevelopment())
             {
@@ -93,10 +95,11 @@ namespace BedeSlots
             services.AddTransient<ITransactionService, TransactionService>();
             services.AddTransient<IUserBalanceService, UserBalanceService>();
             services.AddTransient<ICurrencyConverterService, CurrencyConverterService>();
-            services.AddTransient<IExchangeRateApiCallService, ExchangeRateApiCallService>();
+            services.AddTransient<IExchangeRateApiService, ExchangeRateApiService>();
             services.AddTransient<IExchangeRatesApiCaller, ExchangeRatesApiCaller>();
             services.AddTransient(typeof(IPaginationProvider<>), typeof(PaginationProvider<>));
             services.AddSingleton<ISlotMachine, SlotMachine>();
+            services.AddTransient<IDateTimeProvider, DateTimeProvider>();
         }
 
         private void RegisterAuthentication(IServiceCollection services)
@@ -130,10 +133,7 @@ namespace BedeSlots
 
             services.AddMemoryCache();
 
-            services.AddMvc(options =>
-            {
-                //options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
-            })
+            services.AddMvc()
             .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
     }

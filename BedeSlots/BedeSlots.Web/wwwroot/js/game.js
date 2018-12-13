@@ -2,6 +2,11 @@
 
     $rows = $('#rows').val();
     $cols = $('#cols').val();
+    $gameName = $('#game-name').val();
+
+    if ($gameName === "Classic 777") {
+        $('#game-div').css('height', '650px');
+    }
 
     let directory = "/images/fruits/";
     //images paths
@@ -26,26 +31,25 @@
         arr[3] = directory + "8p.png";
     }
 
-    var isStopped = false;
+    document.getElementById('mario-audio').play();
 
+    var isStopped = false;
     const $spinBtn = $('#spin-button');
     const $spinForm = $('#spin-form');
+        
+    $spinBtn.on('click', spin);
 
-
-
-    $spinBtn.on('click', Spin);
-
-    function Stop() {
+    function stop() {
         isStopped = true;
         $("#status-msg").empty();
 
-        $spinBtn.off('click', Stop);
-        $spinBtn.on('click', Spin);
-        $spinBtn.text('Start');
+        $spinBtn.off('click', stop);
+        $spinBtn.on('click', spin);
+        $spinBtn.text('Spin');
         $spinBtn.removeClass('btn-danger');
     }
 
-    function Spin() {
+    function spin() {
         let $userBalanceNum = parseFloat($('#user-balance').val());
         let $stakeAmountNum = parseFloat($('#stake-amount').val());
 
@@ -53,18 +57,20 @@
             return;
         }
 
-        $spinBtn.off('click', Spin);
-        $spinBtn.on('click', Stop);
+        $spinBtn.off('click', spin);
+        $spinBtn.on('click', stop);
         $spinBtn.text('Stop');
         $spinBtn.addClass('btn-danger');
-        $("tr").css('background', 'white');
-
+        $("tr").css('background', '#1c1c1c');
+        $('#result-message').text('Good luck!');
+        $('#result-message').css('color', 'white');
+                
         const $spinForm = $("#spin-form");
         const dataToSend = $spinForm.serialize();
 
         document.getElementById('spin-audio').play();
 
-        slot(function () {
+        shuffle(function () {
             $.ajax({
                 url: $spinForm.attr('action'),
                 type: "Post",
@@ -83,6 +89,7 @@
 
                         if ($coefDouble > 0.0) {
                             document.getElementById('win-audio').play();
+                            $('#result-message').css('color', 'yellow');
                         }
 
                         if ($coefDouble >= 2.0) {
@@ -116,7 +123,7 @@
         });
     }
 
-    function slot(requestFunction) {
+    function shuffle(requestFunction) {
         let Random = setInterval(function () {
             for (var i = 0; i < $rows; i++) {
                 for (var j = 0; j < $cols; j++) {

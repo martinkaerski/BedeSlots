@@ -25,9 +25,9 @@ namespace BedeSlots.Services.Tests.CardService
             var userManager = new UserManager<User>(userStoreMock.Object, null, null, null, null, null, null, null, null);
 
             var contexOptions = new DbContextOptionsBuilder<BedeSlotsDbContext>()
-     .UseInMemoryDatabase(databaseName: "GetCardDetailsByIdAsync_Should")
-     .UseInternalServiceProvider(serviceProvider)
-     .Options;
+                 .UseInMemoryDatabase(databaseName: "GetCardDetailsByIdAsync_Should")
+                 .UseInternalServiceProvider(serviceProvider)
+                 .Options;
 
             var user = new User();
             var card = new BankCard()

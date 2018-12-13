@@ -3,11 +3,16 @@
 }
 <link href="~/css/home.css" rel="stylesheet" />
 
+<div id="label-corner" class="corner-ribbon sticky black shadow text-center">
+    <span class="neon">Bede</span> <span class="flux">Slots</span>
+</div>
+
 <div id="container">
     <div id="slogan-img">
-
         <img src="images/home/logo.jpg" alt="" name="logo" width="160" height="160" id="logo" /> <img src="images/home/slogan.jpg" alt="" name="logo" width="190" height="109" id="slogan" />
     </div>
+    Try Your Fortune!
+
     <div id="content">
         <div id="leftPan">
             <div id="welcome">
@@ -73,25 +78,3 @@
     </div>
 </div>
 
-<button class=" btn open-button" onclick="openForm()">Chat</button>
-
-<div class="chat-popup" id="myForm">
-    <form class="form-container">
-        <div>
-            <iframe id="bot-iframe" height="400" width="280" src='https://webchat.botframework.com/embed/BedeSlotsBot?s=9auPtlIpveo.cwA.dgY.K2U1OVCynAWVcHZLw16J5sTfxRi1dbdQ5SHOCmIq7Bc' ;'></iframe>
-        </div>
-        <button type="button" class="btn cancel" onclick="closeForm()">Close</button>
-    </form>
-</div>
-
-<script src="https://cdn.botframework.com/botframework-webchat/latest/webchat.js"></script>
-
-<script>
-    function openForm() {
-        document.getElementById("myForm").style.display = "block";
-    }
-
-    function closeForm() {
-        document.getElementById("myForm").style.display = "none";
-    }
-</script>

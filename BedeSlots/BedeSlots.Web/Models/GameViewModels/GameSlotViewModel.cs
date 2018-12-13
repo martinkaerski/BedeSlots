@@ -7,6 +7,8 @@ namespace BedeSlots.Web.Models
 {
     public class GameSlotViewModel
     {
+        public string GameName { get; set; }
+
         [Required]
         public int Rows { get; set; }
 

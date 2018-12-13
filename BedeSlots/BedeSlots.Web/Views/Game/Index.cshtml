@@ -1,10 +1,9 @@
 ﻿@{
     ViewData["Title"] = "Index";
 }
-
-<br />
+<h2 class="text-center">So many ways to play! We Bet you will love it! </h2>
 <link href="~/css/game.css" rel="stylesheet" />
-<div class="row">
+<div id="games-images" class="row">
     <form asp-controller="Game" asp-action="SlotMachine" method="get">
         <div class="hover01 column row">
             <div class="col-md-4">
@@ -16,7 +15,7 @@
             </div>
             <div class="col-md-4">
                 <figure>
-                    <button type="submit"name="size" value="5x5">
+                    <button type="submit" name="size" value="5x5">
                         <img class="game-poster" src="~/images/diamondwild.jpg" alt="Resposive Image" />
                     </button>
                 </figure>
@@ -29,5 +28,5 @@
                 </figure>
             </div>
         </div>
-    </form>
+    </form> 
 </div>

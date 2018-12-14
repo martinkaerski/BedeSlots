@@ -2,7 +2,9 @@
 using BedeSlots.Games.Models;
 using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 
+[assembly: InternalsVisibleTo("BedeSlots.Games.Tests")]
 namespace BedeSlots.Games
 {
     public class SlotMachine : ISlotMachine
@@ -49,7 +51,7 @@ namespace BedeSlots.Games
             return stringMatrix;
         }
 
-        private decimal CalculateCoefficient(Item[,] matrix)
+        internal decimal CalculateCoefficient(Item[,] matrix)
         {
             decimal totalCoef = 0;
             winningRows.Clear();
@@ -119,7 +121,7 @@ namespace BedeSlots.Games
             return stringMatrix;
         }
         // key - cumulative probability
-        private Item GetRandomItem(IDictionary<int, Item> items)
+        internal Item GetRandomItem(IDictionary<int, Item> items)
         {
             var random = new Random(Guid.NewGuid().GetHashCode());
             var randomNumber = random.Next(1, 101); //the maxValue is exclusive

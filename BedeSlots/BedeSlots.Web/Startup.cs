@@ -97,9 +97,9 @@ namespace BedeSlots
             services.AddTransient<ICurrencyConverterService, CurrencyConverterService>();
             services.AddTransient<IExchangeRateApiService, ExchangeRateApiService>();
             services.AddTransient<IExchangeRatesApiCaller, ExchangeRatesApiCaller>();
-            services.AddTransient(typeof(IPaginationProvider<>), typeof(PaginationProvider<>));
             services.AddSingleton<ISlotMachine, SlotMachine>();
             services.AddTransient<IDateTimeProvider, DateTimeProvider>();
+            services.AddTransient(typeof(IPaginationProvider<>), typeof(PaginationProvider<>));
         }
 
         private void RegisterAuthentication(IServiceCollection services)

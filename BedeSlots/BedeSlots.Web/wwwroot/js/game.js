@@ -48,6 +48,7 @@
         $spinBtn.removeClass('btn-danger');
     }
 
+
     function spin() {
         let $userBalanceNum = parseFloat($('#user-balance').val());
         let $stakeAmountNum = parseFloat($('#stake-amount').val());
@@ -69,56 +70,62 @@
         
         document.getElementById('spin-audio').play();
 
+        let partialViewResult;
+        let xhr;
+
         $.ajax({
             url: $spinForm.attr('action'),
             type: "Post",
             data: dataToSend,
-            success: function (partialViewResult, textStatus, xhr) {
-                shuffle(function () {
+            success: function (serverData, textStatus, xhrServer) {
+                partialViewResult = serverData;
+                xhr = xhrServer;
+            }
+        });
 
-                    if (xhr.status === 299) {
-                        $("#status-msg").empty();
-                        $("#status-msg").html(partialViewResult);
-                    }
-                    else {
-                        $("#partial").empty();
-                        $("#partial").html(partialViewResult);
+        shuffle(function () {
 
-                        $coef = $('#res-coef').val();
-                        let $coefDouble = parseFloat($coef);
+            if (xhr.status === 299) {
+                $("#status-msg").empty();
+                $("#status-msg").html(partialViewResult);
+            }
+            else {
+                $("#partial").empty();
+                $("#partial").html(partialViewResult);
 
-                        if ($coefDouble > 0.0) {
-                            document.getElementById('win-audio').play();
-                            $('#result-message').css('color', 'yellow');
-                        }
+                $coef = $('#res-coef').val();
+                let $coefDouble = parseFloat($coef);
 
-                        if ($coefDouble >= 2.0) {
-                            gimmick('body');
-                            $spinBtn.prop('disabled', true);
+                if ($coefDouble > 0.0) {
+                    document.getElementById('win-audio').play();
+                    $('#result-message').css('color', 'yellow');
+                }
 
-                            setTimeout(function () {
-                                gimmick('body');
-                                $spinBtn.prop('disabled', false);
+                if ($coefDouble >= 2.0) {
+                    gimmick('body');
+                    $spinBtn.prop('disabled', true);
 
-                            }, 1500);
-                        }
+                    setTimeout(function () {
+                        gimmick('body');
+                        $spinBtn.prop('disabled', false);
 
-                        $winningRows = $('#winning-rows').val();
-                        debugger;
-                        for (var i = 0; i < $winningRows.length; i++) {
-                            $("#row-" + $winningRows[i]).css('background', '#0bd124');
-                        }
-                    }
+                    }, 1500);
+                }
 
-                    let container = $("#component-balance");
-                    $.get(MyAppUrlSettings.UserBalanceComponent, function (data) { container.html(data); });
+                $winningRows = $('#winning-rows').val();
+                debugger;
+                for (var i = 0; i < $winningRows.length; i++) {
+                    $("#row-" + $winningRows[i]).css('background', '#0bd124');
+                }
+            }
 
-                    var coinsExist = document.getElementById('gimmick')
-                    if (coinsExist) {
-                        coinsExist.parentNode.removeChild(coinsExist);
-                        return false;
-                    }
-                });
+            let container = $("#component-balance");
+            $.get(MyAppUrlSettings.UserBalanceComponent, function (data) { container.html(data); });
+
+            var coinsExist = document.getElementById('gimmick')
+            if (coinsExist) {
+                coinsExist.parentNode.removeChild(coinsExist);
+                return false;
             }
         });
     }

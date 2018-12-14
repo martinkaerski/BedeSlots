@@ -40,7 +40,7 @@ namespace BedeSlots.Services.Data
                 amount = await this.currencyConverterService.ConvertToBaseCurrencyAsync(amount, user.Currency);
             }
 
-            user.Balance += amount;
+            user.Balance += Math.Round(amount,2);
 
             this.context.Update(user);
             await this.context.SaveChangesAsync();
@@ -69,7 +69,7 @@ namespace BedeSlots.Services.Data
 
             if (user.Balance >= amount)
             {
-                user.Balance -= amount;
+                user.Balance -= Math.Round(amount, 2);
             }
             else
             {

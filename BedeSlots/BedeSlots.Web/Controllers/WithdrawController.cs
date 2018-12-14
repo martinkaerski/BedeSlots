@@ -70,7 +70,7 @@ namespace BedeSlots.Web.Controllers
                 user.Id, card.Number, model.Amount, userCurrency);
 
             string currencySymbol = WebConstants.CurrencySymbols[user.Currency];
-            this.StatusMessage = $"Successfully withdrawed {model.Amount} {currencySymbol}.";
+            this.StatusMessage = $"Successfully withdrawn {model.Amount} {currencySymbol}.";
 
             return PartialView("_StatusMessage", this.StatusMessage);
         }

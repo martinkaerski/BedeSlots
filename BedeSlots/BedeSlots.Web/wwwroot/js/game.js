@@ -38,6 +38,15 @@
 
     $spinBtn.on('click', spin);
 
+    $(document).keydown(function (e) {
+        if (e.keyCode == 32 && e.target == document.body) {
+                e.preventDefault();
+            if ($spinBtn.prop('disabled') === false) {
+                $spinBtn.click();
+            }
+        }
+    })
+
     function stop() {
         isStopped = true;
         $("#status-msg").empty();
@@ -48,12 +57,11 @@
         $spinBtn.removeClass('btn-danger');
     }
 
-
     function spin() {
         let $userBalanceNum = parseFloat($('#user-balance').val());
         let $stakeAmountNum = parseFloat($('#stake-amount').val());
 
-        if ($userBalanceNum <= $stakeAmountNum || $stakeAmountNum < 1) {
+        if ($userBalanceNum < $stakeAmountNum || $stakeAmountNum < 1) {
             return;
         }
 
@@ -61,14 +69,12 @@
         $spinBtn.on('click', stop);
         $spinBtn.text('Stop');
         $spinBtn.addClass('btn-danger');
-        $("tr").css('background', '#1c1c1c');
-        $('#result-message').text('Good luck!');
-        $('#result-message').css('color', 'white');
 
         const $spinForm = $("#spin-form");
         const dataToSend = $spinForm.serialize();
-        
+
         document.getElementById('spin-audio').play();
+        $spinBtn.prop('disabled', true);
 
         let partialViewResult;
         let xhr;
@@ -80,11 +86,15 @@
             success: function (serverData, textStatus, xhrServer) {
                 partialViewResult = serverData;
                 xhr = xhrServer;
+                $spinBtn.prop('disabled', false);
             }
         });
 
-        shuffle(function () {
+        $("tr").css('background', '#1c1c1c');
+        $('#result-message').text('Good luck!');
+        $('#result-message').css('color', 'white');
 
+        shuffle(function () {
             if (xhr.status === 299) {
                 $("#status-msg").empty();
                 $("#status-msg").html(partialViewResult);
@@ -103,11 +113,8 @@
 
                 if ($coefDouble >= 2.0) {
                     gimmick('body');
-                    $spinBtn.prop('disabled', true);
-
                     setTimeout(function () {
                         gimmick('body');
-                        $spinBtn.prop('disabled', false);
 
                     }, 1500);
                 }
@@ -148,8 +155,13 @@
                 isStopped = false;
                 clearInterval(Random);
             }
-        }, 100);
+        }, 80);
     }
+
+    let betAmount = document.querySelector('#stake-amount');
+    betAmount.addEventListener("keyup", function () {
+        betAmount.value = betAmount.value.match(/^\d+\.?\d{0,2}/);
+    });
 
     function gimmick(el) {
         var exists = document.getElementById('gimmick')
@@ -170,7 +182,7 @@
 
         var coin = new Image();
         coin.src = 'http://i.imgur.com/5ZW2MT3.png'
-        // 440 wide, 40 high, 10 states
+
         coin.onload = function () {
             element.appendChild(canvas)
             focused = true;

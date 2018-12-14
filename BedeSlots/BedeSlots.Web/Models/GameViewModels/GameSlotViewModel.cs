@@ -20,7 +20,7 @@ namespace BedeSlots.Web.Models
 
         [Required]
         [Range(1, WebConstants.MaxAmount, ErrorMessage = "The minimum bet amount is 1!")]
-        [RegularExpression("^[0-9]+$", ErrorMessage = "The bet amount should be a positive number.")]
+        [RegularExpression(@"\d*\.?\d*", ErrorMessage = "The bet amount should be a number using dot for floating-point numbers.")]
         [Remote(action: "HasEnoughMoneyAsync", controller: "UserBalance", areaName: "")]
         public decimal Amount { get; set; }
 

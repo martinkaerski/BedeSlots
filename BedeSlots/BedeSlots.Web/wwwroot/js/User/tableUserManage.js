@@ -1,9 +1,11 @@
 ﻿$(document).ready(function () {
     $("#table-users").DataTable({
+        "responsive": true,
         "processing": false, // for show progress bar
         "serverSide": true, // for process server side
         "filter": true, // this is for disable filter (search box)
-        "orderMulti": false, // for disable multiple column at once
+        "orderMulti": false, // for disable multiple column at once,
+        "scrollX": true,
 
         "ajax": {
             "url": "/Admin/Users/LoadData",

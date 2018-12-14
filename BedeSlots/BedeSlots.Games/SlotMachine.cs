@@ -1,4 +1,5 @@
-﻿using BedeSlots.Games.Contracts;
+﻿
+using BedeSlots.Games.Contracts;
 using BedeSlots.Games.Models;
 using System;
 using System.Collections.Generic;
@@ -23,7 +24,7 @@ namespace BedeSlots.Games
             var matrix = GenerateItemMatrix(rows, cols, items);
             var coefficient = CalculateCoefficient(matrix);
 
-            amount = coefficient != 0 ? coefficient * amount : 0;
+            amount =  coefficient != 0 ? Math.Round((coefficient * amount),2) : 0;
 
             var spinData = new SpinData()
             {

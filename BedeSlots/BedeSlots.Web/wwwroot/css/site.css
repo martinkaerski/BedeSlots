@@ -64,17 +64,21 @@
     }
 }
 
+@media (min-width:961px) {
+    #modal-add-card {
+        width: 800px;
+        margin: 30px auto;
+    }
 
+    #modal-details-card {
+        width: 400px;
+        margin: 30px auto;
+    }
 
-#modal-add-card {
-    width: 800px;
-    margin: 30px auto;
 }
 
-#modal-details-card {
-    width: 400px;
-    margin: 30px auto;
-}
+
+
 
 @import url("https://fonts.googleapis.com/css?family=Open+Sans:400,700");
 /*!

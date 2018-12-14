@@ -13,4 +13,9 @@
             $.get(MyAppUrlSettings.UserBalanceComponent, function (data) { container.html(data); });
         });
     });
+
+    let withdrawAmount = document.querySelector('#withdraw-amount');
+    withdrawAmount.addEventListener("keyup", function () {
+        withdrawAmount.value = withdrawAmount.value.match(/^\d+\.?\d{0,2}/);
+    });
 });

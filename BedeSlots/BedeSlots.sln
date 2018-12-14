@@ -23,7 +23,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BedeSlots.Services.Tests", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BedeSlots.Services.External.Tests", "BedeSlots.Services.External.Tests\BedeSlots.Services.External.Tests.csproj", "{250CE4DA-4EA2-407C-89C6-3DB00C0594E2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BedeSlots.Web.Tests", "BedeSlots.Web.Tests\BedeSlots.Web.Tests.csproj", "{C346282C-C3F5-4268-BCBE-6A27D7C2203E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BedeSlots.Web.Tests", "BedeSlots.Web.Tests\BedeSlots.Web.Tests.csproj", "{C346282C-C3F5-4268-BCBE-6A27D7C2203E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BedeSlots.Games.Tests", "BedeSlots.Games.Tests\BedeSlots.Games.Tests.csproj", "{D50C5DBB-0DF0-4CB9-9203-FB0F0905381B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -75,6 +77,10 @@ Global
 		{C346282C-C3F5-4268-BCBE-6A27D7C2203E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C346282C-C3F5-4268-BCBE-6A27D7C2203E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C346282C-C3F5-4268-BCBE-6A27D7C2203E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D50C5DBB-0DF0-4CB9-9203-FB0F0905381B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D50C5DBB-0DF0-4CB9-9203-FB0F0905381B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D50C5DBB-0DF0-4CB9-9203-FB0F0905381B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D50C5DBB-0DF0-4CB9-9203-FB0F0905381B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

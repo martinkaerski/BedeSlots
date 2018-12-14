@@ -1,5 +1,4 @@
 ﻿$(document).ready(function () {
-
     $rows = $('#rows').val();
     $cols = $('#cols').val();
     $gameName = $('#game-name').val();
@@ -36,7 +35,7 @@
     var isStopped = false;
     const $spinBtn = $('#spin-button');
     const $spinForm = $('#spin-form');
-        
+
     $spinBtn.on('click', spin);
 
     function stop() {
@@ -64,18 +63,19 @@
         $("tr").css('background', '#1c1c1c');
         $('#result-message').text('Good luck!');
         $('#result-message').css('color', 'white');
-                
+
         const $spinForm = $("#spin-form");
         const dataToSend = $spinForm.serialize();
-
+        
         document.getElementById('spin-audio').play();
 
-        shuffle(function () {
-            $.ajax({
-                url: $spinForm.attr('action'),
-                type: "Post",
-                data: dataToSend,
-                success: function (partialViewResult, textStatus, xhr) {
+        $.ajax({
+            url: $spinForm.attr('action'),
+            type: "Post",
+            data: dataToSend,
+            success: function (partialViewResult, textStatus, xhr) {
+                shuffle(function () {
+
                     if (xhr.status === 299) {
                         $("#status-msg").empty();
                         $("#status-msg").html(partialViewResult);
@@ -96,7 +96,7 @@
                             gimmick('body');
                             $spinBtn.prop('disabled', true);
 
-                            setTimeout(function () { 
+                            setTimeout(function () {
                                 gimmick('body');
                                 $spinBtn.prop('disabled', false);
 
@@ -107,7 +107,7 @@
                         debugger;
                         for (var i = 0; i < $winningRows.length; i++) {
                             $("#row-" + $winningRows[i]).css('background', '#0bd124');
-                        }                       
+                        }
                     }
 
                     let container = $("#component-balance");
@@ -118,8 +118,8 @@
                         coinsExist.parentNode.removeChild(coinsExist);
                         return false;
                     }
-                }
-            })
+                });
+            }
         });
     }
 

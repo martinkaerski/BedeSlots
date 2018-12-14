@@ -8565,3 +8565,7 @@ body {
 #admin-panel {
     word-spacing: 0px;
 }
+
+#history-container{
+   width:80%;
+}

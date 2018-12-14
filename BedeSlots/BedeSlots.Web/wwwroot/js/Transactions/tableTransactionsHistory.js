@@ -1,5 +1,5 @@
 ﻿$(document).ready(function () {
-    $("#table-transactions").DataTable({
+    $("#history-transactions").DataTable({
         "processing": false, // for show progress bar
         "serverSide": true, // for process server side
         "filter": true, // this is for disable filter (search box)
@@ -57,7 +57,9 @@
 
                 return '<span style="color:' + color + '">' + data + '</span>';
             }
-        }],
+        },
+            { className: 'text-center', targets: [0, 1, 2, 3] },
+        ],
         "columns": [
             { "data": "date", "name": "Date", "autoWidth": true },
             { "data": "type", "name": "Type", "autoWidth": true },

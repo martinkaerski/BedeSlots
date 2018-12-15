@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 
 namespace BedeSlots.Controllers
 {
+    [ResponseCache(Duration = 30)]
     public class HomeController : Controller
     {
         private readonly UserManager<User> userManager;
@@ -22,6 +23,7 @@ namespace BedeSlots.Controllers
             this.currencyConverterService = currencyConverterService;
         }
 
+        [ResponseCache(CacheProfileName = "Default")]
         public async Task<IActionResult> Index()
         {
             var user = await this.userManager.GetUserAsync(HttpContext.User);

@@ -51,9 +51,9 @@ namespace BedeSlots.Services.Tests.CardService
             {
                 await bedeSlotsContext.BankCards.AddAsync(firstCard);
                 await bedeSlotsContext.SaveChangesAsync();
-                //var card = await bedeSlotsContext.BankCards.FirstAsync(x => x.Id == firstCard.Id);
+
                 var sut = new Data.CardService(bedeSlotsContext, userManager);
-                // HEEELP !
+
                 await sut.DeleteCardAsync(firstCard.Id);
             }
             using (var bedeSlotsContext = new BedeSlotsDbContext(contexOptions))

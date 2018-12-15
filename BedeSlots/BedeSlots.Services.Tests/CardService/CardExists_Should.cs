@@ -29,15 +29,7 @@ namespace BedeSlots.Services.Tests.CardService
      .Options;
 
             var user = new User();
-            var card = new BankCard()
-            {
-                UserId = user.Id,
-                User = user,
-                CvvNumber = "123",
-                Number = "1616161616161616",
-                Type = CardType.Visa,
-                CreatedOn = DateTime.Now
-            };
+            var card = new BankCard();
 
             using (var bedeSlotsContext = new BedeSlotsDbContext(contexOptions))
             {
@@ -55,21 +47,23 @@ namespace BedeSlots.Services.Tests.CardService
         }
 
         [TestMethod]
-        public async Task ReturnFalse_WhenCardExistsInDatabase()
+        public void ReturnFalse_WhenCardExistsInDatabase()
         {
             var userStoreMock = new Mock<IUserStore<User>>();
             var userManager = new UserManager<User>(userStoreMock.Object, null, null, null, null, null, null, null, null);
 
-            var contexOptions = new DbContextOptionsBuilder<BedeSlotsDbContext>()
+            var notExistingCardId = 1;
+
+            var contextOptions = new DbContextOptionsBuilder<BedeSlotsDbContext>()
      .UseInMemoryDatabase(databaseName: "ReturnFalse_WhenCardExistsInDatabase")
      .UseInternalServiceProvider(serviceProvider)
      .Options;
 
-            using (var bedeSlotsContext = new BedeSlotsDbContext(contexOptions))
+            using (var bedeSlotsContext = new BedeSlotsDbContext(contextOptions))
             {
                 var sut = new Data.CardService(bedeSlotsContext, userManager);
 
-                Assert.IsFalse(sut.CardExists(1));
+                Assert.IsFalse(sut.CardExists(notExistingCardId));
             }
 
         }

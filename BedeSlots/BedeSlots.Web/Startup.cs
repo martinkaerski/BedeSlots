@@ -40,7 +40,15 @@ namespace BedeSlots
             this.RegisterServices(services);
             this.RegisterInfrastructure(services);
 
-            services.AddMvc();
+            services.AddMvc(options =>
+            {
+                options.CacheProfiles.Add("Default",
+                     new CacheProfile()
+                     {
+                         Location = ResponseCacheLocation.Any,
+                         Duration = 30 * 60
+                     });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -21,19 +21,19 @@ namespace BedeSlots.Services.Tests.UserService
             var userStoreMock = new Mock<IUserStore<User>>();
             var userManager = new UserManager<User>(userStoreMock.Object, null, null, null, null, null, null, null, null);
 
-            var contexOptions = new DbContextOptionsBuilder<BedeSlotsDbContext>()
+            var contextOptions = new DbContextOptionsBuilder<BedeSlotsDbContext>()
      .UseInMemoryDatabase(databaseName: "ReturnCollectionOfAllRoles_WhenInvoked")
      .UseInternalServiceProvider(serviceProvider).Options;
 
-            using (var bedeSlotsContext = new BedeSlotsDbContext(contexOptions))
+            using (var bedeSlotsContext = new BedeSlotsDbContext(contextOptions))
             {
                 var role = new IdentityRole("User");
-                bedeSlotsContext.Roles.Add(role);
 
+                bedeSlotsContext.Roles.Add(role);
                 bedeSlotsContext.SaveChanges();
             }
 
-            using (var bedeSlotsContext = new BedeSlotsDbContext(contexOptions))
+            using (var bedeSlotsContext = new BedeSlotsDbContext(contextOptions))
             {
                 var sut = new Data.UserService(bedeSlotsContext,
                     userManager);
@@ -48,15 +48,14 @@ namespace BedeSlots.Services.Tests.UserService
         [TestMethod]
         public async Task ReturnEmptyCollectionOfAllRoles_WhenInvoked()
         {
-
             var userStoreMock = new Mock<IUserStore<User>>();
             var userManager = new UserManager<User>(userStoreMock.Object, null, null, null, null, null, null, null, null);
 
-            var contexOptions = new DbContextOptionsBuilder<BedeSlotsDbContext>()
+            var contextOptions = new DbContextOptionsBuilder<BedeSlotsDbContext>()
      .UseInMemoryDatabase(databaseName: "ReturnEmptyCollectionOfAllRoles_WhenInvoked")
      .UseInternalServiceProvider(serviceProvider).Options;
 
-            using (var bedeSlotsContext = new BedeSlotsDbContext(contexOptions))
+            using (var bedeSlotsContext = new BedeSlotsDbContext(contextOptions))
             {
                 var sut = new Data.UserService(bedeSlotsContext,
                     userManager);

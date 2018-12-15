@@ -20,7 +20,7 @@ namespace BedeSlots.Services.Tests.CardService
             var userStoreMock = new Mock<IUserStore<User>>();
             var userManager = new UserManager<User>(userStoreMock.Object, null, null, null, null, null, null, null, null);
 
-            var contexOptions = new DbContextOptionsBuilder<BedeSlotsDbContext>()
+            var contextOptions = new DbContextOptionsBuilder<BedeSlotsDbContext>()
      .UseInMemoryDatabase(databaseName: "RemoveCarSuccessfully_WhenValidParamatersArePassed").Options;
 
             string userId = "test";
@@ -31,13 +31,13 @@ namespace BedeSlots.Services.Tests.CardService
             DateTime expiryDate = DateTime.Parse("11-11-2111");
             string cardholerName = "test";
 
-            using (var bedeSlotsContext = new BedeSlotsDbContext(contexOptions))
+            using (var bedeSlotsContext = new BedeSlotsDbContext(contextOptions))
             {
                 var sut = new Data.CardService(bedeSlotsContext, userManager);
                 await sut.AddCardAsync(number, cardholerName, cvvNumber, expiryDate, type, userId);
             }
 
-            using (var bedeSlotsContext = new BedeSlotsDbContext(contexOptions))
+            using (var bedeSlotsContext = new BedeSlotsDbContext(contextOptions))
             {
                 Assert.IsTrue(await bedeSlotsContext.BankCards.CountAsync() == 1);
                 Assert.IsTrue(await bedeSlotsContext.BankCards.AnyAsync(c => c.Number == number));

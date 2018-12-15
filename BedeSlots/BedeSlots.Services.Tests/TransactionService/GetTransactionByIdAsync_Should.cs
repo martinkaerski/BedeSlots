@@ -18,18 +18,17 @@ namespace BedeSlots.Services.Tests.TransactionService
         [TestMethod]
         public async Task ReturnTransaction_WhenValidParametersArePassed()
         {
-
-            var contexOptions = new DbContextOptionsBuilder<BedeSlotsDbContext>()
-    .UseInMemoryDatabase(databaseName: "ReturnTransaction_WhenValidParametersArePassed")
-    .UseInternalServiceProvider(serviceProvider).Options;
+            var contextOptions = new DbContextOptionsBuilder<BedeSlotsDbContext>()
+.UseInMemoryDatabase(databaseName: "ReturnTransaction_WhenValidParametersArePassed")
+.UseInternalServiceProvider(serviceProvider).Options;
 
             var transaction = new Transaction() { User = new User() };
-            using (var bedeSlotsContext = new BedeSlotsDbContext(contexOptions))
+            using (var bedeSlotsContext = new BedeSlotsDbContext(contextOptions))
             {
                 bedeSlotsContext.Transactions.Add(transaction);
                 bedeSlotsContext.SaveChanges();
             }
-            using (var bedeSlotsContext = new BedeSlotsDbContext(contexOptions))
+            using (var bedeSlotsContext = new BedeSlotsDbContext(contextOptions))
             {
                 var currencyConverterMock = new Mock<ICurrencyConverterService>();
                 var sut = new Data.TransactionService(bedeSlotsContext, currencyConverterMock.Object);
@@ -38,11 +37,12 @@ namespace BedeSlots.Services.Tests.TransactionService
                 Assert.IsTrue(result.Id == transaction.Id);
             }
         }
+
         [TestMethod]
         public async Task ThrowServiceException_WhenNotExistingIdIsPassed()
         {
 
-            var contexOptions = new DbContextOptionsBuilder<BedeSlotsDbContext>()
+            var contextOptions = new DbContextOptionsBuilder<BedeSlotsDbContext>()
     .UseInMemoryDatabase(databaseName: "ThrowServiceException_WhenNotExistingIdIsPassed")
     .UseInternalServiceProvider(serviceProvider).Options;
 
@@ -50,16 +50,17 @@ namespace BedeSlots.Services.Tests.TransactionService
 
             var transaction = new Transaction() { User = new User() };
 
-            using (var bedeSlotsContext = new BedeSlotsDbContext(contexOptions))
+            using (var bedeSlotsContext = new BedeSlotsDbContext(contextOptions))
             {
                 bedeSlotsContext.Transactions.Add(transaction);
                 bedeSlotsContext.SaveChanges();
             }
 
-            using (var bedeSlotsContext = new BedeSlotsDbContext(contexOptions))
+            using (var bedeSlotsContext = new BedeSlotsDbContext(contextOptions))
             {
                 var currencyConverterMock = new Mock<ICurrencyConverterService>();
                 var sut = new Data.TransactionService(bedeSlotsContext, currencyConverterMock.Object);
+
                 await Assert.ThrowsExceptionAsync<ServiceException>(async () => await sut.GetTransactionByIdAsync(notExistingId));
             }
         }

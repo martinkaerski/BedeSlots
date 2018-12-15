@@ -28,13 +28,14 @@ namespace BedeSlots.Services.Tests.CardService
 
             Data.CardService cardService;
 
-            var contexOptions = new DbContextOptionsBuilder<BedeSlotsDbContext>()
-     .UseInMemoryDatabase(databaseName: "ThrowArgumentNullException_WhenUserIdIsNull").UseInternalServiceProvider(serviceProvider)
-     .Options;
+            var contextOptions = new DbContextOptionsBuilder<BedeSlotsDbContext>()
+     .UseInMemoryDatabase(databaseName: "ThrowArgumentNullException_WhenUserIdIsNull")
+     .UseInternalServiceProvider(serviceProvider).Options;
 
-            using (var bedeSlotsContext = new BedeSlotsDbContext(contexOptions))
+            using (var bedeSlotsContext = new BedeSlotsDbContext(contextOptions))
             {
                 cardService = new Data.CardService(bedeSlotsContext, userManager);
+
                 await Assert.ThrowsExceptionAsync<ArgumentNullException>(async () => await cardService.GetUserCardsLastNumbersAsync(null));
             }
         }
@@ -47,14 +48,16 @@ namespace BedeSlots.Services.Tests.CardService
 
             Data.CardService cardService;
 
-            var contexOptions = new DbContextOptionsBuilder<BedeSlotsDbContext>()
-     .UseInMemoryDatabase(databaseName: "ThrowArgumentException_WhenNotExistingUserIdIsPassed").UseInternalServiceProvider(serviceProvider)
-     .Options;
+            var contextOptions = new DbContextOptionsBuilder<BedeSlotsDbContext>()
+     .UseInMemoryDatabase(databaseName: "ThrowArgumentException_WhenNotExistingUserIdIsPassed")
+     .UseInternalServiceProvider(serviceProvider).Options;
 
-            using (var bedeSlotsContext = new BedeSlotsDbContext(contexOptions))
+            using (var bedeSlotsContext = new BedeSlotsDbContext(contextOptions))
             {
                 cardService = new Data.CardService(bedeSlotsContext, userManager);
-                await Assert.ThrowsExceptionAsync<ArgumentException>(async () => await cardService.GetUserCardsLastNumbersAsync("not existing user id"));
+
+                await Assert.ThrowsExceptionAsync<ArgumentException>(async () =>
+                await cardService.GetUserCardsLastNumbersAsync("not existing user id"));
             }
         }
 
@@ -76,11 +79,11 @@ namespace BedeSlots.Services.Tests.CardService
                 Type = CardType.Visa
             };
 
-            var contexOptions = new DbContextOptionsBuilder<BedeSlotsDbContext>()
+            var contextOptions = new DbContextOptionsBuilder<BedeSlotsDbContext>()
      .UseInMemoryDatabase(databaseName: "ReturnCollectionOfCardNumbersLastFourDigitsInDatabase_WhenValidUserIdIsPassed").UseInternalServiceProvider(serviceProvider)
      .Options;
 
-            using (var bedeSlotsContext = new BedeSlotsDbContext(contexOptions))
+            using (var bedeSlotsContext = new BedeSlotsDbContext(contextOptions))
             {
                 bedeSlotsContext.BankCards.Add(card);
                 bedeSlotsContext.Users.Add(user);
@@ -89,7 +92,7 @@ namespace BedeSlots.Services.Tests.CardService
                 cardService = new Data.CardService(bedeSlotsContext, userManager);
                 cards = await cardService.GetUserCardsLastNumbersAsync(user.Id);
             }
-            using (var bedeSlotsContext = new BedeSlotsDbContext(contexOptions))
+            using (var bedeSlotsContext = new BedeSlotsDbContext(contextOptions))
             {
                 Assert.IsTrue(cards.Count == 1);
                 Assert.IsInstanceOfType(cards, typeof(ICollection<CardNumberDto>));

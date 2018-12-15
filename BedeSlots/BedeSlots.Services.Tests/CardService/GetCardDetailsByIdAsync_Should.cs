@@ -19,13 +19,13 @@ namespace BedeSlots.Services.Tests.CardService
         private ServiceProvider serviceProvider = new ServiceCollection().AddEntityFrameworkInMemoryDatabase().BuildServiceProvider();
 
         [TestMethod]
-        public async Task ReturnCardDetailsDto_WhenValidId()
+        public async Task ReturnCardDetailsDto_WhenValidIdIsPassed()
         {
             var userStoreMock = new Mock<IUserStore<User>>();
             var userManager = new UserManager<User>(userStoreMock.Object, null, null, null, null, null, null, null, null);
 
-            var contexOptions = new DbContextOptionsBuilder<BedeSlotsDbContext>()
-     .UseInMemoryDatabase(databaseName: "GetCardDetailsByIdAsync_Should")
+            var contextOptions = new DbContextOptionsBuilder<BedeSlotsDbContext>()
+     .UseInMemoryDatabase(databaseName: "ReturnCardDetailsDto_WhenValidIdIsPassed")
      .UseInternalServiceProvider(serviceProvider)
      .Options;
 
@@ -39,9 +39,10 @@ namespace BedeSlots.Services.Tests.CardService
                 Type = CardType.Visa,
                 CreatedOn = DateTime.Now
             };
+
             CardDetailsDto result;
 
-            using (var bedeSlotsContext = new BedeSlotsDbContext(contexOptions))
+            using (var bedeSlotsContext = new BedeSlotsDbContext(contextOptions))
             {
                 var sut = new Data.CardService(bedeSlotsContext, userManager);
                 await bedeSlotsContext.BankCards.AddAsync(card);
@@ -49,6 +50,7 @@ namespace BedeSlots.Services.Tests.CardService
 
                 result = await sut.GetCardDetailsByIdAsync(card.Id);
             }
+            
             Assert.IsTrue(result.LastFourDigit == card.Number.Substring(12));
             Assert.IsInstanceOfType(result, typeof(CardDetailsDto));
         }

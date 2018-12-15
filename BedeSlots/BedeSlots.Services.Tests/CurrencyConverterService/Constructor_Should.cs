@@ -13,6 +13,7 @@ namespace BedeSlots.Services.Tests.CurrencyConverterService
         {
             Assert.ThrowsException<ServiceException>(() => new Data.CurrencyConverterService(null));
         }
+
         [TestMethod]
         public void InitializeCorrectly_WhenValidExchangeRateApiCallerIsPassed()
         {

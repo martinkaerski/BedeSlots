@@ -65,7 +65,7 @@ namespace BedeSlots.Web.Tests.Controllers.CardControllerTests
                     }
                 },
                 TempData = new Mock<ITempDataDictionary>().Object
-            }; ;
+            };
 
             return controller;
         }

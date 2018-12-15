@@ -23,8 +23,8 @@ namespace BedeSlots.Services.Tests.CardService
             var userStoreMock = new Mock<IUserStore<User>>();
             var userManager = new UserManager<User>(userStoreMock.Object, null, null, null, null, null, null, null, null);
 
-            var contexOptions = new DbContextOptionsBuilder<BedeSlotsDbContext>()
-     .UseInMemoryDatabase(databaseName: "ReturnUserCards_WhenExistingUserIdIsPassed").UseInternalServiceProvider(serviceProvider)
+            var contextOptions = new DbContextOptionsBuilder<BedeSlotsDbContext>()
+     .UseInMemoryDatabase(databaseName: "ReturnCardById_WhenValidIdIsPassed").UseInternalServiceProvider(serviceProvider)
      .Options;
 
             Data.CardService cardService;
@@ -39,8 +39,10 @@ namespace BedeSlots.Services.Tests.CardService
                 Type = CardType.Visa,
                 CreatedOn = DateTime.Now
             };
+
             BankCard result;
-            using (var bedeSlotsContext = new BedeSlotsDbContext(contexOptions))
+
+            using (var bedeSlotsContext = new BedeSlotsDbContext(contextOptions))
             {
                 cardService = new Data.CardService(bedeSlotsContext, userManager);
                 await bedeSlotsContext.BankCards.AddAsync(card);
@@ -49,7 +51,7 @@ namespace BedeSlots.Services.Tests.CardService
                 result = await cardService.GetCardByIdAsync(card.Id);
             }
 
-            using (var bedeSlotsContext = new BedeSlotsDbContext(contexOptions))
+            using (var bedeSlotsContext = new BedeSlotsDbContext(contextOptions))
             {
                 Assert.IsTrue(result.Id == card.Id);
             }

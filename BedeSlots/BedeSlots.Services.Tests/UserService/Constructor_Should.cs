@@ -16,9 +16,10 @@ namespace BedeSlots.Services.Tests.UserService
         public void ThrowServiceException_WhenNullContextParameterIsPassed()
         {
             var userStoreMock = new Mock<IUserStore<User>>();
+
             var userManager = new UserManager<User>(userStoreMock.Object, null, null, null, null, null, null, null, null);
 
-            var contexOptions = new DbContextOptionsBuilder<BedeSlotsDbContext>()
+            var contextOptions = new DbContextOptionsBuilder<BedeSlotsDbContext>()
      .UseInMemoryDatabase(databaseName: "ThrowServiceException_WhenNullContextParameterIsPassed").Options;
 
             var transactionServiceMock = new Mock<ITransactionService>();
@@ -29,32 +30,32 @@ namespace BedeSlots.Services.Tests.UserService
         [TestMethod]
         public void ThrowServiceException_WhenNullUserManagerParameterIsPassed()
         {
-            var contexOptions = new DbContextOptionsBuilder<BedeSlotsDbContext>()
+            var contextOptions = new DbContextOptionsBuilder<BedeSlotsDbContext>()
 .UseInMemoryDatabase(databaseName: "ThrowServiceException_WhenNullUserManagerParameterIsPassed").Options;
 
             var transactionServiceMock = new Mock<ITransactionService>();
 
-            using (var bedeSlotsContext = new BedeSlotsDbContext(contexOptions))
+            using (var bedeSlotsContext = new BedeSlotsDbContext(contextOptions))
             {
-                Assert.ThrowsException<ServiceException>(() => new Data.UserService(bedeSlotsContext,
-                   null));
+                Assert.ThrowsException<ServiceException>(() => new Data.UserService(bedeSlotsContext, null));
             }
         }
+
         [TestMethod]
         public void NotThrowException_WhenValidParametersArePassed()
         {
             var userStoreMock = new Mock<IUserStore<User>>();
             var userManager = new UserManager<User>(userStoreMock.Object, null, null, null, null, null, null, null, null);
 
-            var contexOptions = new DbContextOptionsBuilder<BedeSlotsDbContext>()
+            var contextOptions = new DbContextOptionsBuilder<BedeSlotsDbContext>()
      .UseInMemoryDatabase(databaseName: "NotThrowException_WhenValidParametersArePassed").Options;
 
             var transactionServiceMock = new Mock<ITransactionService>();
 
-            using (var bedeSlotsContext = new BedeSlotsDbContext(contexOptions))
+            using (var bedeSlotsContext = new BedeSlotsDbContext(contextOptions))
             {
-                var sut = new Data.UserService(bedeSlotsContext,
-                    userManager);
+                var sut = new Data.UserService(bedeSlotsContext, userManager);
+
                 Assert.IsInstanceOfType(sut, typeof(Data.UserService));
             }
         }

@@ -12,11 +12,12 @@ namespace BedeSlots.Services.Tests.CurrencyService
     [TestClass]
     public class GetAllCurrencies_Should
     {
-        private readonly ServiceProvider serviceProvider = new ServiceCollection().AddEntityFrameworkInMemoryDatabase().BuildServiceProvider();
 
         [TestMethod]
         public void ReturnCollectionOfAllCurrencies_WhenInvoked()
         {
+            var serviceProvider = new ServiceCollection().AddEntityFrameworkInMemoryDatabase().BuildServiceProvider();
+
             var contexOptions = new DbContextOptionsBuilder<BedeSlotsDbContext>()
                  .UseInMemoryDatabase(databaseName: "ReturnCollectionOfAllCurrencies_WhenInvoked")
                  .UseInternalServiceProvider(serviceProvider).Options;

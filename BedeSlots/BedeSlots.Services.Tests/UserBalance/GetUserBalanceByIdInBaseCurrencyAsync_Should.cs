@@ -18,15 +18,16 @@ namespace BedeSlots.Services.Tests.UserBalance
         [TestMethod]
         public async Task ThrowServiceException_WhenNullParameterIsPassed()
         {
-            var contexOptions = new DbContextOptionsBuilder<BedeSlotsDbContext>()
+            var contextOptions = new DbContextOptionsBuilder<BedeSlotsDbContext>()
      .UseInMemoryDatabase(databaseName: "ThrowServiceException_WhenNullParameterIsPassed")
      .UseInternalServiceProvider(serviceProvider).Options;
 
-            using (var bedeSlotsContext = new BedeSlotsDbContext(contexOptions))
+            using (var bedeSlotsContext = new BedeSlotsDbContext(contextOptions))
             {
                 var currencyConverterMock = new Mock<ICurrencyConverterService>();
 
                 var sut = new Data.UserBalanceService(bedeSlotsContext, currencyConverterMock.Object);
+
                 await Assert.ThrowsExceptionAsync<ServiceException>(async () => await sut.GetUserBalanceByIdInBaseCurrencyAsync(null));
             }
         }
@@ -34,25 +35,27 @@ namespace BedeSlots.Services.Tests.UserBalance
         [TestMethod]
         public async Task ThrowServiceException_WhenUnexistingUserIdIsPassed()
         {
-            var contexOptions = new DbContextOptionsBuilder<BedeSlotsDbContext>()
+            var contextOptions = new DbContextOptionsBuilder<BedeSlotsDbContext>()
      .UseInMemoryDatabase(databaseName: "ThrowServiceException_WhenUnexistingUserIdIsPassed")
      .UseInternalServiceProvider(serviceProvider).Options;
 
-            using (var bedeSlotsContext = new BedeSlotsDbContext(contexOptions))
+            using (var bedeSlotsContext = new BedeSlotsDbContext(contextOptions))
             {
                 var currencyConverterMock = new Mock<ICurrencyConverterService>();
+
                 var notExistingUserId = "not existing id";
 
                 var sut = new Data.UserBalanceService(bedeSlotsContext, currencyConverterMock.Object);
 
-                await Assert.ThrowsExceptionAsync<ServiceException>(async () => await sut.GetUserBalanceByIdInBaseCurrencyAsync(notExistingUserId));
+                await Assert.ThrowsExceptionAsync<ServiceException>(async () =>
+                await sut.GetUserBalanceByIdInBaseCurrencyAsync(notExistingUserId));
             }
         }
 
         [TestMethod]
         public async Task ReturnUserBalance_WhenValidUserIdIsPassed()
         {
-            var contexOptions = new DbContextOptionsBuilder<BedeSlotsDbContext>()
+            var contextOptions = new DbContextOptionsBuilder<BedeSlotsDbContext>()
     .UseInMemoryDatabase(databaseName: "ReturnUserBalance_WhenValidUserIdIsPassed")
     .UseInternalServiceProvider(serviceProvider).Options;
 
@@ -60,18 +63,20 @@ namespace BedeSlots.Services.Tests.UserBalance
 
             var user = new User() { Balance = expectedBalance, Currency = Currency.USD };
 
-            using (var bedeSlotsContext = new BedeSlotsDbContext(contexOptions))
+            using (var bedeSlotsContext = new BedeSlotsDbContext(contextOptions))
             {
                 bedeSlotsContext.Users.Add(user);
                 bedeSlotsContext.SaveChanges();
             }
 
-            using (var bedeSlotsContext = new BedeSlotsDbContext(contexOptions))
+            using (var bedeSlotsContext = new BedeSlotsDbContext(contextOptions))
             {
                 var currencyConverterMock = new Mock<ICurrencyConverterService>();
 
                 var sut = new Data.UserBalanceService(bedeSlotsContext, currencyConverterMock.Object);
+
                 var result = await sut.GetUserBalanceByIdInBaseCurrencyAsync(user.Id);
+
                 Assert.IsTrue(result == expectedBalance);
             }
         }

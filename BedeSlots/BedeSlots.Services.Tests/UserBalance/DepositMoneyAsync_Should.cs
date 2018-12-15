@@ -21,22 +21,23 @@ namespace BedeSlots.Services.Tests.UserBalance
         [TestMethod]
         public async Task IncreaseUserBalance_WhenValidParametersArePassed()
         {
-            var contexOptions = new DbContextOptionsBuilder<BedeSlotsDbContext>()
+            var contextOptions = new DbContextOptionsBuilder<BedeSlotsDbContext>()
      .UseInMemoryDatabase(databaseName: "IncreaseUserBalance_WhenValidParametersArePassed")
      .UseInternalServiceProvider(serviceProvider).Options;
+
             var tenDollars = 10;
+
             var user = new User() { Currency = Currency.USD };
 
-            using (var bedeSlotsContext = new BedeSlotsDbContext(contexOptions))
+            using (var bedeSlotsContext = new BedeSlotsDbContext(contextOptions))
             {
                 bedeSlotsContext.Users.Add(user);
                 bedeSlotsContext.SaveChanges();
             }
 
-            using (var bedeSlotsContext = new BedeSlotsDbContext(contexOptions))
+            using (var bedeSlotsContext = new BedeSlotsDbContext(contextOptions))
             {
                 var currencyConverterMock = new Mock<ICurrencyConverterService>();
-                
 
                 var sut = new Data.UserBalanceService(bedeSlotsContext, currencyConverterMock.Object);
                 var result = await sut.DepositMoneyAsync(tenDollars, user.Id);
@@ -44,54 +45,62 @@ namespace BedeSlots.Services.Tests.UserBalance
                 Assert.IsTrue(result == tenDollars);
             }
         }
+
         [TestMethod]
         public async Task ThrowServiceException_WhenNullUserIdParameterIsPassed()
         {
-            var contexOptions = new DbContextOptionsBuilder<BedeSlotsDbContext>()
+            var contextOptions = new DbContextOptionsBuilder<BedeSlotsDbContext>()
      .UseInMemoryDatabase(databaseName: "ThrowServiceException_WhenNullUserIdParameterIsPassed")
      .UseInternalServiceProvider(serviceProvider).Options;
 
-            using (var bedeSlotsContext = new BedeSlotsDbContext(contexOptions))
+            using (var bedeSlotsContext = new BedeSlotsDbContext(contextOptions))
             {
                 var currencyConverterMock = new Mock<ICurrencyConverterService>();
-                
+
                 decimal validNumber = 1;
 
                 var sut = new Data.UserBalanceService(bedeSlotsContext, currencyConverterMock.Object);
+
                 await Assert.ThrowsExceptionAsync<ServiceException>(async () => await sut.DepositMoneyAsync(validNumber, null));
             }
         }
+
         [TestMethod]
         public async Task ThrowServiceException_WhenNegativeAmountParameterIsPassed()
         {
-            var contexOptions = new DbContextOptionsBuilder<BedeSlotsDbContext>()
+            var contextOptions = new DbContextOptionsBuilder<BedeSlotsDbContext>()
      .UseInMemoryDatabase(databaseName: "ThrowServiceException_WhenNegativeAmountParameterIsPassed")
      .UseInternalServiceProvider(serviceProvider).Options;
 
-            using (var bedeSlotsContext = new BedeSlotsDbContext(contexOptions))
+            using (var bedeSlotsContext = new BedeSlotsDbContext(contextOptions))
             {
                 var currencyConverterMock = new Mock<ICurrencyConverterService>();
-                
+
                 decimal invalidNumber = -10;
 
                 var sut = new Data.UserBalanceService(bedeSlotsContext, currencyConverterMock.Object);
+
                 await Assert.ThrowsExceptionAsync<ServiceException>(async () => await sut.DepositMoneyAsync(invalidNumber, "valid id"));
             }
         }
+
         [TestMethod]
         public async Task ThrowServiceException_WhenUserNotExistInDatabase()
         {
-            var contexOptions = new DbContextOptionsBuilder<BedeSlotsDbContext>()
+            var contextOptions = new DbContextOptionsBuilder<BedeSlotsDbContext>()
      .UseInMemoryDatabase(databaseName: "ThrowServiceException_WhenUserNotExistInDatabase")
      .UseInternalServiceProvider(serviceProvider).Options;
+
             var tenDollars = 10;
+
             var user = new User() { Balance = tenDollars + tenDollars, Currency = Currency.USD };
 
-            using (var bedeSlotsContext = new BedeSlotsDbContext(contexOptions))
+            using (var bedeSlotsContext = new BedeSlotsDbContext(contextOptions))
             {
                 var currencyConverterMock = new Mock<ICurrencyConverterService>();
 
                 var sut = new Data.UserBalanceService(bedeSlotsContext, currencyConverterMock.Object);
+
                 await Assert.ThrowsExceptionAsync<ServiceException>(async () => await sut.DepositMoneyAsync(tenDollars, user.Id));
             }
         }

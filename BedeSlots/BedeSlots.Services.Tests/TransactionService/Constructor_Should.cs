@@ -24,11 +24,11 @@ namespace BedeSlots.Services.Tests.TransactionService
         [TestMethod]
         public void ThrowServiceException_WhenNullCurrencyConverterParameterIsPassed()
         {
-            var contexOptions = new DbContextOptionsBuilder<BedeSlotsDbContext>()
+            var contextOptions = new DbContextOptionsBuilder<BedeSlotsDbContext>()
     .UseInMemoryDatabase(databaseName: "ThrowServiceException_WhenNullCurrencyConverterParameterIsPassed")
     .UseInternalServiceProvider(serviceProvider).Options;
             
-            using (var bedeSlotsContext = new BedeSlotsDbContext(contexOptions))
+            using (var bedeSlotsContext = new BedeSlotsDbContext(contextOptions))
             {
                 Assert.ThrowsException<ServiceException>(() => new Data.TransactionService(bedeSlotsContext, null));
             }
@@ -37,14 +37,15 @@ namespace BedeSlots.Services.Tests.TransactionService
         [TestMethod]
         public void InitializeCorrectly_WhenValidParametersArePassed()
         {
-            var contexOptions = new DbContextOptionsBuilder<BedeSlotsDbContext>()
+            var contextOptions = new DbContextOptionsBuilder<BedeSlotsDbContext>()
     .UseInMemoryDatabase(databaseName: "InitializeCorrectly_WhenValidParametersArePassed")
     .UseInternalServiceProvider(serviceProvider).Options;
 
-            using (var bedeSlotsContext = new BedeSlotsDbContext(contexOptions))
+            using (var bedeSlotsContext = new BedeSlotsDbContext(contextOptions))
             {
                 var currencyConverterMock = new Mock<ICurrencyConverterService>();
                 var sut = new Data.TransactionService(bedeSlotsContext, currencyConverterMock.Object);
+
                 Assert.IsInstanceOfType(sut, typeof(Data.TransactionService));
             }
         }

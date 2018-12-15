@@ -3,7 +3,12 @@
     padding-bottom: 20px;
     margin: 0;
     background-image: url("/images/slider-background-casino-security-white.jpg");
+    background-position: center;
+    background-size: cover;
     background-repeat: no-repeat;
+    min-height: 100%;
+    z-index: 0;
+    background-attachment: fixed;
 }
 
 #navbar-brand {
@@ -8572,4 +8577,16 @@ body {
 
 #history-container{
    width:80%;
+}
+
+
+
+.w3-display-container {
+    height: 680px;
+    margin-top: -69px;
+    overflow: hidden;
+    padding: 0px;
+    width: 100%;
+    padding: 0;
+    max-width: inherit;
 }

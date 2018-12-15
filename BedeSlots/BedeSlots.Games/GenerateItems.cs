@@ -4,39 +4,41 @@ using System.Linq;
 
 namespace BedeSlots.Games
 {
+    using static GameConstants;
+
     public static class GenerateItems
     {
         public static IDictionary<int, Item> GetItems()
         {
             var apple = new Item
             {
-                Name = "a",
-                Coefficient = 0.4m,
-                Probability = 45,
+                Name = AppleSymbol,
+                Coefficient = AppleCoef,
+                Probability = AppleProb,
                 Type = ItemType.Normal
             };
 
             var banana = new Item
             {
-                Name = "b",
-                Coefficient = 0.6m,
-                Probability = 35,
+                Name = BananaSymbol,
+                Coefficient = BananaCoef,
+                Probability = BananaProb,
                 Type = ItemType.Normal
             };
 
             var pineapple = new Item
             {
-                Name = "p",
-                Coefficient = 0.8m,
-                Probability = 15,
+                Name = PineappleSymbol,
+                Coefficient = PineappleCoef,
+                Probability = PineappleProb,
                 Type = ItemType.Normal
             };
 
             var wildcard = new Item
             {
-                Name = "w",
-                Coefficient = 0m,
-                Probability = 5,
+                Name = WildcardSymbol,
+                Coefficient = WildcardCoef,
+                Probability = WildcardProb,
                 Type = ItemType.Wildcard
 
             };

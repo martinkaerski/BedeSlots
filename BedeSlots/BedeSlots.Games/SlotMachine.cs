@@ -1,4 +1,5 @@
 ﻿
+using BedeSlots.Common.Providers.Contracts;
 using BedeSlots.Games.Contracts;
 using BedeSlots.Games.Models;
 using System;
@@ -12,9 +13,11 @@ namespace BedeSlots.Games
     {
         private readonly List<int> winningRows;
         private readonly IDictionary<int, Item> items;
+        private readonly IRandomProvider randomProvider;
 
-        public SlotMachine()
+        public SlotMachine(IRandomProvider randomProvider)
         {
+            this.randomProvider = randomProvider;
             items = GenerateItems.GetItems();
             winningRows = new List<int>();
         }
@@ -24,7 +27,7 @@ namespace BedeSlots.Games
             var matrix = GenerateItemMatrix(rows, cols, items);
             var coefficient = CalculateCoefficient(matrix);
 
-            amount =  coefficient != 0 ? Math.Round((coefficient * amount),2) : 0;
+            amount =  coefficient != 0 ? Math.Round(((decimal)coefficient * amount),2) : 0;
 
             var spinData = new SpinData()
             {
@@ -52,16 +55,16 @@ namespace BedeSlots.Games
             return stringMatrix;
         }
 
-        internal decimal CalculateCoefficient(Item[,] matrix)
+        internal double CalculateCoefficient(Item[,] matrix)
         {
-            decimal totalCoef = 0;
+            double totalCoef = 0;
             winningRows.Clear();
 
             for (int row = 0; row < matrix.GetLength(0); row++)
             {
                 Item previousItem = null;
                 bool isWinningRow = true;
-                decimal rowCoef = 0;
+                double rowCoef = 0;
 
                 for (int col = 0; col < matrix.GetLength(1); col++)
                 {
@@ -124,8 +127,7 @@ namespace BedeSlots.Games
         // key - cumulative probability
         internal Item GetRandomItem(IDictionary<int, Item> items)
         {
-            var random = new Random(Guid.NewGuid().GetHashCode());
-            var randomNumber = random.Next(1, 101); //the maxValue is exclusive
+            var randomNumber = randomProvider.Next(1, 101); //the maxValue is exclusive
 
             Item selectedItem = null;
             foreach (var item in items)

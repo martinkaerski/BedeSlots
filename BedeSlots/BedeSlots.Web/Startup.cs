@@ -100,6 +100,7 @@ namespace BedeSlots
             services.AddSingleton<ISlotMachine, SlotMachine>();
             services.AddTransient<IDateTimeProvider, DateTimeProvider>();
             services.AddTransient(typeof(IPaginationProvider<>), typeof(PaginationProvider<>));
+            services.AddTransient<IRandomProvider, RandomProvider>();
         }
 
         private void RegisterAuthentication(IServiceCollection services)

@@ -4,7 +4,7 @@
     $gameName = $('#game-name').val();
 
     if ($gameName === "Classic 777") {
-        $('#game-div').css('height', '650px');
+        $('#game-div').css('height', '660px');
     }
 
     let directory = "/images/fruits/";

@@ -10,4 +10,4 @@ L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
 // add marker to the map
 marker = L.marker([lat, lon]).addTo(map);
 // add popup to the marker
-marker.bindPopup("<b>Wheeler Dealers CO.</b><br />Alexander Malinov 31<br />Sofia").openPopup();
+marker.bindPopup("<b>Bede Slots</b><br />Alexander Malinov 31<br />Sofia").openPopup();

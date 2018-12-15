@@ -37,22 +37,6 @@ namespace BedeSlots.Services.Data
             return transactions;
         }
 
-        //TODO: delete it?
-        public async Task<Transaction> GetTransactionByIdAsync(int id)
-        {
-            //TODO: user FirstOrDefault and check for null
-            if (!await this.context.Transactions.AnyAsync(t => t.Id == id))
-            {
-                throw new ServiceException($"Transaction with Id:{id} not exist!");
-            }
-            var transaction = await this.context.Transactions
-                .Include(t => t.User)
-                .ThenInclude(u => u.Cards)
-                .SingleOrDefaultAsync(t => t.Id == id);
-
-            return transaction;
-        }
-
         public async Task<Transaction> AddTransactionAsync(TransactionType type, string userId, string description, decimal amount, Currency currency)
         {
             if (userId == null)

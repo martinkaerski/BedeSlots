@@ -11,8 +11,6 @@ namespace BedeSlots.Services.Data.Contracts
 
         IQueryable<TransactionHistoryDto> GetUserTransactionsAsync(string id);
 
-        Task<Transaction> GetTransactionByIdAsync(int id);
-
         Task<Transaction> AddTransactionAsync(TransactionType type, string userId, string description, decimal amount, Currency currrency);
     }
 }

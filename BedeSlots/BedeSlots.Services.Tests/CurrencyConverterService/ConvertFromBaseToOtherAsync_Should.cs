@@ -1,6 +1,7 @@
 ﻿using BedeSlots.Data.Models;
 using BedeSlots.Services.Data.Contracts;
 using BedeSlots.Services.Data.Exceptions;
+using BedeSlots.Services.External.Contracts;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System;
@@ -20,7 +21,7 @@ namespace BedeSlots.Services.Tests.CurrencyConverterService
             decimal exchangeRateApiCallerMockReturnVal = 5;
             decimal expectedVal = inputVal * exchangeRateApiCallerMockReturnVal;
 
-            var exchangeRateApiCallerMock = new Mock<IExchangeRateApiCallService>();
+            var exchangeRateApiCallerMock = new Mock<IExchangeRateApiService>();
             exchangeRateApiCallerMock.Setup(e => e.GetRateAsync(It.IsAny<Currency>())).ReturnsAsync(exchangeRateApiCallerMockReturnVal);
 
             var sut = new Data.CurrencyConverterService(exchangeRateApiCallerMock.Object);
@@ -35,7 +36,7 @@ namespace BedeSlots.Services.Tests.CurrencyConverterService
         {
             decimal negativeNumber = -44;
 
-            var exchangeRateApiCallerMock = new Mock<IExchangeRateApiCallService>();
+            var exchangeRateApiCallerMock = new Mock<IExchangeRateApiService>();
 
             var sut = new Data.CurrencyConverterService(exchangeRateApiCallerMock.Object);
 

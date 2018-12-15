@@ -22,6 +22,6 @@ namespace BedeSlots.Web
             { Currency.BGN, "lv" }
         };
 
-        public const double MaxAmount = 1000000000d;
+        public const double MaxAmount = 1000000d;
     }
 }

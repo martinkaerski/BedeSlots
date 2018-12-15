@@ -10,7 +10,7 @@ namespace BedeSlots.Web.Models
         {
         }
 
-        [Range(1, WebConstants.MaxAmount, ErrorMessage = "The withdraw amount should be more than 1.")]
+        [Range(1, WebConstants.MaxAmount, ErrorMessage = "The deposit amount should be between 1 and 1 million.")]
         [Remote(action: "HasEnoughMoneyAsync", controller: "UserBalance", areaName: "")]
         [RegularExpression(@"\d*\.?\d*", ErrorMessage = "The withdraw amount should be a number using dot for floating-point numbers.")]
         public decimal Amount { get; set; }

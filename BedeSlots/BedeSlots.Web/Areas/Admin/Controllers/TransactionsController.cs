@@ -32,33 +32,7 @@ namespace BedeSlots.Web.Areas.Admin.Controllers
         public IActionResult Index()
         {
             return View();
-        }
-
-        //TODO: delete it? It is not used
-        public async Task<IActionResult> Details(int id)
-        {
-            var transaction = await transactionService.GetTransactionByIdAsync(id);
-
-            if (transaction == null)
-            {
-                return NotFound();
-            }
-
-            var model = new TransactionDetailsViewModel()
-            {
-                Date = transaction.Date,
-                Type = transaction.Type.ToString(),
-                Amount = transaction.Amount,
-                Description = transaction.Description,
-                UserEmail = transaction.User.Email,
-                FirstName = transaction.User.FirstName,
-                LastName = transaction.User.LastName,
-                Birthdate = transaction.User.Birthdate,
-                Cards = transaction.User.Cards.Select(c => c.Number).ToList()
-            };
-
-            return View(model);
-        }
+        }      
 
         [HttpPost]
         [ValidateAntiForgeryToken]

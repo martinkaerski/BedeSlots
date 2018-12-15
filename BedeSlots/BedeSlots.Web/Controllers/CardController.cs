@@ -1,6 +1,7 @@
 ﻿using BedeSlots.Common;
 using BedeSlots.Common.Providers.Contracts;
 using BedeSlots.Data.Models;
+using BedeSlots.DTO.BankCardDto;
 using BedeSlots.Services.Data.Contracts;
 using BedeSlots.Web.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -72,8 +73,16 @@ namespace BedeSlots.Web.Controllers
         [HttpGet]
         public async Task<IActionResult> Details(int cardId)
         {
-            //TODO: try catch and return not found view or error view?
-            var card = await this.cardService.GetCardDetailsByIdAsync(cardId);
+            CardDetailsDto card;
+            try
+            {
+                card = await this.cardService.GetCardDetailsByIdAsync(cardId);
+            }
+            catch (Exception)
+            {
+                Response.StatusCode = 404;
+                return View("NotFound");
+            }
 
             var model = new CardInfoViewModel()
             {

@@ -36,7 +36,7 @@ namespace BedeSlots.Web.Models
         public string WinningRows { get; set; }
 
         [Required]
-        public double Coefficient { get; set; }
+        public decimal Coefficient { get; set; }
 
         public string StatusMessage { get; set; }
     }

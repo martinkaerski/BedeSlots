@@ -10,6 +10,6 @@ namespace BedeSlots.Games.Models
 
         public List<int> WinningRows { get; set; }
 
-        public double Coefficient { get; set; }
+        public decimal Coefficient { get; set; }
     }
 }

@@ -3,6 +3,7 @@ using BedeSlots.Common.Providers.Contracts;
 using BedeSlots.Data.Models;
 using BedeSlots.DTO.BankCardDto;
 using BedeSlots.Services.Data.Contracts;
+using BedeSlots.Services.Data.Exceptions;
 using BedeSlots.Web.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -78,7 +79,7 @@ namespace BedeSlots.Web.Controllers
             {
                 card = await this.cardService.GetCardDetailsByIdAsync(cardId);
             }
-            catch (Exception)
+            catch (ServiceException)
             {
                 Response.StatusCode = 404;
                 return View("NotFound");

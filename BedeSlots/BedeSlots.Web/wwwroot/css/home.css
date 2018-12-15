@@ -11,10 +11,15 @@
 body {
     padding: 0px;
     margin: 0px;
-    ;
 }
 
 .index-info{
     padding:30px;
     text-align-last:left;
+}
+
+@media (max-width: 880px) {
+    #slogan {
+        display:none;
+    }
 }

@@ -1,6 +1,5 @@
 ﻿using BedeSlots.Data;
 using BedeSlots.Data.Models;
-using BedeSlots.DTO;
 using BedeSlots.DTO.BankCardDto;
 using BedeSlots.Services.Data.Contracts;
 using BedeSlots.Services.Data.Exceptions;
@@ -152,11 +151,11 @@ namespace BedeSlots.Services.Data
             return this.context.BankCards.Any(c => c.Id == bankCardId);
         }
 
-        public async Task<CardDetailsDto> GetCardDetailsByIdAsync(int id)
+        public async Task<CardDetailsDto> GetCardDetailsByIdAsync(int cardId)
         {
             var card = await this.context.BankCards
                 .Where(c => c.IsDeleted == false)
-                .Select(c=> new CardDetailsDto()
+                .Select(c => new CardDetailsDto()
                 {
                     Id = c.Id,
                     CardholerName = c.CardholerName,
@@ -165,11 +164,30 @@ namespace BedeSlots.Services.Data
                     LastFourDigit = c.Number.Substring(12),
                     Type = c.Type
                 })
-                .FirstOrDefaultAsync(c => c.Id == id);
+                .FirstOrDefaultAsync(c => c.Id == cardId);
 
             if (card == null)
             {
-                throw new ServiceException($"There is no card with id {id}");
+                throw new ServiceException($"There is no card with id {cardId}");
+            }
+
+            return card;
+        }
+
+        public async Task<CardNumberDto> GetCardNumberByIdAsync(int cardId)
+        {
+            var card = await this.context.BankCards
+                .Where(c => c.IsDeleted == false)
+                .Select(c => new CardNumberDto()
+                {
+                    Id = c.Id,
+                    Number = c.Number.Substring(12)
+                })
+                .FirstOrDefaultAsync(c => c.Id == cardId);
+
+            if (card == null)
+            {
+                throw new ServiceException($"There is no card with id {cardId}");
             }
 
             return card;

@@ -1,17 +1,23 @@
-﻿using BedeSlots.Games.Contracts;
+﻿
+using BedeSlots.Common.Providers.Contracts;
+using BedeSlots.Games.Contracts;
 using BedeSlots.Games.Models;
 using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 
+[assembly: InternalsVisibleTo("BedeSlots.Games.Tests")]
 namespace BedeSlots.Games
 {
     public class SlotMachine : ISlotMachine
     {
         private readonly List<int> winningRows;
         private readonly IDictionary<int, Item> items;
+        private readonly IRandomProvider randomProvider;
 
-        public SlotMachine()
+        public SlotMachine(IRandomProvider randomProvider)
         {
+            this.randomProvider = randomProvider;
             items = GenerateItems.GetItems();
             winningRows = new List<int>();
         }
@@ -21,7 +27,7 @@ namespace BedeSlots.Games
             var matrix = GenerateItemMatrix(rows, cols, items);
             var coefficient = CalculateCoefficient(matrix);
 
-            amount = coefficient != 0 ? coefficient * amount : 0;
+            amount =  coefficient != 0 ? Math.Round(((decimal)coefficient * amount),2) : 0;
 
             var spinData = new SpinData()
             {
@@ -49,16 +55,16 @@ namespace BedeSlots.Games
             return stringMatrix;
         }
 
-        private decimal CalculateCoefficient(Item[,] matrix)
+        internal double CalculateCoefficient(Item[,] matrix)
         {
-            decimal finalCoef = 0;
+            double totalCoef = 0;
             winningRows.Clear();
 
             for (int row = 0; row < matrix.GetLength(0); row++)
             {
                 Item previousItem = null;
-                bool isWinning = true;
-                decimal rowCoef = 0;
+                bool isWinningRow = true;
+                double rowCoef = 0;
 
                 for (int col = 0; col < matrix.GetLength(1); col++)
                 {
@@ -68,34 +74,24 @@ namespace BedeSlots.Games
                         continue;
                     }
 
-                    if (previousItem != null)
+                    if (previousItem != null && element != previousItem)
                     {
-                        if (element != previousItem)
-                        {
-                            isWinning = false;
-                            break;
-                        }
-                        else
-                        {
-                            rowCoef += element.Coefficient;
-                            previousItem = element;
-                        }
+                        isWinningRow = false;
+                        break;
                     }
-                    else
-                    {
-                        rowCoef += element.Coefficient;
-                        previousItem = element;
-                    }
+
+                    rowCoef += element.Coefficient;
+                    previousItem = element;
                 }
 
-                if (isWinning)
+                if (isWinningRow)
                 {
-                    finalCoef += rowCoef;
+                    totalCoef += rowCoef;
                     winningRows.Add(row);
                 }
             }
 
-            return finalCoef;
+            return totalCoef;
         }
 
         private Item[,] GenerateItemMatrix(int rows, int cols, IDictionary<int, Item> items)
@@ -129,10 +125,9 @@ namespace BedeSlots.Games
             return stringMatrix;
         }
         // key - cumulative probability
-        private Item GetRandomItem(IDictionary<int, Item> items)
+        internal Item GetRandomItem(IDictionary<int, Item> items)
         {
-            var random = new Random(Guid.NewGuid().GetHashCode());
-            var randomNumber = random.Next(1, 101); //the maxValue is exclusive
+            var randomNumber = randomProvider.Next(1, 101); //the maxValue is exclusive
 
             Item selectedItem = null;
             foreach (var item in items)

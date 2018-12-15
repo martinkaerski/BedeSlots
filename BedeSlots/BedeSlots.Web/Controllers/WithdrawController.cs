@@ -4,8 +4,6 @@ using BedeSlots.Web.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace BedeSlots.Web.Controllers
@@ -31,6 +29,19 @@ namespace BedeSlots.Web.Controllers
         [TempData]
         public string StatusMessage { get; set; }
 
+        [HttpGet]
+        public async Task<IActionResult> Index()
+        {
+            var user = await this.userManager.GetUserAsync(HttpContext.User);
+
+            var model = new WithdrawViewModel()
+            {
+                Currency = user.Currency
+            };
+
+            return View(model);
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Withdraw(WithdrawViewModel model)
@@ -52,29 +63,16 @@ namespace BedeSlots.Web.Controllers
 
             await this.userBalanceService.ReduceMoneyAsync(model.Amount, user.Id);
 
-            var card = await this.cardService.GetCardDetailsByIdAsync(model.BankCardId);
+            var card = await this.cardService.GetCardNumberByIdAsync(model.BankCardId);
             var userCurrency = await this.currencyService.GetUserCurrencyAsync(user.Id);
 
-            await this.transactionService.AddTransactionAsync(Data.Models.TransactionType.Withdraw,
-                user.Id, card.LastFourDigit, model.Amount, userCurrency);
+            await this.transactionService.AddTransactionAsync(TransactionType.Withdraw,
+                user.Id, card.Number, model.Amount, userCurrency);
 
             string currencySymbol = WebConstants.CurrencySymbols[user.Currency];
-            this.StatusMessage = $"Successfully withdrawed {model.Amount} {currencySymbol}.";
+            this.StatusMessage = $"Successfully withdrawn {model.Amount} {currencySymbol}.";
 
             return PartialView("_StatusMessage", this.StatusMessage);
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> Index()
-        {
-            var user = await this.userManager.GetUserAsync(HttpContext.User);
-
-            var retrieveViewModel = new WithdrawViewModel()
-            {
-                Currency = user.Currency
-            };
-
-            return View(retrieveViewModel);
         }
     }
 }

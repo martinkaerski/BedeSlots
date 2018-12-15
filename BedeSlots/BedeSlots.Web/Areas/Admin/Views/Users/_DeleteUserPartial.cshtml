@@ -6,54 +6,14 @@
 
 <h2>Are you sure you want to delete @Model.UserName?</h2>
 
-
 <div>
     <form id="deleteUser">
+        @Html.AntiForgeryToken()
         <input asp-for="Id" type="text" hidden />
     </form>
 
     <div class="text-center">
-        <button id="btnSubmit" type="submit" class="btn btn-danger">Yes, delete it</button>
-        <button id="btnReject" type="button" class="btn btn-default">Cancel</button>
+        <button id="deleteBtnSubmit" type="submit" class="btn btn-danger">Yes, delete it</button>
+        <button id="deleteBtntnReject" type="button" class="btn btn-default">Cancel</button>
     </div>
 </div>
-
-<script>
-    $(document).ready(function () {
-        $("#btnSubmit").click(function (event) {
-            event.preventDefault();
-            var dataToSend = $("#deleteUser").serialize();
-            console.log(dataToSend);
-
-            $.ajax({
-                type: "POST",
-                url: "/Admin/Users/Delete",
-                data: dataToSend,
-                success: function (data) {
-                    $("#myModal1").modal("hide");
-                    if (data) {
-                        oTable = $('#table-users').DataTable();
-                        oTable.draw();
-                    }
-                    else {
-                        alert("Something went wrong!");
-                    }
-                }
-            })
-        })
-
-        $("#btnReject").click(function (event) {
-            event.preventDefault();
-            $("#myModal1").modal("hide");
-
-            if (data) {
-                oTable = $('#table-users').DataTable();
-                oTable.draw();
-            }
-            else {
-                alert("Something Went Wrong!");
-            }
-        });
-    })
-</script>
-

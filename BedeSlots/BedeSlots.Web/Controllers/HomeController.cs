@@ -1,11 +1,8 @@
 ﻿using BedeSlots.Data.Models;
 using BedeSlots.Models;
-using BedeSlots.Services.Data;
 using BedeSlots.Services.Data.Contracts;
-using BedeSlots.Web.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
 
@@ -23,6 +20,7 @@ namespace BedeSlots.Controllers
             this.currencyConverterService = currencyConverterService;
         }
 
+        [HttpGet]
         [ResponseCache(CacheProfileName = "Default")]
         public async Task<IActionResult> Index()
         {
@@ -39,14 +37,12 @@ namespace BedeSlots.Controllers
                 {
                     userBalance = user.Balance;
                 }
-
-                //TODO: Da se iztrie? 
-                ViewData["Balance"] = new UserBalanceViewModel() { Balance = Math.Round(userBalance, 2) };
             }
 
             return View();
         }
 
+        [HttpGet]
         public IActionResult About()
         {
             ViewData["Message"] = "Your application description page.";
@@ -54,6 +50,7 @@ namespace BedeSlots.Controllers
             return View();
         }
 
+        [HttpGet]
         public IActionResult Contact()
         {
             ViewData["Message"] = "Your contact page.";
@@ -61,6 +58,7 @@ namespace BedeSlots.Controllers
             return View();
         }
 
+        [HttpGet]
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });

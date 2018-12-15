@@ -2,22 +2,44 @@
     ViewData["Title"] = "Home Page";
 }
 <link href="~/css/home.css" rel="stylesheet" />
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+
+<style>
+
+    /* Full height image header */
+    .bgimg-1 {
+        background-position: center;
+        background-size: cover;
+        background-image: url("/images/home.jpg");
+        min-height: 100%;
+        z-index: 0;
+        background-attachment: fixed;
+    }
+
+</style>
+
+<div id="label-corner" class="corner-ribbon sticky black shadow text-center">
+    <span class="neon">Bede</span> <span class="flux">Slots</span>
+</div>
+
+<div class="bgimg-1 w3-display-container" id="home">
+
+    <div class="w3-display-middle w3-center" style="white-space:nowrap;">
+        <span class="w3-center 2 w3-padding-large w3-black w3-xlarge w3-wide w3-animate-opacity"><i>WE KNOW EVERYTHING ABOUT LUCK!</i></span>
+    </div>
+    <div class="w3-display-bottomleft w3-text-white" style="padding:48px">
+            <p><a href="game" class="w3-button w3-round-xxlarge w3-red w3-padding-large w3-large w3-hover-black">Try you fortune now!</a></p>
+     </div>
+</div>
 
 <div id="container">
-    <div id="slogan-img">
-
-        <img src="images/home/logo.jpg" alt="" name="logo" width="160" height="160" id="logo" /> <img src="images/home/slogan.jpg" alt="" name="logo" width="190" height="109" id="slogan" />
-    </div>
     <div id="content">
         <div id="leftPan">
             <div id="welcome">
                 <h2 class="text-capitalize">We know everything abou luck!</h2>
                 <p>
                     <span class="headline">Nam justo augue, dictum a, hendrerit!</span><br />
-                    Fusce interdum. Maecenas eu elit sed nulla dignissim interdum.
-                    Sed laoreet. Aenean pede. Phasellus porta. Ut dictum nonummy diam.
-                    Cras Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
-                    Nam eu nulla. Donec lobortis purus vel urna. Nunc laoreet lacinia nunc.
+                    All your favorite games are right here with some of the best payouts.
                 </p>
                 <div class="clear"></div>
             </div>
@@ -33,23 +55,6 @@
                 </div>
                 <div class="popularItem" id="r1">
                     <img src="images/home/img_games-04.jpg" width="57" height="57" alt="" />
-                    <p>
-                        <span class="headline">Nam justo augue, </span><br />
-                        Fusce interdum. Maecenas eu elit sed nulla dignissim interdum. Sed laoreet.
-                    </p>
-                    <div class="clear"></div>
-                </div>
-                <div class="clear"></div>
-                <div class="popularItem" id="l2">
-                    <img src="images/home/img_games-05.jpg" width="57" height="57" alt="" />
-                    <p>
-                        <span class="headline">Nam justo augue, </span><br />
-                        Fusce interdum. Maecenas eu elit sed nulla dignissim interdum. Sed laoreet.
-                    </p>
-                    <div class="clear"></div>
-                </div>
-                <div class="popularItem" id="r2">
-                    <img src="images/home/img_games-06.jpg" width="57" height="57" alt="" />
                     <p>
                         <span class="headline">Nam justo augue, </span><br />
                         Fusce interdum. Maecenas eu elit sed nulla dignissim interdum. Sed laoreet.
@@ -73,25 +78,3 @@
     </div>
 </div>
 
-<button class=" btn open-button" onclick="openForm()">Chat</button>
-
-<div class="chat-popup" id="myForm">
-    <form class="form-container">
-        <div>
-            <iframe id="bot-iframe" height="400" width="280" src='https://webchat.botframework.com/embed/BedeSlotsBot?s=9auPtlIpveo.cwA.dgY.K2U1OVCynAWVcHZLw16J5sTfxRi1dbdQ5SHOCmIq7Bc' ;'></iframe>
-        </div>
-        <button type="button" class="btn cancel" onclick="closeForm()">Close</button>
-    </form>
-</div>
-
-<script src="https://cdn.botframework.com/botframework-webchat/latest/webchat.js"></script>
-
-<script>
-    function openForm() {
-        document.getElementById("myForm").style.display = "block";
-    }
-
-    function closeForm() {
-        document.getElementById("myForm").style.display = "none";
-    }
-</script>

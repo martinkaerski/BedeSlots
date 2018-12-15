@@ -7,9 +7,9 @@ namespace BedeSlots.Services.Data
 {
     public class CurrencyConverterService : ICurrencyConverterService
     {
-        private readonly IExchangeRateApiCallService exchangeRateApiCallService;
+        private readonly IExchangeRateApiService exchangeRateApiCallService;
 
-        public CurrencyConverterService(IExchangeRateApiCallService exchangeRateApiCallService)
+        public CurrencyConverterService(IExchangeRateApiService exchangeRateApiCallService)
         {
             this.exchangeRateApiCallService = exchangeRateApiCallService ?? throw new ServiceException(nameof(exchangeRateApiCallService));
         }

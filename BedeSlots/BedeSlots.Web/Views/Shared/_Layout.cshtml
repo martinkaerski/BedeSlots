@@ -15,38 +15,41 @@
         <link rel="stylesheet" href="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/css/bootstrap.min.css"
               asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css"
               asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
-        <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
+        <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     </environment>
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
 </head>
 <body>
-    <nav class="navbar navbar-default navbar-fixed-top" id="my-navbar">
+    <nav class="navbar navbar-default navbar-fixed-top" >
         <div class="container-fluid">
             <div class="navbar-header">
-                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="sr-only">Toggle navigation</span>
-                </button>
-                <a asp-area="" asp-controller="Home" asp-action="Index" id="nav-logo" class="glyphicon glyphicon-fire navbar-brand">BedeSlots</a>
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">Menu</button>
+                <a asp-area="" asp-controller="Home" asp-action="Index" id="nav-logo" class="navbar-left"><img src="~/images/logo.png"></a>
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li><a asp-area="" asp-controller="Home" asp-action="Index"class="glyphicon glyphicon-home"> Home</a></li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="About" class="glyphicon glyphicon-info-sign"> About</a></li>
+                    <li><a asp-area="" asp-controller="Home" asp-action="Index" class="glyphicon glyphicon-home"> Home</a></li>
                     <li><a asp-area="" asp-controller="Home" asp-action="Contact" class="glyphicon glyphicon-bell"> Contact</a></li>
                     @if (User.Identity.IsAuthenticated)
-                    {                        
-                        <li class="active"><a asp-area="" asp-controller="Game" asp-action="Index" class="glyphicon glyphicon-asterisk"> Games</a></li>
+                    {
                         <li> <a asp-area="" asp-controller="Deposit" asp-action="Index" class="glyphicon glyphicon-piggy-bank"> Deposit</a></li>
+                        <li class="active"><a asp-area="" asp-controller="Game" asp-action="Index" class="glyphicon glyphicon-asterisk"> Games</a></li>
                     }
                     @if (User.Identity.IsAuthenticated)
                     {
                         @if (User.IsInRole(WebConstants.MasterAdminRole) || User.IsInRole(WebConstants.AdminRole))
                         {
-                            <li><a asp-area="Admin" asp-controller="Transactions" asp-action="Index" class="glyphicon glyphicon-list"> Transactions</a></li>
-                            <li><a asp-area="Admin" asp-controller="Users" asp-action="Index" class="glyphicon glyphicon-user"> Users</a></li>
+                            <li>
+                                <a class="dropdown-toggle glyphicon glyphicon-align-justify" role="button" data-toggle="dropdown" id="admin-panel"> Admin<span class="caret"></span></a>
+
+                                <ul class="dropdown-menu">
+                                    <li><a asp-area="Admin" asp-controller="Transactions" asp-action="Index" class="glyphicon glyphicon-list"> Transactions</a></li>
+                                    <li><a asp-area="Admin" asp-controller="Users" asp-action="Index" class="glyphicon glyphicon-user"> Users</a></li>
+                                </ul>
+                            </li>
                         }
                     }
                 </ul>
+
                 @await Html.PartialAsync("_LoginPartial")
 
                 <div id="component-balance">
@@ -58,8 +61,20 @@
             </div>
         </div>
     </nav>
-    <div class="container body-content">
+    
+    <div class="body-content">
         @RenderBody()
+
+        <button class=" btn open-button" onclick="openForm()">Chat</button>
+        <div class="chat-popup" id="myForm">
+            <form class="form-chat">
+                <div>
+                    <iframe id="bot-iframe" height="400" width="280" src='https://webchat.botframework.com/embed/BedeSlotsBot?s=9auPtlIpveo.cwA.dgY.K2U1OVCynAWVcHZLw16J5sTfxRi1dbdQ5SHOCmIq7Bc' ;'></iframe>
+                </div>
+                <button type="button" class="btn cancel" onclick="closeForm()">Close</button>
+            </form>
+        </div>
+
         <hr />
         <footer>
             <p>&copy; 2018 - BedeSlots</p>
@@ -87,6 +102,7 @@
         <script src="~/js/site.min.js" asp-append-version="true"></script>
     </environment>
 
+    <script src="~/js/chatBot.js"></script>
     @RenderSection("Scripts", required: false)
 </body>
 </html>

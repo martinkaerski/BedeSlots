@@ -1,6 +1,6 @@
-﻿using BedeSlots.Common;
-using BedeSlots.Data;
+﻿using BedeSlots.Data;
 using BedeSlots.Data.Models;
+using BedeSlots.Services.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -8,7 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Threading.Tasks;
 
-namespace BedeSlots.Web.Extensions
+namespace BedeSlots.Web.Infrastructure.Extensions
 {
     public static class ApplicationBuilderExtensions
     {
@@ -54,7 +54,7 @@ namespace BedeSlots.Web.Extensions
                                 FirstName = adminName,
                                 LastName = adminName,
                                 Birthdate = new DateTime(1970, 01, 01),
-                                Currency = CommonConstants.BaseCurrency
+                                Currency = ServicesConstants.BaseCurrency
                             };
 
                             var createAdmin = await userManager.CreateAsync(adminUser, "123456");
@@ -67,7 +67,6 @@ namespace BedeSlots.Web.Extensions
                     })
                     .Wait();
             }
-
             return app;
         }
     }

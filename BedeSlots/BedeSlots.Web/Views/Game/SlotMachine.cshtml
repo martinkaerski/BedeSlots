@@ -1,40 +1,46 @@
-﻿@model GameSlotViewModel
-@inject IJsonHelper Json
+﻿
+@model GameSlotViewModel
 
 @{
-    ViewData["Title"] = "SmallSlotMachine";
+    ViewData["Title"] = "SlotMachine";
 }
 
-<h2 class="text-center">Slot Machine</h2>
-<div id="status-msg">
-    <partial name="_StatusMessage" model="@Model.StatusMessage" />
-</div>
+<div class="container"> 
+    <div id="status-msg">
+        <partial name="_StatusMessage" model="@Model.StatusMessage" />
+    </div>
 
-<div class="row" id="slot-machine">
-    <div class="col-md-6 col-md-offset-3">
-        <div id="partial">
-            <partial name="_GameSlotPartial" model="@Model" />
-        </div>
+    <div id="game-div">
+        <h2 class="game-name text-center">@Model.GameName</h2>
 
-        <form id="spin-form" method="post" asp-controller="Game" asp-action="Spin">
-            <div class="form-group col-md-6 col-md-offset-3">
-                <label asp-for="@Model.Amount" class="control-label text-info"></label>
-                <input asp-for="@Model.Amount" id="stake-amount" type="number" min="1" />
-                <span class="text-info">@WebConstants.CurrencySymbols[Model.Currency]</span>
-                <span asp-validation-for="@Model.Amount" class="text-danger"></span>
+        <div class="row" id="slot-machine">
+            <div class="col-md-6 col-md-offset-3">
+                <div id="partial">
+                    <partial name="_GameSlotPartial" model="@Model" />
+                </div>
 
-                <input asp-for="@Model.Rows" id="rows" hidden />
-                <input asp-for="@Model.Cols" id="cols" hidden />
+                <form id="spin-form" method="post" asp-controller="Game" asp-action="Spin">
+                    <div class="form col-md-6 col-md-offset-3 text-center">
+                        <label asp-for="@Model.Amount" class="control-label text">Bet</label>
+                        <input asp-for="@Model.Amount" id="stake-amount" type="text" min="1" class="inline" />
+                        <span class="text">@WebConstants.CurrencySymbols[Model.Currency]</span>
+                        <button type="button" id="spin-button" class="btn btn-success form-control inline">Spin</button>
+
+                        <input asp-for="@Model.Rows" id="rows" hidden />
+                        <input asp-for="@Model.Cols" id="cols" hidden />
+                        <input asp-for="@Model.GameName" id="game-name" hidden />
+                    </div>
+                    <span asp-validation-for="@Model.Amount" class="text-danger"></span>
+                </form>
             </div>
-            <button type="button" id="spin-button" class="btn btn-success btn-block">Spin</button>
-        </form>
+        </div>
     </div>
 </div>
 
 <audio id="spin-audio" src="/audio/snip.mp3"></audio>
 <audio id="win-audio" src="~/audio/win.mp3"></audio>
 <audio id="big-win-audio" src="~/audio/big-win.mp3"></audio>
-
+<audio id="mario-audio" src="~/audio/mario.mp3"></audio>
 
 @section Scripts{
     @await Html.PartialAsync("_ValidationScriptsPartial")s

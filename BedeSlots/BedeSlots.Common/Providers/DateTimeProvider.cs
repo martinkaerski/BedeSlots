@@ -1,7 +1,7 @@
-﻿using BedeSlots.Web.Providers.Contracts;
+﻿using BedeSlots.Common.Providers.Contracts;
 using System;
 
-namespace BedeSlots.Web.Providers
+namespace BedeSlots.Common.Providers
 {
     public class DateTimeProvider : IDateTimeProvider
     {

@@ -17,7 +17,7 @@ namespace BedeSlots.Services.Tests.CurrencyConverterService
         [TestMethod]
         public void InitializeCorrectly_WhenValidExchangeRateApiCallerIsPassed()
         {
-            var eracMock = new Mock<IExchangeRateApiCallService>();
+            var eracMock = new Mock<IExchangeRateApiService>();
             var sut = new Data.CurrencyConverterService(eracMock.Object);
 
             Assert.IsInstanceOfType(sut, typeof(Data.CurrencyConverterService));

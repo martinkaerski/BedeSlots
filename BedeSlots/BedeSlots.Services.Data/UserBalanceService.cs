@@ -35,12 +35,12 @@ namespace BedeSlots.Services.Data
 
             var user = await this.context.Users.FirstOrDefaultAsync(u => u.Id == userId) ?? throw new ServiceException("User not exist in database!");
 
-            if (user.Currency != CommonConstants.BaseCurrency)
+            if (user.Currency != ServicesConstants.BaseCurrency)
             {
                 amount = await this.currencyConverterService.ConvertToBaseCurrencyAsync(amount, user.Currency);
             }
 
-            user.Balance += amount;
+            user.Balance += Math.Round(amount,2);
 
             this.context.Update(user);
             await this.context.SaveChangesAsync();
@@ -62,14 +62,14 @@ namespace BedeSlots.Services.Data
 
             var user = await this.context.Users.FirstOrDefaultAsync(u => u.Id == userId) ?? throw new ServiceException("User not exist!");
 
-            if (user.Currency != CommonConstants.BaseCurrency)
+            if (user.Currency != ServicesConstants.BaseCurrency)
             {
                 amount = await this.currencyConverterService.ConvertToBaseCurrencyAsync(amount, user.Currency);
             }
 
             if (user.Balance >= amount)
             {
-                user.Balance -= amount;
+                user.Balance -= Math.Round(amount, 2);
             }
             else
             {
@@ -106,7 +106,7 @@ namespace BedeSlots.Services.Data
 
             decimal balance = user.Balance;
 
-            if (user.Currency != CommonConstants.BaseCurrency)
+            if (user.Currency != ServicesConstants.BaseCurrency)
             {
                 balance = await this.currencyConverterService.ConvertFromBaseToOtherAsync(balance, user.Currency);
             }

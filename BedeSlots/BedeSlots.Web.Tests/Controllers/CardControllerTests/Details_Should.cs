@@ -1,4 +1,5 @@
-﻿using BedeSlots.Data.Models;
+﻿using BedeSlots.Common.Providers.Contracts;
+using BedeSlots.Data.Models;
 using BedeSlots.DTO.BankCardDto;
 using BedeSlots.Services.Data.Contracts;
 using BedeSlots.Web.Controllers;
@@ -24,7 +25,8 @@ namespace BedeSlots.Web.Tests.Controllers.CardControllerTests
         {
             // Arrange
             var cardServiceMock = new Mock<ICardService>();
-            var controller = SetupController(cardServiceMock);
+            var dateTimeProvMock = new Mock<IDateTimeProvider>();
+            var controller = SetupController(cardServiceMock, dateTimeProvMock);
 
             var card = new CardDetailsDto() {
                 Id = 1,
@@ -48,7 +50,8 @@ namespace BedeSlots.Web.Tests.Controllers.CardControllerTests
         {
             // Arrange
             var cardServiceMock = new Mock<ICardService>();
-            var controller = SetupController(cardServiceMock);
+            var dateTimeProvMock = new Mock<IDateTimeProvider>();
+            var controller = SetupController(cardServiceMock, dateTimeProvMock);
 
             var card = new CardDetailsDto()
             {
@@ -69,11 +72,11 @@ namespace BedeSlots.Web.Tests.Controllers.CardControllerTests
             cardServiceMock.Verify(x => x.GetCardDetailsByIdAsync(It.IsAny<int>()), Times.Once);
         }
 
-        private CardController SetupController(Mock<ICardService> cardServiceMock)
+        private CardController SetupController(Mock<ICardService> cardServiceMock, Mock<IDateTimeProvider> dateTimeMock)
         {
             var userManagerMock = SetupUserManagerMock();
 
-            var controller = new CardController(userManagerMock.Object, cardServiceMock.Object)
+            var controller = new CardController(userManagerMock.Object, cardServiceMock.Object, dateTimeMock.Object)
             {
                 ControllerContext = new ControllerContext()
                 {
@@ -83,7 +86,7 @@ namespace BedeSlots.Web.Tests.Controllers.CardControllerTests
                     }
                 },
                 TempData = new Mock<ITempDataDictionary>().Object
-            }; ;
+            };;
 
             return controller;
         }

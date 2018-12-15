@@ -59,7 +59,7 @@ namespace BedeSlots.Web.Controllers
             var deposit = await this.userBalanceService.DepositMoneyAsync(depositViewModel.DepositAmount, user.Id);
 
             string currencySymbol = WebConstants.CurrencySymbols[user.Currency];
-            this.StatusMessage = $"Successfully deposit {depositViewModel.DepositAmount} {currencySymbol}.";
+            this.StatusMessage = $"Successfully deposited {depositViewModel.DepositAmount} {currencySymbol}.";
 
             return PartialView("_StatusMessage", this.StatusMessage);
         }

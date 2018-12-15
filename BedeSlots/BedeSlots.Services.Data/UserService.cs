@@ -134,8 +134,6 @@ namespace BedeSlots.Services.Data
 
             var user = await GetUserByIdAsync(userId);
 
-            //await this.userManager.AddToRoleAsync(user, newRole.Name);
-
             var newIdentityRole = new IdentityUserRole<string>() { RoleId = newRole.Id, UserId = user.Id };
 
             this.context.UserRoles.Remove(userRole);
@@ -151,6 +149,7 @@ namespace BedeSlots.Services.Data
             {
                 throw new ServiceException("UserId can not be null!");
             }
+
             var user = await this.GetUserByIdAsync(userId);
             user.IsDeleted = true;
             await this.context.SaveChangesAsync();

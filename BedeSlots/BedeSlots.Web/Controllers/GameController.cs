@@ -1,4 +1,5 @@
-﻿using BedeSlots.Data.Models;
+﻿
+using BedeSlots.Data.Models;
 using BedeSlots.Games.Contracts;
 using BedeSlots.Services.Data.Contracts;
 using BedeSlots.Web.Models;
@@ -109,7 +110,7 @@ namespace BedeSlots.Web.Controllers
 
                 await userBalanceService.DepositMoneyAsync(result.Amount, user.Id);
                 model.Balance += result.Amount;
-                model.Message = $"You won {Math.Round(result.Amount, 2)}";
+                model.Message = $"You won {Math.Round(result.Amount, 2)} {WebConstants.CurrencySymbols[user.Currency]}.";
             }
             else
             {
@@ -122,19 +123,24 @@ namespace BedeSlots.Web.Controllers
         [HttpGet]
         public async Task<IActionResult> SlotMachine(string size)
         {
+            string gameName = "Slot Machine";
+
             switch (size)
             {
                 case "4x3":
                     rows = 4;
                     cols = 3;
+                    gameName = "Fruits Gone Wild";
                     break;
                 case "5x5":
                     rows = 5;
                     cols = 5;
+                    gameName = "Diamond Wild";
                     break;
                 case "8x5":
                     rows = 8;
                     cols = 5;
+                    gameName = "Classic 777";
                     break;
                 default:
                     return this.RedirectToAction("Index");
@@ -146,10 +152,11 @@ namespace BedeSlots.Web.Controllers
 
             var model = new GameSlotViewModel()
             {
+                GameName = gameName,
                 Rows = rows,
                 Cols = cols,
                 Matrix = stringMatrix,
-                Balance = Math.Round(convertedUserBalance,2),
+                Balance = Math.Round(convertedUserBalance, 2),
                 Message = "Good luck!",
                 Currency = user.Currency
             };

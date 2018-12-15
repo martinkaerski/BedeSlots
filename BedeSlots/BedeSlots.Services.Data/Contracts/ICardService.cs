@@ -1,5 +1,4 @@
 ﻿using BedeSlots.Data.Models;
-using BedeSlots.DTO;
 using BedeSlots.DTO.BankCardDto;
 using System;
 using System.Collections.Generic;
@@ -22,5 +21,7 @@ namespace BedeSlots.Services.Data.Contracts
         Task<BankCard> DeleteCardAsync(int cardId);
 
         Task<CardDetailsDto> GetCardDetailsByIdAsync(int id);
+
+        Task<CardNumberDto> GetCardNumberByIdAsync(int cardId);
     }
 }

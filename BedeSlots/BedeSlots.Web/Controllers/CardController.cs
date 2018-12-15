@@ -1,4 +1,5 @@
 ﻿using BedeSlots.Common;
+using BedeSlots.Common.Providers.Contracts;
 using BedeSlots.Data.Models;
 using BedeSlots.Services.Data.Contracts;
 using BedeSlots.Web.Models;
@@ -17,11 +18,13 @@ namespace BedeSlots.Web.Controllers
     {
         private readonly UserManager<User> userManager;
         private readonly ICardService cardService;
+        private readonly IDateTimeProvider dateTimeProvider;
 
-        public CardController(UserManager<User> userManager, ICardService cardService)
+        public CardController(UserManager<User> userManager, ICardService cardService, IDateTimeProvider dateTimeProvider)
         {
             this.userManager = userManager;
             this.cardService = cardService;
+            this.dateTimeProvider = dateTimeProvider;
         }
 
         [HttpGet]
@@ -45,6 +48,7 @@ namespace BedeSlots.Web.Controllers
             {
                 return Json(new { message = $"Invalid parameters!" });
             }
+
             DateTime expiryDate = model.Expiry;
 
             var card = await this.cardService.AddCardAsync(model.CardNumber, model.CardholderName, model.Cvv, expiryDate, model.CardType, userId);
@@ -68,6 +72,7 @@ namespace BedeSlots.Web.Controllers
         [HttpGet]
         public async Task<IActionResult> Details(int cardId)
         {
+            //TODO: try catch and return not found view or error view?
             var card = await this.cardService.GetCardDetailsByIdAsync(cardId);
 
             var model = new CardInfoViewModel()
@@ -107,7 +112,7 @@ namespace BedeSlots.Web.Controllers
         [AcceptVerbs("Get", "Post")]
         public JsonResult IsValidExpiryDate(DateTime expiry)
         {
-            if (expiry <= DateTime.Now)
+            if (expiry <= dateTimeProvider.Now)
             {
                 return Json($"Invalid expiry date!");
             }

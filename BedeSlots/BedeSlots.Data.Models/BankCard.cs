@@ -1,4 +1,5 @@
 ﻿
+using BedeSlots.Common.CustomAttributes;
 using System;
 using System.ComponentModel.DataAnnotations;
 
@@ -15,7 +16,7 @@ namespace BedeSlots.Data.Models
         public string CvvNumber { get; set; }
 
         [Required]
-        //TODO ExpiryDate atribute?
+        [ExpiryDate]
         public DateTime ExpiryDate { get; set; }
 
         [Required]

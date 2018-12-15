@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace BedeSlots.Web.Providers.Contracts
+namespace BedeSlots.Common.Providers.Contracts
 {
     public interface IDateTimeProvider
     {

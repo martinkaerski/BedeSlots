@@ -1,8 +1,7 @@
 ﻿using BedeSlots.Data.Models;
-using BedeSlots.DTO;
 using BedeSlots.DTO.TransactionDto;
 using BedeSlots.Services.Data.Contracts;
-using BedeSlots.Web.Providers.Contracts;
+using BedeSlots.Web.Infrastructure.Providers.Contracts;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -29,19 +28,21 @@ namespace BedeSlots.Web.Controllers
             this.currencyConverterService = currencyConverterService;
         }
 
+        [HttpGet]
         public IActionResult Index()
         {
             return View();
         }
 
         [HttpPost]
-        public async Task<IActionResult> LoadData()
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> LoadData(string draw, string sortColumn, string sortColumnDirection, string searchValue)
         {
             try
             {
                 var user = await this.userManager.GetUserAsync(HttpContext.User);
 
-                string draw, sortColumn, sortColumnDirection, searchValue;
+                //string draw, sortColumn, sortColumnDirection, searchValue;
                 int pageSize, skip, recordsTotal;
 
                 this.paginationProvider.GetParameters(out draw, out sortColumn, out sortColumnDirection, out searchValue, out pageSize, out skip, out recordsTotal, HttpContext, Request);
@@ -61,11 +62,14 @@ namespace BedeSlots.Web.Controllers
 
                 //Total number of rows count 
                 recordsTotal = transactions.Count();
-            
+
                 //Paging 
-                var data = transactions
+                var dataFiltered = transactions
                     .Skip(skip)
                     .Take(pageSize)
+                    .ToList();
+
+                var data = dataFiltered
                     .Select(t => new
                     {
                         Date = t.Date.ToString("G", CultureInfo.InvariantCulture),
@@ -80,7 +84,7 @@ namespace BedeSlots.Web.Controllers
             }
             catch (Exception)
             {
-                throw;
+                return RedirectToAction(controllerName: "Home", actionName: "Index");
             }
         }
 

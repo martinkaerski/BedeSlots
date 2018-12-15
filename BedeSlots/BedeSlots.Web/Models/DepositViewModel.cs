@@ -15,7 +15,7 @@ namespace BedeSlots.Web.Models
 
         [Required(ErrorMessage = "Please enter a positive amount!")]
         [Range(1, WebConstants.MaxAmount, ErrorMessage ="The deposit amount should be more than 1.")]
-        [RegularExpression("^[0-9]+$", ErrorMessage = "The deposit amount should be a number.")]
+        [RegularExpression(@"\d*\.?\d*", ErrorMessage = "The deposit amount should be  a number using dot for floating-point numbers.")]
         [Display(Name = "Deposit")]
         public decimal DepositAmount { get; set; }
 

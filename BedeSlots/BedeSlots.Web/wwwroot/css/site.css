@@ -10,7 +10,9 @@
     z-index: 0;
     background-attachment: fixed;
 }
-
+footer {
+    font-size: 10px;
+}
 #navbar-brand {
     font-size: 20px;
 }

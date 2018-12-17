@@ -45,7 +45,7 @@ namespace BedeSlots.Services.Data
         {
             var usersRoles = context.UserRoles.Where(x => x.RoleId != null);
 
-            var allRoles = context.Roles.ToList();
+            var allRoles = this.context.Roles.ToList();
             var roleDictionary = new Dictionary<string, string>();
 
             foreach (var role in usersRoles)
@@ -79,6 +79,7 @@ namespace BedeSlots.Services.Data
             {
                 throw new ServiceException("UserId can not be null!");
             }
+
             var role = await this.context.UserRoles.FirstOrDefaultAsync(u => u.UserId == userId);
             var roleId = role.RoleId;
 
@@ -91,6 +92,7 @@ namespace BedeSlots.Services.Data
             {
                 throw new ServiceException("UserId can not be null!");
             }
+
             var role = await this.context.UserRoles.FirstOrDefaultAsync(u => u.UserId == userId);
 
             return role;
@@ -102,6 +104,7 @@ namespace BedeSlots.Services.Data
             {
                 throw new ServiceException("UserId can not be null!");
             }
+
             var role = await this.context.UserRoles.FirstOrDefaultAsync(u => u.UserId == userId);
             var roleId = role.RoleId;
             var roleName = this.context.Roles.SingleOrDefault(r => r.Id == roleId).Name;
@@ -132,12 +135,12 @@ namespace BedeSlots.Services.Data
 
             var newRole = await this.context.Roles.FirstOrDefaultAsync(r => r.Id == newRoleId) ?? throw new ServiceException("Role not exist!");
 
-            var user = await GetUserByIdAsync(userId);
+            var user = await this.GetUserByIdAsync(userId);
 
             var newIdentityRole = new IdentityUserRole<string>() { RoleId = newRole.Id, UserId = user.Id };
 
             this.context.UserRoles.Remove(userRole);
-            await context.UserRoles.AddAsync(newIdentityRole);
+            await this.context.UserRoles.AddAsync(newIdentityRole);
             await this.context.SaveChangesAsync();
 
             return newRole;
@@ -163,6 +166,7 @@ namespace BedeSlots.Services.Data
             {
                 throw new ServiceException("UserId can not be null!");
             }
+
             var user = await this.context.Users.FirstOrDefaultAsync(u => u.Id == userId);
             return user.Currency;
         }

@@ -43,6 +43,7 @@ namespace BedeSlots.Services.Data
             {
                 throw new ServiceException("UserId can not be null!");
             }
+
             if (amount < 0)
             {
                 throw new ServiceException("Amount must be positive number!");

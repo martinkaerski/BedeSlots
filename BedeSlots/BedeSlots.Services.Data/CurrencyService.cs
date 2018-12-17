@@ -1,9 +1,9 @@
-﻿using BedeSlots.Data;
+﻿using System;
+using BedeSlots.Data;
 using BedeSlots.Data.Models;
 using BedeSlots.Services.Data.Contracts;
 using BedeSlots.Services.Data.Exceptions;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -25,6 +25,7 @@ namespace BedeSlots.Services.Data
             {
                 throw new ServiceException("UserId can not be null!");
             }
+
             if (!await this.context.Users.AnyAsync(u => u.Id == userId))
             {
                 throw new ServiceException("User not exist in database!");

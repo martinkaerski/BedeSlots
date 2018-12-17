@@ -37,7 +37,7 @@ namespace BedeSlots.Services.Data
                 throw new ServiceException($"User with id:{userId} doesn't exist!");
             }
 
-            var cards = await context.BankCards
+            var cards = await this.context.BankCards
                 .Where(c => c.UserId == userId && c.IsDeleted == false)
                 .Select(c => new CardDetailsDto
                 {
@@ -58,6 +58,7 @@ namespace BedeSlots.Services.Data
             {
                 throw new ArgumentNullException("userId is null!");
             }
+
             var exists = await this.context.Users.AnyAsync(u => u.Id == userId);
 
             if (!exists)
@@ -65,7 +66,7 @@ namespace BedeSlots.Services.Data
                 throw new ArgumentException($"User with id:{userId} doesn't exist!");
             }
 
-            var cardsNumbers = await context.BankCards
+            var cardsNumbers = await this.context.BankCards
                 .Where(c => c.UserId == userId && c.IsDeleted == false)
                 .Select(c => new CardNumberDto
                 {
@@ -83,6 +84,7 @@ namespace BedeSlots.Services.Data
             {
                 throw new ArgumentNullException("userId is null!");
             }
+
             var exists = await this.context.Users.AnyAsync(u => u.Id == userId);
 
             if (!exists)
@@ -90,7 +92,7 @@ namespace BedeSlots.Services.Data
                 throw new ArgumentException($"User with id:{userId} doesn't exist!");
             }
 
-            var cardsNumbers = await context.BankCards
+            var cardsNumbers = await this.context.BankCards
                 .Where(c => c.UserId == userId && c.IsDeleted == false)
                 .Select(c => new CardNumberDto
                 {
@@ -104,7 +106,7 @@ namespace BedeSlots.Services.Data
 
         public async Task<BankCard> AddCardAsync(string cardNumber, string cardholerName, string cvv, DateTime expiryDate, CardType cardType, string userId)
         {
-            var cardNumberWithoutSpaces = cardNumber.Replace(" ", "");
+            var cardNumberWithoutSpaces = cardNumber.Replace(" ", string.Empty);
 
             var card = new BankCard()
             {

@@ -1,11 +1,10 @@
 ﻿$(document).ready(function () {
-
     $rows = $('#rows').val();
     $cols = $('#cols').val();
     $gameName = $('#game-name').val();
 
     if ($gameName === "Classic 777") {
-        $('#game-div').css('height', '650px');
+        $('#game-div').css('height', '660px');
     }
 
     let directory = "/images/fruits/";
@@ -36,8 +35,17 @@
     var isStopped = false;
     const $spinBtn = $('#spin-button');
     const $spinForm = $('#spin-form');
-        
+
     $spinBtn.on('click', spin);
+
+    $(document).keydown(function (e) {
+        if (e.keyCode == 32 && e.target == document.body) {
+                e.preventDefault();
+            if ($spinBtn.prop('disabled') === false) {
+                $spinBtn.click();
+            }
+        }
+    })
 
     function stop() {
         isStopped = true;
@@ -53,7 +61,7 @@
         let $userBalanceNum = parseFloat($('#user-balance').val());
         let $stakeAmountNum = parseFloat($('#stake-amount').val());
 
-        if ($userBalanceNum <= $stakeAmountNum || $stakeAmountNum < 1) {
+        if ($userBalanceNum < $stakeAmountNum || $stakeAmountNum < 1) {
             return;
         }
 
@@ -61,65 +69,71 @@
         $spinBtn.on('click', stop);
         $spinBtn.text('Stop');
         $spinBtn.addClass('btn-danger');
-        $("tr").css('background', '#1c1c1c');
-        $('#result-message').text('Good luck!');
-        $('#result-message').css('color', 'white');
-                
+
         const $spinForm = $("#spin-form");
         const dataToSend = $spinForm.serialize();
 
         document.getElementById('spin-audio').play();
+        $spinBtn.prop('disabled', true);
+
+        let partialViewResult;
+        let xhr;
+
+        $.ajax({
+            url: $spinForm.attr('action'),
+            type: "Post",
+            data: dataToSend,
+            success: function (serverData, textStatus, xhrServer) {
+                partialViewResult = serverData;
+                xhr = xhrServer;
+                $spinBtn.prop('disabled', false);
+            }
+        });
+
+        $("tr").css('background', '#1c1c1c');
+        $('#result-message').text('Good luck!');
+        $('#result-message').css('color', 'white');
 
         shuffle(function () {
-            $.ajax({
-                url: $spinForm.attr('action'),
-                type: "Post",
-                data: dataToSend,
-                success: function (partialViewResult, textStatus, xhr) {
-                    if (xhr.status === 299) {
-                        $("#status-msg").empty();
-                        $("#status-msg").html(partialViewResult);
-                    }
-                    else {
-                        $("#partial").empty();
-                        $("#partial").html(partialViewResult);
+            if (xhr.status === 299) {
+                $("#status-msg").empty();
+                $("#status-msg").html(partialViewResult);
+            }
+            else {
+                $("#partial").empty();
+                $("#partial").html(partialViewResult);
 
-                        $coef = $('#res-coef').val();
-                        let $coefDouble = parseFloat($coef);
+                $coef = $('#res-coef').val();
+                let $coefDouble = parseFloat($coef);
 
-                        if ($coefDouble > 0.0) {
-                            document.getElementById('win-audio').play();
-                            $('#result-message').css('color', 'yellow');
-                        }
-
-                        if ($coefDouble >= 2.0) {
-                            gimmick('body');
-                            $spinBtn.prop('disabled', true);
-
-                            setTimeout(function () { 
-                                gimmick('body');
-                                $spinBtn.prop('disabled', false);
-
-                            }, 1500);
-                        }
-
-                        $winningRows = $('#winning-rows').val();
-                        debugger;
-                        for (var i = 0; i < $winningRows.length; i++) {
-                            $("#row-" + $winningRows[i]).css('background', '#0bd124');
-                        }                       
-                    }
-
-                    let container = $("#component-balance");
-                    $.get(MyAppUrlSettings.UserBalanceComponent, function (data) { container.html(data); });
-
-                    var coinsExist = document.getElementById('gimmick')
-                    if (coinsExist) {
-                        coinsExist.parentNode.removeChild(coinsExist);
-                        return false;
-                    }
+                if ($coefDouble > 0.0) {
+                    document.getElementById('win-audio').play();
+                    $('#result-message').css('color', 'yellow');
                 }
-            })
+
+                if ($coefDouble >= 2.0) {
+                    gimmick('body');
+                    setTimeout(function () {
+                        gimmick('body');
+
+                    }, 1500);
+                }
+
+                $winningRows = $('#winning-rows').val();
+                debugger;
+                for (var i = 0; i < $winningRows.length; i++) {
+                    $("#row-" + $winningRows[i]).css('background', '#0bd124');
+                }
+            }
+
+            let container = $("#component-balance");
+            $.get(MyAppUrlSettings.UserBalanceComponent, function (data) { container.html(data); });
+
+            var coinsExist = document.getElementById('gimmick')
+            if (coinsExist) {
+                coinsExist.parentNode.removeChild(coinsExist);
+                return false;
+            }
         });
     }
 
@@ -141,8 +155,13 @@
                 isStopped = false;
                 clearInterval(Random);
             }
-        }, 100);
+        }, 80);
     }
+
+    let betAmount = document.querySelector('#stake-amount');
+    betAmount.addEventListener("keyup", function () {
+        betAmount.value = betAmount.value.match(/^\d+\.?\d{0,2}/);
+    });
 
     function gimmick(el) {
         var exists = document.getElementById('gimmick')
@@ -163,7 +182,7 @@
 
         var coin = new Image();
         coin.src = 'http://i.imgur.com/5ZW2MT3.png'
-        // 440 wide, 40 high, 10 states
+
         coin.onload = function () {
             element.appendChild(canvas)
             focused = true;

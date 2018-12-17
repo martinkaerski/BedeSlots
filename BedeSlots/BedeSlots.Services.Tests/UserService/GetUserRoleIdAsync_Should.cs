@@ -19,37 +19,35 @@ namespace BedeSlots.Services.Tests.UserService
         [TestMethod]
         public async Task ReturnRoleId_WhenValidUserIdIsPassed()
         {
-
             var userStoreMock = new Mock<IUserStore<User>>();
             var userManager = new UserManager<User>(userStoreMock.Object, null, null, null, null, null, null, null, null);
 
-            var contexOptions = new DbContextOptionsBuilder<BedeSlotsDbContext>()
+            var contextOptions = new DbContextOptionsBuilder<BedeSlotsDbContext>()
      .UseInMemoryDatabase(databaseName: "ReturnRoleId_WhenValidUserIdIsPassed")
      .UseInternalServiceProvider(serviceProvider).Options;
 
-            var transactionServiceMock = new Mock<ITransactionService>();
-
             var user = new User();
-            var role = new IdentityRole("User");
-            IdentityUserRole<string> userRole;
 
-            using (var bedeSlotsContext = new BedeSlotsDbContext(contexOptions))
+            var role = new IdentityRole("User");
+
+            using (var bedeSlotsContext = new BedeSlotsDbContext(contextOptions))
             {
                 bedeSlotsContext.Roles.Add(role);
                 bedeSlotsContext.Users.Add(user);
 
-                userRole = new IdentityUserRole<string>() { UserId = user.Id, RoleId = role.Id };
+                var userRole = new IdentityUserRole<string>() { UserId = user.Id, RoleId = role.Id };
 
                 bedeSlotsContext.UserRoles.Add(userRole);
                 bedeSlotsContext.SaveChanges();
             }
 
-            using (var bedeSlotsContext = new BedeSlotsDbContext(contexOptions))
+            using (var bedeSlotsContext = new BedeSlotsDbContext(contextOptions))
             {
                 var sut = new Data.UserService(bedeSlotsContext,
                     userManager);
 
                 var result = await sut.GetUserRoleIdAsync(user.Id);
+
                 Assert.IsTrue(result == role.Id);
             }
         }
@@ -57,26 +55,20 @@ namespace BedeSlots.Services.Tests.UserService
         [TestMethod]
         public async Task ThrowServiceException_WhenNullParameterIsPassed()
         {
-
             var userStoreMock = new Mock<IUserStore<User>>();
             var userManager = new UserManager<User>(userStoreMock.Object, null, null, null, null, null, null, null, null);
 
-            var contexOptions = new DbContextOptionsBuilder<BedeSlotsDbContext>()
+            var contextOptions = new DbContextOptionsBuilder<BedeSlotsDbContext>()
      .UseInMemoryDatabase(databaseName: "ReturnRoleId_WhenValidUserIdIsPassed")
      .UseInternalServiceProvider(serviceProvider).Options;
 
-            var transactionServiceMock = new Mock<ITransactionService>();
-            
-            using (var bedeSlotsContext = new BedeSlotsDbContext(contexOptions))
+            using (var bedeSlotsContext = new BedeSlotsDbContext(contextOptions))
             {
                 var sut = new Data.UserService(bedeSlotsContext,
                     userManager);
 
                 await Assert.ThrowsExceptionAsync<ServiceException>(async () => await sut.GetUserRoleIdAsync(null));
-
             }
         }
-
-
     }
 }

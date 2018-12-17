@@ -40,7 +40,7 @@ namespace BedeSlots.Services.Data
                 amount = await this.currencyConverterService.ConvertToBaseCurrencyAsync(amount, user.Currency);
             }
 
-            user.Balance += amount;
+            user.Balance += Math.Round(amount, 2);
 
             this.context.Update(user);
             await this.context.SaveChangesAsync();
@@ -69,7 +69,7 @@ namespace BedeSlots.Services.Data
 
             if (user.Balance >= amount)
             {
-                user.Balance -= amount;
+                user.Balance -= Math.Round(amount, 2);
             }
             else
             {
@@ -88,7 +88,6 @@ namespace BedeSlots.Services.Data
                 throw new ServiceException("UserId can not be null!");
             }
 
-
             var user = await this.context.Users
                             .Where(u => u.Id == userId)
                             .Select(u => new
@@ -102,7 +101,6 @@ namespace BedeSlots.Services.Data
             {
                 throw new ServiceException($"User with Id:{userId} not exist!");
             }
-
 
             decimal balance = user.Balance;
 
@@ -120,6 +118,7 @@ namespace BedeSlots.Services.Data
             {
                 throw new ServiceException("UserId can not be null!");
             }
+
             if (!await context.Users.AnyAsync(u => u.Id == userId))
             {
                 throw new ServiceException($"User with Id:{userId} not exist!");

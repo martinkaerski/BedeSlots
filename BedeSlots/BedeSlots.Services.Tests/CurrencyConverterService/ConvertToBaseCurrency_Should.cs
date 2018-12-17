@@ -24,15 +24,14 @@ namespace BedeSlots.Services.Tests.CurrencyConverterService
             decimal returnVal = 5;
             decimal expectedVal = inputVal * (1 / returnVal);
 
-            var eracsMock = new Mock<IExchangeRateApiService>();
-            eracsMock.Setup(e => e.GetRateAsync(It.IsAny<Currency>())).ReturnsAsync(returnVal);
+            var exchangeRateApiCallerMock = new Mock<IExchangeRateApiService>();
+            exchangeRateApiCallerMock.Setup(e => e.GetRateAsync(It.IsAny<Currency>())).ReturnsAsync(returnVal);
 
-            var sut = new Data.CurrencyConverterService(eracsMock.Object);
+            var sut = new Data.CurrencyConverterService(exchangeRateApiCallerMock.Object);
 
             var result = await sut.ConvertToBaseCurrencyAsync(inputVal, Currency.BGN);
 
             Assert.IsTrue(result == expectedVal);
-
         }
 
         [TestMethod]
@@ -40,11 +39,12 @@ namespace BedeSlots.Services.Tests.CurrencyConverterService
         {
             decimal negativeNumber = -44;
 
-            var eracsMock = new Mock<IExchangeRateApiService>();
+            var exchangeRateApiCallerMock = new Mock<IExchangeRateApiService>();
 
-            var sut = new Data.CurrencyConverterService(eracsMock.Object);
+            var sut = new Data.CurrencyConverterService(exchangeRateApiCallerMock.Object);
 
-            await Assert.ThrowsExceptionAsync<ServiceException>(async () => await sut.ConvertToBaseCurrencyAsync(negativeNumber, Currency.BGN));
+            await Assert.ThrowsExceptionAsync<ServiceException>(async () =>
+            await sut.ConvertToBaseCurrencyAsync(negativeNumber, Currency.BGN));
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿using BedeSlots.Games.Contracts;
+﻿
+using BedeSlots.Common.Providers.Contracts;
+using BedeSlots.Games.Contracts;
 using BedeSlots.Games.Models;
 using System;
 using System.Collections.Generic;
@@ -11,9 +13,11 @@ namespace BedeSlots.Games
     {
         private readonly List<int> winningRows;
         private readonly IDictionary<int, Item> items;
+        private readonly IRandomProvider randomProvider;
 
-        public SlotMachine()
+        public SlotMachine(IRandomProvider randomProvider)
         {
+            this.randomProvider = randomProvider;
             items = GenerateItems.GetItems();
             winningRows = new List<int>();
         }
@@ -23,7 +27,7 @@ namespace BedeSlots.Games
             var matrix = GenerateItemMatrix(rows, cols, items);
             var coefficient = CalculateCoefficient(matrix);
 
-            amount = coefficient != 0 ? coefficient * amount : 0;
+            amount =  coefficient != 0 ? Math.Round(((decimal)coefficient * amount),2) : 0;
 
             var spinData = new SpinData()
             {
@@ -123,8 +127,7 @@ namespace BedeSlots.Games
         // key - cumulative probability
         internal Item GetRandomItem(IDictionary<int, Item> items)
         {
-            var random = new Random(Guid.NewGuid().GetHashCode());
-            var randomNumber = random.Next(1, 101); //the maxValue is exclusive
+            var randomNumber = randomProvider.Next(1, 101); //the maxValue is exclusive
 
             Item selectedItem = null;
             foreach (var item in items)

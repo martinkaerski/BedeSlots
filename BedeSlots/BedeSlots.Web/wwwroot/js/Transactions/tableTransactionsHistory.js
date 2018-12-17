@@ -1,9 +1,12 @@
 ﻿$(document).ready(function () {
-    $("#table-transactions").DataTable({
+    $("#history-transactions").DataTable({
         "processing": false, // for show progress bar
         "serverSide": true, // for process server side
         "filter": true, // this is for disable filter (search box)
-        "orderMulti": false, // for disable multiple column at once
+        "orderMulti": false, // for disable multiple column at once,
+        "order": [[0, "desc"]],
+        "scrollX": true,
+
         "ajax": {
             "url": "/History/LoadData",
             "type": "POST",
@@ -57,9 +60,16 @@
 
                 return '<span style="color:' + color + '">' + data + '</span>';
             }
-        }],
+        },
+            { className: 'text-center', targets: [0, 1, 2, 3] },
+        ],
         "columns": [
-            { "data": "date", "name": "Date", "autoWidth": true },
+            {
+                "data": "date", "name": "Date", "autoWidth": true,
+                "render": function (d) {
+                    return moment(d).format("DD/MM/YYYY HH:mm:ss");
+                }
+            },
             { "data": "type", "name": "Type", "autoWidth": true },
             { "data": "amount", "name": "Amount", "autoWidth": true },
             { "data": "description", "name": "Description", "autoWidth": true },

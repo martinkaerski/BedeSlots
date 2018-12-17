@@ -20,34 +20,3 @@
     </div>
 </div>
 
-<script>
-    $(document).ready(function () {
-
-        $("#btnSubmit").click(function (event) {
-            event.preventDefault();
-            var dataToSend = $("#editRole").serialize();
-
-            $.ajax({
-                type: "POST",
-                url: "/Admin/Users/EditRole",
-                data: dataToSend,
-                success: function (data) {
-                    $("#myModal1").modal("hide");
-                    if (data) {
-                        oTable = $('#table-users').DataTable();
-                        oTable.draw();
-                    }
-                    else {
-                        alert("Something went wrong!");
-                    }
-                }
-            })
-        })
-
-        $("#btnReject").click(function (event) {
-            event.preventDefault();
-            $("#myModal1").modal("hide");
-        })
-    })
-</script>
-

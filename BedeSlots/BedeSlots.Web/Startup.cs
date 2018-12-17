@@ -42,7 +42,15 @@ namespace BedeSlots
             this.RegisterServices(services);
             this.RegisterInfrastructure(services);
 
-            services.AddMvc();
+            services.AddMvc(options =>
+            {
+                options.CacheProfiles.Add("Default",
+                     new CacheProfile()
+                     {
+                         Location = ResponseCacheLocation.Any,
+                         Duration = 30 * 60
+                     });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -100,6 +108,7 @@ namespace BedeSlots
             services.AddSingleton<ISlotMachine, SlotMachine>();
             services.AddTransient<IDateTimeProvider, DateTimeProvider>();
             services.AddTransient(typeof(IPaginationProvider<>), typeof(PaginationProvider<>));
+            services.AddTransient<IRandomProvider, RandomProvider>();
         }
 
         private void RegisterAuthentication(IServiceCollection services)
@@ -108,17 +117,21 @@ namespace BedeSlots
                 .AddEntityFrameworkStores<BedeSlotsDbContext>()
                 .AddDefaultTokenProviders();
 
+            services.Configure<IdentityOptions>(options =>
+            {
+                // Password settings
+                options.Password.RequireDigit = false;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireUppercase = false;
+                options.Password.RequireLowercase = false;
+                options.Password.RequiredUniqueChars = 0;
+            });
+
             if (this.Environment.IsDevelopment())
             {
                 services.Configure<IdentityOptions>(options =>
                 {
-                    // Password settings
-                    options.Password.RequireDigit = false;
                     options.Password.RequiredLength = 3;
-                    options.Password.RequireNonAlphanumeric = false;
-                    options.Password.RequireUppercase = false;
-                    options.Password.RequireLowercase = false;
-                    options.Password.RequiredUniqueChars = 0;
 
                     // Lockout settings
                     options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromSeconds(1);

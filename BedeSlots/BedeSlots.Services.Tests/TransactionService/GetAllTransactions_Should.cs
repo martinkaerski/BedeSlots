@@ -18,15 +18,15 @@ namespace BedeSlots.Services.Tests.TransactionService
         public async Task ReturnCollectionOfAllTransaction_WhenValidParametersArePassed()
         {
 
-            var contexOptions = new DbContextOptionsBuilder<BedeSlotsDbContext>()
+            var contextOptions = new DbContextOptionsBuilder<BedeSlotsDbContext>()
     .UseInMemoryDatabase(databaseName: "ReturnCollectionOfAllTransaction_WhenValidParametersArePassed")
     .UseInternalServiceProvider(serviceProvider).Options;
-            using (var bedeSlotsContext = new BedeSlotsDbContext(contexOptions))
+            using (var bedeSlotsContext = new BedeSlotsDbContext(contextOptions))
             {
                 bedeSlotsContext.Transactions.Add(new Transaction() { User = new User() { Email = "test" } });
                 bedeSlotsContext.SaveChanges();
             }
-            using (var bedeSlotsContext = new BedeSlotsDbContext(contexOptions))
+            using (var bedeSlotsContext = new BedeSlotsDbContext(contextOptions))
             {
                 var currencyConverterMock = new Mock<ICurrencyConverterService>();
                 var sut = new Data.TransactionService(bedeSlotsContext, currencyConverterMock.Object);
@@ -35,15 +35,16 @@ namespace BedeSlots.Services.Tests.TransactionService
                 Assert.IsTrue(await result.CountAsync() == 1);
             }
         }
+
         [TestMethod]
         public async Task ReturnEmptyCollectionOfAllTransaction_WhenValidParametersArePassed()
         {
 
-            var contexOptions = new DbContextOptionsBuilder<BedeSlotsDbContext>()
+            var contextOptions = new DbContextOptionsBuilder<BedeSlotsDbContext>()
     .UseInMemoryDatabase(databaseName: "ReturnEmptyCollectionOfAllTransaction_WhenValidParametersArePassed")
     .UseInternalServiceProvider(serviceProvider).Options;
             
-            using (var bedeSlotsContext = new BedeSlotsDbContext(contexOptions))
+            using (var bedeSlotsContext = new BedeSlotsDbContext(contextOptions))
             {
                 var currencyConverterMock = new Mock<ICurrencyConverterService>();
                 var sut = new Data.TransactionService(bedeSlotsContext, currencyConverterMock.Object);

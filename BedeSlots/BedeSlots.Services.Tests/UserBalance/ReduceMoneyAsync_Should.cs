@@ -21,23 +21,26 @@ namespace BedeSlots.Services.Tests.UserBalance
         [TestMethod]
         public async Task ReduceUserBalance_WhenValidParametersArePassed()
         {
-            var contexOptions = new DbContextOptionsBuilder<BedeSlotsDbContext>()
+            var contextOptions = new DbContextOptionsBuilder<BedeSlotsDbContext>()
      .UseInMemoryDatabase(databaseName: "ReduceUserBalance_WhenValidParametersArePassed")
      .UseInternalServiceProvider(serviceProvider).Options;
+
             var tenDollars = 10;
+
             var user = new User() { Balance = tenDollars + tenDollars, Currency = Currency.USD };
 
-            using (var bedeSlotsContext = new BedeSlotsDbContext(contexOptions))
+            using (var bedeSlotsContext = new BedeSlotsDbContext(contextOptions))
             {
                 bedeSlotsContext.Users.Add(user);
                 bedeSlotsContext.SaveChanges();
             }
 
-            using (var bedeSlotsContext = new BedeSlotsDbContext(contexOptions))
+            using (var bedeSlotsContext = new BedeSlotsDbContext(contextOptions))
             {
                 var currencyConverterMock = new Mock<ICurrencyConverterService>();
 
                 var sut = new Data.UserBalanceService(bedeSlotsContext, currencyConverterMock.Object);
+
                 var result = await sut.ReduceMoneyAsync(tenDollars, user.Id);
 
                 Assert.IsTrue(result == tenDollars);
@@ -47,38 +50,44 @@ namespace BedeSlots.Services.Tests.UserBalance
         [TestMethod]
         public async Task ThrowServiceException_WhenUserNotExistInDatabase()
         {
-            var contexOptions = new DbContextOptionsBuilder<BedeSlotsDbContext>()
+            var contextOptions = new DbContextOptionsBuilder<BedeSlotsDbContext>()
      .UseInMemoryDatabase(databaseName: "ThrowServiceException_WhenUserNotExistInDatabase")
      .UseInternalServiceProvider(serviceProvider).Options;
+
             var tenDollars = 10;
+
             var user = new User() { Balance = tenDollars + tenDollars, Currency = Currency.USD };
 
-            using (var bedeSlotsContext = new BedeSlotsDbContext(contexOptions))
+            using (var bedeSlotsContext = new BedeSlotsDbContext(contextOptions))
             {
                 var currencyConverterMock = new Mock<ICurrencyConverterService>();
 
                 var sut = new Data.UserBalanceService(bedeSlotsContext, currencyConverterMock.Object);
+
                 await Assert.ThrowsExceptionAsync<ServiceException>(async () => await sut.ReduceMoneyAsync(tenDollars, user.Id));
             }
         }
+
         [TestMethod]
         public async Task ThrowServiceException_WhenAmountParameterIsBiggerThanUserBalance()
         {
-            var contexOptions = new DbContextOptionsBuilder<BedeSlotsDbContext>()
+            var contextOptions = new DbContextOptionsBuilder<BedeSlotsDbContext>()
      .UseInMemoryDatabase(databaseName: "ReduceUserBalance_WhenValidParametersArePassed")
      .UseInternalServiceProvider(serviceProvider).Options;
+
             var tenDollars = 10;
+
             var amountBiggerThanUserBalance = 5000;
 
             var user = new User() { Balance = tenDollars, Currency = Currency.USD };
 
-            using (var bedeSlotsContext = new BedeSlotsDbContext(contexOptions))
+            using (var bedeSlotsContext = new BedeSlotsDbContext(contextOptions))
             {
                 bedeSlotsContext.Users.Add(user);
                 bedeSlotsContext.SaveChanges();
             }
 
-            using (var bedeSlotsContext = new BedeSlotsDbContext(contexOptions))
+            using (var bedeSlotsContext = new BedeSlotsDbContext(contextOptions))
             {
                 var currencyConverterMock = new Mock<ICurrencyConverterService>();
 
@@ -91,16 +100,18 @@ namespace BedeSlots.Services.Tests.UserBalance
         [TestMethod]
         public async Task ThrowServiceException_WhenNullUserIdParameterIsPassed()
         {
-            var contexOptions = new DbContextOptionsBuilder<BedeSlotsDbContext>()
+            var contextOptions = new DbContextOptionsBuilder<BedeSlotsDbContext>()
      .UseInMemoryDatabase(databaseName: "ThrowServiceException_WhenNullUserIdParameterIsPassed")
      .UseInternalServiceProvider(serviceProvider).Options;
 
-            using (var bedeSlotsContext = new BedeSlotsDbContext(contexOptions))
+            using (var bedeSlotsContext = new BedeSlotsDbContext(contextOptions))
             {
                 var currencyConverterMock = new Mock<ICurrencyConverterService>();
+
                 decimal validNumber = 1;
 
                 var sut = new Data.UserBalanceService(bedeSlotsContext, currencyConverterMock.Object);
+
                 await Assert.ThrowsExceptionAsync<ServiceException>(async () => await sut.ReduceMoneyAsync(validNumber, null));
             }
         }
@@ -108,17 +119,22 @@ namespace BedeSlots.Services.Tests.UserBalance
         [TestMethod]
         public async Task ThrowServiceException_WhenNegativeAmountParameterIsPassed()
         {
-            var contexOptions = new DbContextOptionsBuilder<BedeSlotsDbContext>()
+            var contextOptions = new DbContextOptionsBuilder<BedeSlotsDbContext>()
      .UseInMemoryDatabase(databaseName: "ThrowServiceException_WhenNegativeAmountParameterIsPassed")
      .UseInternalServiceProvider(serviceProvider).Options;
 
-            using (var bedeSlotsContext = new BedeSlotsDbContext(contexOptions))
+            using (var bedeSlotsContext = new BedeSlotsDbContext(contextOptions))
             {
                 var currencyConverterMock = new Mock<ICurrencyConverterService>();
+
+                string validId = "pseudo valid id";
+
                 decimal invalidNumber = -10;
 
                 var sut = new Data.UserBalanceService(bedeSlotsContext, currencyConverterMock.Object);
-                await Assert.ThrowsExceptionAsync<ServiceException>(async () => await sut.ReduceMoneyAsync(invalidNumber, "valid id"));
+
+                await Assert.ThrowsExceptionAsync<ServiceException>(async () =>
+                await sut.ReduceMoneyAsync(invalidNumber, validId));
             }
         }
     }

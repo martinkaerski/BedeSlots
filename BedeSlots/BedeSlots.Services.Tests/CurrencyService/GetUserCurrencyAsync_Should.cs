@@ -19,7 +19,7 @@ namespace BedeSlots.Services.Tests.CurrencyService
         [TestMethod]
         public async Task ReturnUserCurrency_WhenValidUserIdIsPassed()
         {
-            var contexOptions = new DbContextOptionsBuilder<BedeSlotsDbContext>()
+            var contextOptions = new DbContextOptionsBuilder<BedeSlotsDbContext>()
                 .UseInMemoryDatabase(databaseName: "ReturnUserCurrency_WhenValidUserIdIsPassed")
                 .UseInternalServiceProvider(serviceProvider).Options;
 
@@ -28,13 +28,13 @@ namespace BedeSlots.Services.Tests.CurrencyService
                 Currency = Currency.BGN
             };
 
-            using (var bedeSlotsContext = new BedeSlotsDbContext(contexOptions))
+            using (var bedeSlotsContext = new BedeSlotsDbContext(contextOptions))
             {
                 await bedeSlotsContext.Users.AddAsync(user);
                 await bedeSlotsContext.SaveChangesAsync();
 
             }
-            using (var bedeSlotsContext = new BedeSlotsDbContext(contexOptions))
+            using (var bedeSlotsContext = new BedeSlotsDbContext(contextOptions))
             {
                 var sut = new Data.CurrencyService(bedeSlotsContext);
                 var result = await sut.GetUserCurrencyAsync(user.Id);
@@ -43,41 +43,43 @@ namespace BedeSlots.Services.Tests.CurrencyService
                 Assert.IsInstanceOfType(result, typeof(Currency));
             }
         }
+
         [TestMethod]
         public async Task ThrowServiceException_WhenUserCurrencyIsNull()
         {
-            var contexOptions = new DbContextOptionsBuilder<BedeSlotsDbContext>()
+            var contextOptions = new DbContextOptionsBuilder<BedeSlotsDbContext>()
                 .UseInMemoryDatabase(databaseName: "ThrowServiceException_WhenUserCurrencyIsNull")
                 .UseInternalServiceProvider(serviceProvider).Options;
 
             var user = new User();
 
-            using (var bedeSlotsContext = new BedeSlotsDbContext(contexOptions))
+            using (var bedeSlotsContext = new BedeSlotsDbContext(contextOptions))
             {
                 await bedeSlotsContext.Users.AddAsync(user);
                 await bedeSlotsContext.SaveChangesAsync();
 
             }
-            using (var bedeSlotsContext = new BedeSlotsDbContext(contexOptions))
+            using (var bedeSlotsContext = new BedeSlotsDbContext(contextOptions))
             {
                 var sut = new Data.CurrencyService(bedeSlotsContext);
                 await Assert.ThrowsExceptionAsync<ServiceException>(async () => await sut.GetUserCurrencyAsync(user.Id));
             }
         }
+
         [TestMethod]
         public async Task ThrowServiceException_WhenThereAreNoUsersInDatabase()
         {
-            var contexOptions = new DbContextOptionsBuilder<BedeSlotsDbContext>()
+            var contextOptions = new DbContextOptionsBuilder<BedeSlotsDbContext>()
                 .UseInMemoryDatabase(databaseName: "ThrowServiceException_WhenThereAreNoUsersInDatabase")
                 .UseInternalServiceProvider(serviceProvider).Options;
 
-
-            using (var bedeSlotsContext = new BedeSlotsDbContext(contexOptions))
+            using (var bedeSlotsContext = new BedeSlotsDbContext(contextOptions))
             {
                 var sut = new Data.CurrencyService(bedeSlotsContext);
                 await Assert.ThrowsExceptionAsync<ServiceException>(async () => await sut.GetUserCurrencyAsync("test"));
             }
         }
+
         [TestMethod]
         public void ThrowServiceException_WhenNullUserIdIsPassed()
         {

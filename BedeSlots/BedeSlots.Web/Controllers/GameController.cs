@@ -15,9 +15,6 @@ namespace BedeSlots.Web.Controllers
     [Authorize]
     public class GameController : Controller
     {
-        private int rows = 4;
-        private int cols = 3;
-
         private readonly ISlotMachine game;
         private readonly UserManager<User> userManager;
         private readonly ITransactionService transactionService;
@@ -63,8 +60,8 @@ namespace BedeSlots.Web.Controllers
                 return PartialView("_StatusMessage", this.StatusMessage);
             }
 
-            rows = stakeModel.Rows;
-            cols = stakeModel.Cols;
+            int rows = stakeModel.Rows;
+            int cols = stakeModel.Cols;
 
             GameType gameType;
 
@@ -124,6 +121,8 @@ namespace BedeSlots.Web.Controllers
         public async Task<IActionResult> SlotMachine(string size)
         {
             string gameName = "Slot Machine";
+            int rows;
+            int cols;
 
             switch (size)
             {

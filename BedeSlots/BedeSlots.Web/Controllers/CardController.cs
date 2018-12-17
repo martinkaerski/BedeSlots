@@ -1,7 +1,9 @@
 ﻿using BedeSlots.Common;
 using BedeSlots.Common.Providers.Contracts;
 using BedeSlots.Data.Models;
+using BedeSlots.DTO.BankCardDto;
 using BedeSlots.Services.Data.Contracts;
+using BedeSlots.Services.Data.Exceptions;
 using BedeSlots.Web.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -72,8 +74,16 @@ namespace BedeSlots.Web.Controllers
         [HttpGet]
         public async Task<IActionResult> Details(int cardId)
         {
-            //TODO: try catch and return not found view or error view?
-            var card = await this.cardService.GetCardDetailsByIdAsync(cardId);
+            CardDetailsDto card;
+            try
+            {
+                card = await this.cardService.GetCardDetailsByIdAsync(cardId);
+            }
+            catch (ServiceException)
+            {
+                Response.StatusCode = 404;
+                return View("NotFound");
+            }
 
             var model = new CardInfoViewModel()
             {
@@ -92,14 +102,12 @@ namespace BedeSlots.Web.Controllers
         public async Task<JsonResult> DoesCardExistInDatabase(string cardNumber)
         {
             var cardNumberWithoutSpaces = cardNumber.Replace(" ", "");
-
             var userId = this.userManager.GetUserId(HttpContext.User);
 
             var cardsNumbers = await this.cardService.GetUserCardsAllNumbersAsync(userId);
+            var cardExists = cardsNumbers.Any(c => c.Number == cardNumberWithoutSpaces);
 
-            var doesExists = cardsNumbers.Any(c => c.Number == cardNumberWithoutSpaces);
-
-            if (!doesExists)
+            if (!cardExists)
             {
                 return Json(true);
             }

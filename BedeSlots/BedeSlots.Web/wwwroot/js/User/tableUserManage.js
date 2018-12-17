@@ -1,9 +1,11 @@
 ﻿$(document).ready(function () {
     $("#table-users").DataTable({
+        "responsive": true,
         "processing": false, // for show progress bar
         "serverSide": true, // for process server side
         "filter": true, // this is for disable filter (search box)
-        "orderMulti": false, // for disable multiple column at once
+        "orderMulti": false, // for disable multiple column at once,
+        "scrollX": true,
 
         "ajax": {
             "url": "/Admin/Users/LoadData",
@@ -50,7 +52,7 @@
                 "orderable": false,
                 "searchable": false,
             },
-            { className: 'text-center', targets: [1, 2, 3, 4, 5, 6, 7, 8] },
+            { className: 'text-center', targets: [0, 1, 2, 3, 4, 5, 6, 7, 8] },
             ],
         "columns": [
             { "data": "username", "name": "Username", "autoWidth": true },

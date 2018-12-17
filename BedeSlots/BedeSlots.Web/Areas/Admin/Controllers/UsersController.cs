@@ -131,7 +131,7 @@ namespace BedeSlots.Web.Areas.Admin.Controllers
             var userRoles = await this.userManager.GetRolesAsync(user);
             if (userRoles.Contains(WebConstants.MasterAdminRole))
             {
-                return PartialView("_MasterAdminEdit");
+                return PartialView("_MasterAdminEditPartial");
             }
 
             var model = new DeleteUserViewModel()

@@ -19,11 +19,11 @@ namespace BedeSlots.Services.Tests.UserBalance
         [TestMethod]
         public void CreateNewInstance_WhenValidParametersArePassed()
         {
-            var contexOptions = new DbContextOptionsBuilder<BedeSlotsDbContext>()
+            var contextOptions = new DbContextOptionsBuilder<BedeSlotsDbContext>()
      .UseInMemoryDatabase(databaseName: "CreateNewInstance_WhenValidParametersArePassed")
      .UseInternalServiceProvider(serviceProvider).Options;
 
-            using (var bedeSlotsContext = new BedeSlotsDbContext(contexOptions))
+            using (var bedeSlotsContext = new BedeSlotsDbContext(contextOptions))
             {
                 var currencyConverterMock = new Mock<ICurrencyConverterService>();
 
@@ -36,11 +36,11 @@ namespace BedeSlots.Services.Tests.UserBalance
         [TestMethod]
         public void ThrowServiceExcpetion_WhenNullCurrencyConverterParameterIsPassed()
         {
-            var contexOptions = new DbContextOptionsBuilder<BedeSlotsDbContext>()
+            var contextOptions = new DbContextOptionsBuilder<BedeSlotsDbContext>()
      .UseInMemoryDatabase(databaseName: "ThrowServiceExcpetion_WhenNullCurrencyConverterParameterIsPassed")
      .UseInternalServiceProvider(serviceProvider).Options;
 
-            using (var bedeSlotsContext = new BedeSlotsDbContext(contexOptions))
+            using (var bedeSlotsContext = new BedeSlotsDbContext(contextOptions))
             {
                 Assert.ThrowsException<ServiceException>(() => new Data.UserBalanceService(bedeSlotsContext, null));
             }

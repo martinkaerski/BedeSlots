@@ -22,21 +22,20 @@ namespace BedeSlots.Services.Tests.UserService
         [TestMethod]
         public async Task ReturnRoleName_WhenValidUserIdIsPassed()
         {
-
             var userStoreMock = new Mock<IUserStore<User>>();
             var userManager = new UserManager<User>(userStoreMock.Object, null, null, null, null, null, null, null, null);
 
-            var contexOptions = new DbContextOptionsBuilder<BedeSlotsDbContext>()
+            var contextOptions = new DbContextOptionsBuilder<BedeSlotsDbContext>()
      .UseInMemoryDatabase(databaseName: "ReturnRoleName_WhenValidUserIdIsPassed")
      .UseInternalServiceProvider(serviceProvider).Options;
 
-            var transactionServiceMock = new Mock<ITransactionService>();
-
             var user = new User();
+
             var role = new IdentityRole("User");
+
             IdentityUserRole<string> userRole;
 
-            using (var bedeSlotsContext = new BedeSlotsDbContext(contexOptions))
+            using (var bedeSlotsContext = new BedeSlotsDbContext(contextOptions))
             {
                 bedeSlotsContext.Roles.Add(role);
                 bedeSlotsContext.Users.Add(user);
@@ -47,29 +46,30 @@ namespace BedeSlots.Services.Tests.UserService
                 bedeSlotsContext.SaveChanges();
             }
 
-            using (var bedeSlotsContext = new BedeSlotsDbContext(contexOptions))
+            using (var bedeSlotsContext = new BedeSlotsDbContext(contextOptions))
             {
                 var sut = new Data.UserService(bedeSlotsContext,
                      userManager);
 
                 var result = await sut.GetUserRoleNameAsync(user.Id);
+
                 Assert.IsTrue(result == role.Name);
             }
         }
+
         [TestMethod]
         public async Task ThrowServiceException_WhenNullArgumentIsPassed()
         {
-
             var userStoreMock = new Mock<IUserStore<User>>();
             var userManager = new UserManager<User>(userStoreMock.Object, null, null, null, null, null, null, null, null);
 
-            var contexOptions = new DbContextOptionsBuilder<BedeSlotsDbContext>()
+            var contextOptions = new DbContextOptionsBuilder<BedeSlotsDbContext>()
      .UseInMemoryDatabase(databaseName: "ThrowServiceException_WhenNullArgumentIsPassed")
      .UseInternalServiceProvider(serviceProvider).Options;
 
             var transactionServiceMock = new Mock<ITransactionService>();
 
-            using (var bedeSlotsContext = new BedeSlotsDbContext(contexOptions))
+            using (var bedeSlotsContext = new BedeSlotsDbContext(contextOptions))
             {
                 var sut = new Data.UserService(bedeSlotsContext,
                     userManager);

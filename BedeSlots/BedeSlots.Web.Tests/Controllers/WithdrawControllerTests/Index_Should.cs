@@ -45,6 +45,7 @@ namespace BedeSlots.Web.Tests.Controllers.WithdrawControllerTests
 
             // Act
             var result = await controller.Index();
+
             // Assert
             Assert.IsInstanceOfType(result, typeof(ViewResult));
         }

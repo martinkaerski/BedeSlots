@@ -8581,8 +8581,6 @@ body {
    width:80%;
 }
 
-
-
 .w3-display-container {
     height: 680px;
     margin-top: -69px;
@@ -8591,4 +8589,13 @@ body {
     width: 100%;
     padding: 0;
     max-width: inherit;
+}
+
+.container {
+    min-height: 75vh;
+}
+
+body{
+    margin-bottom:0px;
+    padding-bottom:0px;
 }

@@ -1,6 +1,5 @@
 ﻿using BedeSlots.Data.Models;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace BedeSlots.Web.Models
@@ -19,7 +18,7 @@ namespace BedeSlots.Web.Models
         public string[,] Matrix { get; set; }
 
         [Required]
-        [Range(1, WebConstants.MaxAmount, ErrorMessage = "The minimum bet amount is 1!")]
+        [Range(1, WebConstants.MaxAmount, ErrorMessage = "The bet amount should be between 1 and 1 million.")]
         [RegularExpression(@"\d*\.?\d*", ErrorMessage = "The bet amount should be a number using dot for floating-point numbers.")]
         [Remote(action: "HasEnoughMoneyAsync", controller: "UserBalance", areaName: "")]
         public decimal Amount { get; set; }
@@ -37,7 +36,7 @@ namespace BedeSlots.Web.Models
         public string WinningRows { get; set; }
 
         [Required]
-        public double Coefficient { get; set; }
+        public decimal Coefficient { get; set; }
 
         public string StatusMessage { get; set; }
     }

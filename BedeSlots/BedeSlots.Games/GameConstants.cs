@@ -7,10 +7,10 @@
         public const string PineappleSymbol = "p";
         public const string WildcardSymbol = "w";
 
-        public const double AppleCoef = 0.4d;
-        public const double BananaCoef = 0.6d;
-        public const double PineappleCoef = 0.8d;
-        public const double WildcardCoef = 0d;
+        public const decimal AppleCoef = 0.4m;
+        public const decimal BananaCoef = 0.6m;
+        public const decimal PineappleCoef = 0.8m;
+        public const decimal WildcardCoef = 0m;
 
         public const int AppleProb = 45;
         public const int BananaProb = 35;

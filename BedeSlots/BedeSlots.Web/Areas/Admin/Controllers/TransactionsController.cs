@@ -32,7 +32,7 @@ namespace BedeSlots.Web.Areas.Admin.Controllers
         public IActionResult Index()
         {
             return View();
-        }
+        }      
 
         [HttpPost]
         [ValidateAntiForgeryToken]

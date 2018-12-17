@@ -14,7 +14,7 @@ namespace BedeSlots.Web.Models
         public int BankCardId { get; set; }
 
         [Required(ErrorMessage = "Please enter a positive amount!")]
-        [Range(1, WebConstants.MaxAmount, ErrorMessage ="The deposit amount should be more than 1.")]
+        [Range(1, WebConstants.MaxAmount, ErrorMessage ="The deposit amount should be between 1 and 1 million.")]
         [RegularExpression(@"\d*\.?\d*", ErrorMessage = "The deposit amount should be  a number using dot for floating-point numbers.")]
         [Display(Name = "Deposit")]
         public decimal DepositAmount { get; set; }

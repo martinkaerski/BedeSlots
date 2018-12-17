@@ -55,16 +55,16 @@ namespace BedeSlots.Games
             return stringMatrix;
         }
 
-        internal double CalculateCoefficient(Item[,] matrix)
+        internal decimal CalculateCoefficient(Item[,] matrix)
         {
-            double totalCoef = 0;
+            decimal totalCoef = 0;
             winningRows.Clear();
 
             for (int row = 0; row < matrix.GetLength(0); row++)
             {
                 Item previousItem = null;
                 bool isWinningRow = true;
-                double rowCoef = 0;
+                decimal rowCoef = 0;
 
                 for (int col = 0; col < matrix.GetLength(1); col++)
                 {

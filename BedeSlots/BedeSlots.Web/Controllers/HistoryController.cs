@@ -41,11 +41,8 @@ namespace BedeSlots.Web.Controllers
             try
             {
                 var user = await this.userManager.GetUserAsync(HttpContext.User);
-
-                //string draw, sortColumn, sortColumnDirection, searchValue;
-                int pageSize, skip, recordsTotal;
-
-                this.paginationProvider.GetParameters(out draw, out sortColumn, out sortColumnDirection, out searchValue, out pageSize, out skip, out recordsTotal, HttpContext, Request);
+                
+                this.paginationProvider.GetParameters(out draw, out sortColumn, out sortColumnDirection, out searchValue, out int pageSize, out int skip, out int recordsTotal, HttpContext, Request);
 
                 var transactions = this.transactionService.GetUserTransactionsAsync(user.Id);
 

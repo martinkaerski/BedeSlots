@@ -18,8 +18,7 @@ namespace BedeSlots.Games.Tests.SlotMachineTests
                 Name = "item1",
                 CumulativeProbability = 50
             };
-
-
+            
             var items = new Dictionary<int, Item>
             {
                 { firstItem.CumulativeProbability, firstItem }

@@ -21,7 +21,7 @@
         })
     });
 
-    $("#myModal1").on('click', '#btnReject', function (event) {
+    $("#myModal1").on('click', '#deletebtnReject', function (event) {
         event.preventDefault();
         $("#myModal1").modal("hide");
     });

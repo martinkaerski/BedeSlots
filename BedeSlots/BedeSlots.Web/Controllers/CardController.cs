@@ -102,14 +102,12 @@ namespace BedeSlots.Web.Controllers
         public async Task<JsonResult> DoesCardExistInDatabase(string cardNumber)
         {
             var cardNumberWithoutSpaces = cardNumber.Replace(" ", "");
-
             var userId = this.userManager.GetUserId(HttpContext.User);
 
             var cardsNumbers = await this.cardService.GetUserCardsAllNumbersAsync(userId);
+            var cardExists = cardsNumbers.Any(c => c.Number == cardNumberWithoutSpaces);
 
-            var doesExists = cardsNumbers.Any(c => c.Number == cardNumberWithoutSpaces);
-
-            if (!doesExists)
+            if (!cardExists)
             {
                 return Json(true);
             }

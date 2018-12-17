@@ -5,6 +5,6 @@ namespace BedeSlots.Common.Providers
 {
     public class DateTimeProvider : IDateTimeProvider
     {
-        public virtual DateTime Now => DateTime.Now;
+        public virtual DateTime Now => DateTime.UtcNow;
     }
 }

@@ -1,4 +1,4 @@
-![alt text](http://bedeslots777.azurewebsites.net/images/logo.png)
+# Bede Slots
 * Telerik Academy Final Project
 
 # Main functionality
@@ -16,7 +16,14 @@
 - Bootstrap
 - jQuery
 - JavaScript
+- Moq
 
 ### Azure: [BedeSlots](https://bedeslots777.azurewebsites.net/)
 
 # Screenshots
+
+|                                         |                                              |
+| -----------------------------------     | -------------------------------------------- |   
+| ![alt tag](./Screenshots/1.png)         | ![alt tag](./Screenshots/3.png)              |
+| ![alt tag](./Screenshots/2.png)         | ![alt tag](./Screenshots/4.png)              |
+     

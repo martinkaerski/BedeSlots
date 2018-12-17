@@ -1,4 +1,3 @@
-# BedeSlots
 ![alt text](http://bedeslots777.azurewebsites.net/images/logo.png)
 * Telerik Academy Final Project
 
